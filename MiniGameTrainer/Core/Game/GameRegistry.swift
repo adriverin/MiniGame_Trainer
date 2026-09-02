@@ -7,6 +7,7 @@ enum GameRegistry {
         PianoGameModule.self,
         TrampboxGameModule.self,
         ReactGameModule.self,
+        TowerStackGameModule.self,
     ]
 
     static var descriptors: [MiniGameDescriptor] {

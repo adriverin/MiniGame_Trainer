@@ -2,6 +2,8 @@ import Foundation
 
 /// DEBUG-only launch arguments for automation and quick manual checks, e.g.
 /// `-autoPlay piano -pianoSkipCountdown -pianoOverlay -pianoAutoStart` or `-openIntro piano`.
+/// Tower Stack: `-autoPlay towerStack -towerStackAutoStart -towerStackOverlay -towerStackGeometry`
+/// `-towerStackAutoPlace 0` (perfect) / `0.05` (5 % offset), `-towerStackMissAt 20`, `-towerStackPauseAtScore 12`.
 enum DebugLaunchOptions {
     #if DEBUG
     static var autoPlayGameID: String? {
