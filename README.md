@@ -165,3 +165,4 @@ pause/interruption recovery, deterministic seeds, performance summaries, score d
 statistics persistence (86 tests). Run with the scheme's Test action or the `xcodebuild ... test`
 command above.
 # MiniGame_Trainer
+# MiniGame_Trainer
