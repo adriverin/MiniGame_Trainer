@@ -3,14 +3,16 @@
 An iPhone app for practising short reaction/skill minigames. Each game is an isolated module
 plugged into a shared shell (home, library, intro, results, statistics, settings). The library
 contains **Piano**, **Trampbox**, **REACT!**, **Tower Stack**, **Center Hit**, **Keep Up**,
-**TIME'S UP!**, **GRID**, **TRACE**, **Directions**, **TAP AT 7**, and **SWIPE FAST**.
+**TIME'S UP!**, **GRID**, **TRACE**, **Directions**, **TAP AT 7**, **SWIPE FAST**, and
+**COLOR REFLEX**.
 Reference measurements live in `Documentation/GAME_ANALYSIS.md`,
 `Documentation/TRAMPBOX_GAME_ANALYSIS.md`, `Documentation/REACT_GAME_ANALYSIS.md`,
 `Documentation/TOWER_STACK_GAME_ANALYSIS.md`, `Documentation/CENTER_HIT_GAME_ANALYSIS.md`,
 `Documentation/KEEP_UP_GAME_ANALYSIS.md`, `Documentation/TIMES_UP_GAME_ANALYSIS.md`,
 `Documentation/GRID_GAME_ANALYSIS.md`, `Documentation/TRACE_GAME_ANALYSIS.md`,
-`Documentation/DIRECTIONS_GAME_ANALYSIS.md`, `Documentation/TAP_SEVEN_GAME_ANALYSIS.md`, and
-`Documentation/SWIPE_FAST_GAME_ANALYSIS.md`.
+`Documentation/DIRECTIONS_GAME_ANALYSIS.md`, `Documentation/TAP_SEVEN_GAME_ANALYSIS.md`,
+`Documentation/SWIPE_FAST_GAME_ANALYSIS.md`, and
+`Documentation/COLOR_REFLEX_GAME_ANALYSIS.md`.
 
 This is an independent training app; it is not affiliated with any game platform and uses only
 original assets.
