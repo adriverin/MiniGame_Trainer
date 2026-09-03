@@ -17,6 +17,7 @@ enum GameRegistry {
         TapSevenGameModule.self,
         SwipeFastGameModule.self,
         TargetSpeedGameModule.self,
+        BloopyGameModule.self,
     ]
 
     static var descriptors: [MiniGameDescriptor] {
