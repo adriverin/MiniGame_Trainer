@@ -10,6 +10,7 @@ enum GameRegistry {
         TowerStackGameModule.self,
         CenterHitGameModule.self,
         KeepUpGameModule.self,
+        TraceGameModule.self,
     ]
 
     static var descriptors: [MiniGameDescriptor] {

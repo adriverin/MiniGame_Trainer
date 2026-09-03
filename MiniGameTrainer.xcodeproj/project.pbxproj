@@ -149,6 +149,25 @@
 		FBD333F612DE51C3704CF65B /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0089563AF9F216A32D1C04 /* AppRouter.swift */; };
 		FCAE555D73C346E9C763884E /* ReactPerformanceTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B7E6391DD0087A0F0AEE44 /* ReactPerformanceTracker.swift */; };
 		FE1A025A8FDA4B2C02DB2645 /* TrampboxGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941DB0DEF189754E1E49ADB4 /* TrampboxGameScene.swift */; };
+		A1CE00000000000000000002 /* TraceGameConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CE00000000000000000001 /* TraceGameConfig.swift */; };
+		A1CE00000000000000000004 /* TraceDifficultyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CE00000000000000000003 /* TraceDifficultyModel.swift */; };
+		A1CE00000000000000000006 /* TraceGameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CE00000000000000000005 /* TraceGameLogic.swift */; };
+		A1CE00000000000000000008 /* TraceGameModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CE00000000000000000007 /* TraceGameModule.swift */; };
+		A1CE0000000000000000000A /* TraceGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CE00000000000000000009 /* TraceGameScene.swift */; };
+		A1CE0000000000000000000C /* TraceGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CE0000000000000000000B /* TraceGameView.swift */; };
+		A1CE0000000000000000000E /* TraceGameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CE0000000000000000000D /* TraceGameViewModel.swift */; };
+		A1CE00000000000000000010 /* TraceGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CE0000000000000000000F /* TraceGeometry.swift */; };
+		A1CE00000000000000000012 /* TraceIntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CE00000000000000000011 /* TraceIntroView.swift */; };
+		A1CE00000000000000000014 /* TraceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CE00000000000000000013 /* TraceModels.swift */; };
+		A1CE00000000000000000016 /* TracePatternGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CE00000000000000000015 /* TracePatternGenerator.swift */; };
+		A1CE00000000000000000018 /* TraceTuningStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CE00000000000000000017 /* TraceTuningStore.swift */; };
+		A1CE0000000000000000001A /* TraceDebugOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CE00000000000000000019 /* TraceDebugOptions.swift */; };
+		A1CE0000000000000000001C /* TraceDebugSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CE0000000000000000001B /* TraceDebugSettingsView.swift */; };
+		A1CE0000000000000000001E /* TraceGameLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CE0000000000000000001D /* TraceGameLogicTests.swift */; };
+		A1CE00000000000000000020 /* TraceGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CE0000000000000000001F /* TraceGeometryTests.swift */; };
+		A1CE00000000000000000022 /* TracePatternTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CE00000000000000000021 /* TracePatternTests.swift */; };
+		A1CE00000000000000000024 /* TracePersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CE00000000000000000023 /* TracePersistenceTests.swift */; };
+		A1CE00000000000000000026 /* TraceScoringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CE00000000000000000025 /* TraceScoringTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -307,6 +326,25 @@
 		FD43B5F146F3BCD7EE485C51 /* ReactGameLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactGameLogic.swift; sourceTree = "<group>"; };
 		FD59BC8C3553E8A25D7FCBB6 /* CenterHitPersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterHitPersistenceTests.swift; sourceTree = "<group>"; };
 		FFACE44F6A7B6C60C4F02704 /* TrampboxGameModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrampboxGameModule.swift; sourceTree = "<group>"; };
+		A1CE00000000000000000001 /* TraceGameConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceGameConfig.swift; sourceTree = "<group>"; };
+		A1CE00000000000000000003 /* TraceDifficultyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceDifficultyModel.swift; sourceTree = "<group>"; };
+		A1CE00000000000000000005 /* TraceGameLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceGameLogic.swift; sourceTree = "<group>"; };
+		A1CE00000000000000000007 /* TraceGameModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceGameModule.swift; sourceTree = "<group>"; };
+		A1CE00000000000000000009 /* TraceGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceGameScene.swift; sourceTree = "<group>"; };
+		A1CE0000000000000000000B /* TraceGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceGameView.swift; sourceTree = "<group>"; };
+		A1CE0000000000000000000D /* TraceGameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceGameViewModel.swift; sourceTree = "<group>"; };
+		A1CE0000000000000000000F /* TraceGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceGeometry.swift; sourceTree = "<group>"; };
+		A1CE00000000000000000011 /* TraceIntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceIntroView.swift; sourceTree = "<group>"; };
+		A1CE00000000000000000013 /* TraceModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceModels.swift; sourceTree = "<group>"; };
+		A1CE00000000000000000015 /* TracePatternGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracePatternGenerator.swift; sourceTree = "<group>"; };
+		A1CE00000000000000000017 /* TraceTuningStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceTuningStore.swift; sourceTree = "<group>"; };
+		A1CE00000000000000000019 /* TraceDebugOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceDebugOptions.swift; sourceTree = "<group>"; };
+		A1CE0000000000000000001B /* TraceDebugSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceDebugSettingsView.swift; sourceTree = "<group>"; };
+		A1CE0000000000000000001D /* TraceGameLogicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceGameLogicTests.swift; sourceTree = "<group>"; };
+		A1CE0000000000000000001F /* TraceGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceGeometryTests.swift; sourceTree = "<group>"; };
+		A1CE00000000000000000021 /* TracePatternTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracePatternTests.swift; sourceTree = "<group>"; };
+		A1CE00000000000000000023 /* TracePersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracePersistenceTests.swift; sourceTree = "<group>"; };
+		A1CE00000000000000000025 /* TraceScoringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceScoringTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -339,6 +377,7 @@
 				3F02A293AAC0C14DDD3DD081 /* React */,
 				B170F8604A97DE9C54FC2491 /* TowerStack */,
 				6AE0008BC1F692694BFA3F39 /* Trampbox */,
+				A1CE00000000000000000028 /* Trace */,
 			);
 			path = Games;
 			sourceTree = "<group>";
@@ -664,6 +703,11 @@
 				C9E5A1015ACFF68AF2B99542 /* TrampboxDifficultyTests.swift */,
 				D1D37E9D3AE5C66F094C47F7 /* TrampboxGameLogicTests.swift */,
 				9EB3F83523FAF95EC01E63AB /* TrampboxPlatformGeneratorTests.swift */,
+				A1CE0000000000000000001D /* TraceGameLogicTests.swift */,
+				A1CE0000000000000000001F /* TraceGeometryTests.swift */,
+				A1CE00000000000000000021 /* TracePatternTests.swift */,
+				A1CE00000000000000000023 /* TracePersistenceTests.swift */,
+				A1CE00000000000000000025 /* TraceScoringTests.swift */,
 			);
 			path = MiniGameTrainerTests;
 			sourceTree = "<group>";
@@ -707,6 +751,35 @@
 				E5ED5A1B028C3030ED37C6F0 /* Debug */,
 			);
 			path = CenterHit;
+			sourceTree = "<group>";
+		};
+		A1CE00000000000000000027 /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				A1CE00000000000000000019 /* TraceDebugOptions.swift */,
+				A1CE0000000000000000001B /* TraceDebugSettingsView.swift */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
+		A1CE00000000000000000028 /* Trace */ = {
+			isa = PBXGroup;
+			children = (
+				A1CE00000000000000000001 /* TraceGameConfig.swift */,
+				A1CE00000000000000000003 /* TraceDifficultyModel.swift */,
+				A1CE00000000000000000005 /* TraceGameLogic.swift */,
+				A1CE00000000000000000007 /* TraceGameModule.swift */,
+				A1CE00000000000000000009 /* TraceGameScene.swift */,
+				A1CE0000000000000000000B /* TraceGameView.swift */,
+				A1CE0000000000000000000D /* TraceGameViewModel.swift */,
+				A1CE0000000000000000000F /* TraceGeometry.swift */,
+				A1CE00000000000000000011 /* TraceIntroView.swift */,
+				A1CE00000000000000000013 /* TraceModels.swift */,
+				A1CE00000000000000000015 /* TracePatternGenerator.swift */,
+				A1CE00000000000000000017 /* TraceTuningStore.swift */,
+				A1CE00000000000000000027 /* Debug */,
+			);
+			path = Trace;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -829,6 +902,11 @@
 				7F8CD0574F99BEF23B38AB30 /* TrampboxDifficultyTests.swift in Sources */,
 				B67C807E8621F87F5E6EE07C /* TrampboxGameLogicTests.swift in Sources */,
 				DE6891CEAA7C36FF6BE03EC4 /* TrampboxPlatformGeneratorTests.swift in Sources */,
+				A1CE0000000000000000001E /* TraceGameLogicTests.swift in Sources */,
+				A1CE00000000000000000020 /* TraceGeometryTests.swift in Sources */,
+				A1CE00000000000000000022 /* TracePatternTests.swift in Sources */,
+				A1CE00000000000000000024 /* TracePersistenceTests.swift in Sources */,
+				A1CE00000000000000000026 /* TraceScoringTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -950,6 +1028,20 @@
 				2066CF952BF403CB476C8EFF /* TrampboxPlatformNode.swift in Sources */,
 				C0862CD6A388E02336C57C01 /* TrampboxTuningStore.swift in Sources */,
 				F4D89E4A388474A155B7D92D /* UserPreferences.swift in Sources */,
+				A1CE00000000000000000002 /* TraceGameConfig.swift in Sources */,
+				A1CE00000000000000000004 /* TraceDifficultyModel.swift in Sources */,
+				A1CE00000000000000000006 /* TraceGameLogic.swift in Sources */,
+				A1CE00000000000000000008 /* TraceGameModule.swift in Sources */,
+				A1CE0000000000000000000A /* TraceGameScene.swift in Sources */,
+				A1CE0000000000000000000C /* TraceGameView.swift in Sources */,
+				A1CE0000000000000000000E /* TraceGameViewModel.swift in Sources */,
+				A1CE00000000000000000010 /* TraceGeometry.swift in Sources */,
+				A1CE00000000000000000012 /* TraceIntroView.swift in Sources */,
+				A1CE00000000000000000014 /* TraceModels.swift in Sources */,
+				A1CE00000000000000000016 /* TracePatternGenerator.swift in Sources */,
+				A1CE00000000000000000018 /* TraceTuningStore.swift in Sources */,
+				A1CE0000000000000000001A /* TraceDebugOptions.swift in Sources */,
+				A1CE0000000000000000001C /* TraceDebugSettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
