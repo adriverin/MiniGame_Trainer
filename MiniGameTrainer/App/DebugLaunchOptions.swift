@@ -14,6 +14,9 @@ import Foundation
 /// DIRECTIONS: `-autoPlay directions -directionsAutoInput -directionsOverlay -directionsGeometry`,
 /// `-directionsSkipPresentation -directionsLevel 12 -directionsSeed 1 -directionsFailAt 3`,
 /// `-directionsSequence up,left,down,right`.
+/// SWIPE FAST: `-autoPlay swipeFast -swipeFastAutoPlay -swipeFastOverlay -swipeFastGeometry`,
+/// `-swipeFastScore 70 -swipeFastSeed 1 -swipeFastAllowedTime 1.2 -swipeFastWrongFails`,
+/// `-swipeFastAutoExpire -swipeFastAutoWrong`.
 enum DebugLaunchOptions {
     #if DEBUG
     static var autoPlayGameID: String? {
