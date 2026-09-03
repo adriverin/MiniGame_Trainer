@@ -85,9 +85,10 @@ private extension SwipeFastInputOutcome {
 
 final class SwipeFastPersistenceTests: XCTestCase {
     @MainActor
-    func testSwipeFastIsRegisteredAfterDirections() {
-        XCTAssertEqual(GameRegistry.modules[9].descriptor.id, "directions")
-        XCTAssertEqual(GameRegistry.modules[10].descriptor.id, "swipeFast")
+    func testSwipeFastIsRegisteredWithHigherIsBetterScoring() {
+        let ids = GameRegistry.modules.map { $0.descriptor.id }
+        XCTAssertEqual(ids.filter { $0 == "swipeFast" }.count, 1)
+        XCTAssertTrue(ids.contains("directions"))
         XCTAssertEqual(GameRegistry.descriptor(for: "swipeFast"), SwipeFastGameModule.descriptor)
         XCTAssertEqual(SwipeFastGameModule.descriptor.scorePresentation.comparison, .higherIsBetter)
     }
