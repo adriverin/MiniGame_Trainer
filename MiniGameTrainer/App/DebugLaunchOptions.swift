@@ -8,6 +8,8 @@ import Foundation
 /// `-keepUpEdgeCatch 0.75`, `-keepUpMissAt 100`, `-keepUpPhysicsScore 40`, or `-keepUpNoTrail`.
 /// TIME'S UP: `-autoPlay timesUp -timesUpAutoStart -timesUpOverlay -timesUpGeometry`,
 /// `-timesUpAutoTap`, `-timesUpAutoOffset 0.01`, or `-timesUpScript 0.01,-0.03,-0.16`.
+/// GRID: `-autoPlay grid -gridOverlay -gridAutoCorrect -gridForcePattern -gridSeed 42`
+/// `-gridLevel 10 -gridRows 5 -gridColumns 5 -gridTargets 8 -gridPresentation 0.8 -gridTimeout 5`.
 enum DebugLaunchOptions {
     #if DEBUG
     static var autoPlayGameID: String? {
