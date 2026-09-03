@@ -52,6 +52,7 @@ targets:
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         SUPPORTS_MACCATALYST: NO
         ENABLE_PREVIEWS: YES
+        DEVELOPMENT_TEAM: CA4ZH8R7Y7
 
   MiniGameTrainerTests:
     type: bundle.unit-test
