@@ -7,12 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		014D9E0B3338003EBB105CD3 /* TracePatternGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8670D02EC8F53836D90860 /* TracePatternGenerator.swift */; };
 		02020C7A95C4BB83DC6F510D /* TowerStackGameConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3687BD857CFA106B51FA45EB /* TowerStackGameConfig.swift */; };
 		025984AD57CDA1A21E4AE8AD /* TimesUpGameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B10974A9570C81519D6216F /* TimesUpGameLogic.swift */; };
 		0297802323F61DB1A38F9B60 /* TimesUpGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA73A7DD65968106244180CD /* TimesUpGameScene.swift */; };
 		0776006FBFFBDD7F01062D73 /* PianoDebugSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43574D37CDE5FD247ADB7D9 /* PianoDebugSettingsView.swift */; };
 		077A5BE083420DC7DD1084CD /* PianoGameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C5F31B968C67E2E7DEA9EA /* PianoGameViewModel.swift */; };
 		0867AA4B32AE59D166C6AE1E /* ReactRandomizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C4C547BFFB19C746207F99 /* ReactRandomizationTests.swift */; };
+		08B94ED33A6DC8A81783049A /* TraceGameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD932B5BC99B07162116BF00 /* TraceGameViewModel.swift */; };
 		0904B8F2269D8E44C502DC35 /* TowerStackGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80345F0978C0033B061685F7 /* TowerStackGameScene.swift */; };
 		098E5F3DF84E046894EC24C0 /* KeepUpGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812130BEDC523D960D474FDF /* KeepUpGeometry.swift */; };
 		099060A25767CE59AB4C249D /* TowerStackMovementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC008A0DF6B9B0636050E02E /* TowerStackMovementTests.swift */; };
@@ -23,13 +25,17 @@
 		10E16F299BE76123422526B5 /* ReactGameLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7D0DE77517587C1EBD3459 /* ReactGameLogicTests.swift */; };
 		141292FD6EC57F0DA5DE3AD9 /* KeepUpPhysics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AF7EFD233DB9295D759B67 /* KeepUpPhysics.swift */; };
 		180CBCDE5BB5B3A5E46A2123 /* ReactDebugOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616DC29C477856542278A8AF /* ReactDebugOptions.swift */; };
+		18AD582DACB9D7A5D3B1CA6C /* TraceIntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51681CB78098AAA39D19935D /* TraceIntroView.swift */; };
 		198B023B1608B7CE8F97BF88 /* KeepUpPersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694A77B888CABB5C1F36FF33 /* KeepUpPersistenceTests.swift */; };
 		1E73B62B3BC6EE9040D40A23 /* GameLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501564BC8B6BE82B4D2AB304 /* GameLibraryView.swift */; };
 		1EAFAF3FE187FC8CF14288C2 /* StatisticsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAC0F71CEB98443FB15CE78D /* StatisticsStore.swift */; };
 		1F4F568363DA51B79FB66C34 /* TowerStackDebugSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9461FA6DBAD9D935C7C456DC /* TowerStackDebugSettingsView.swift */; };
 		2066CF952BF403CB476C8EFF /* TrampboxPlatformNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B47A025A4816D6835421FB /* TrampboxPlatformNode.swift */; };
+		2296F12A5B4C2160519C5DD0 /* TraceGameLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C24F8FB6EF2010AE902F0C /* TraceGameLogicTests.swift */; };
 		23D13C71F8D2D290E8C89C32 /* PianoIntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AEDB2F09D3B91376D3950F /* PianoIntroView.swift */; };
+		23E60074D72641ECD87ED188 /* TraceScoringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D42976396613805D490314 /* TraceScoringTests.swift */; };
 		25BC64E4C56C8A08207C2653 /* KeepUpTuningStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64876C9D6E17854591F37C1 /* KeepUpTuningStore.swift */; };
+		265FAAB6F1872ECD66E7D815 /* TraceGameConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE63190F635D7F32F236EE76 /* TraceGameConfig.swift */; };
 		287BC6A9A8BADFA3CC4D6D41 /* TrampboxPlatformGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3DDBC736158EFB571CFEF8D /* TrampboxPlatformGenerator.swift */; };
 		28BDE3258FC7B0EDAD4C2C98 /* PianoGameLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D3E88DCAEFB5CDE6B51ACA /* PianoGameLogicTests.swift */; };
 		2AC69EAE8236D6B88AB60A9D /* GridDebugOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D46DACAE58FAC7080EEED6 /* GridDebugOptions.swift */; };
@@ -54,11 +60,14 @@
 		419C71F40B47990636FBA848 /* CenterHitGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBBBD2F504A5A0F3AB58EEE2 /* CenterHitGeometry.swift */; };
 		421744908638C5617F7268CD /* KeepUpGameLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D8213E98E32919CEF89F95 /* KeepUpGameLogicTests.swift */; };
 		432848AF86E6DF545E713CD2 /* ReactTuningStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7869BA4A0FD2E525D46C5307 /* ReactTuningStore.swift */; };
+		44BDC94C2C3EA50DBF8F3597 /* TraceGameModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D354C256FC67E92B58BACDA /* TraceGameModule.swift */; };
+		4503375683C3E13E306E9B65 /* TraceGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FECA0A5FDBC0E06B959479 /* TraceGeometryTests.swift */; };
 		4672D1058CF177A7F9D06BD5 /* KeepUpDebugSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08A75306826E815D46420B7 /* KeepUpDebugSettingsView.swift */; };
 		46B8E1ED1E01EAF8E7D1CC04 /* TrampboxCollisionDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E6F757BBE1812C7822548F /* TrampboxCollisionDetector.swift */; };
 		46C227BF0FB788D3F7E205DC /* CenterHitGameModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC410ECFC38B960CF6C9D58F /* CenterHitGameModule.swift */; };
 		4891DA5CCA6AAA0D4384A151 /* GameResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD6D25C46AA4577ABC010D3 /* GameResult.swift */; };
 		4C15B0B7A00CA8691633F1BE /* MiniGameDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC46BEA1D6263BDF0003F38 /* MiniGameDescriptor.swift */; };
+		4D75361ADD98CC5E7B96CBA9 /* TraceTuningStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 714C0103B06CD6F39F7E2090 /* TraceTuningStore.swift */; };
 		4EC55B2E409B6F9C78FAD6E1 /* TowerStackGameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F713BC2EFA71D52DE4F426D /* TowerStackGameLogic.swift */; };
 		504D0C2F039FC7BF5123F86B /* TowerStackProjectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2475A0B9BD5D5A1689D4B2C4 /* TowerStackProjectionTests.swift */; };
 		50F129F4CD5BD7E9C3037DD1 /* KeepUpCeilingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBD7D8357B7F214AC84800D /* KeepUpCeilingTests.swift */; };
@@ -75,7 +84,9 @@
 		5845013036BA582712BFD6F4 /* TowerStackBlockNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8A670558E99FC8D5940AB3 /* TowerStackBlockNode.swift */; };
 		5AF3E69A51265777913680B9 /* CenterHitGameLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA37242263145E938C48AAD /* CenterHitGameLogicTests.swift */; };
 		5D325C163C3AE52767AC55FC /* GridGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DA2876724B4EF1B75B0892 /* GridGeometry.swift */; };
+		5FCDB704A20B6345FF892A29 /* TraceDebugOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66FD0E8AAA7462D9FDBE3A3D /* TraceDebugOptions.swift */; };
 		6074B8B556CAFC8BCA231D74 /* GridGameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A6CD9C8368F85BD58B810A /* GridGameLogic.swift */; };
+		619230A8E838F3C4A706DDE4 /* TracePersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D370B36F110DC448ACC9B13 /* TracePersistenceTests.swift */; };
 		63270821C491360BC8EB5A04 /* PianoGameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225D09F2A6D47D5FA2C4386C /* PianoGameLogic.swift */; };
 		644DE8D254599CAE30A5D338 /* TimesUpTuningStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564A32531C3C23AF2B27C5E0 /* TimesUpTuningStore.swift */; };
 		64D0234A457DE1F632DE1112 /* TowerStackGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EA8E1C2DCF24EAE8543BCC /* TowerStackGeometry.swift */; };
@@ -83,6 +94,7 @@
 		668154737AE2C84A099AAB25 /* KeepUpDifficultyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F19455DC671FFE6F2EB23E /* KeepUpDifficultyTests.swift */; };
 		66DF989557A99AB74915080C /* TrampboxGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04588D96EDD17F386830BE44 /* TrampboxGeometry.swift */; };
 		699F73176234B4B72D7264B8 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3359BB89B36FD20EE4A70D /* AppInfo.swift */; };
+		69D46A609D06BF3E31F4451A /* TraceDifficultyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C6229E72041F80191F2F92 /* TraceDifficultyModel.swift */; };
 		6E1C8CA22B1CBAFC755A9153 /* TimesUpGameLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A295E7BE5F167348C2A691 /* TimesUpGameLogicTests.swift */; };
 		6EE0799EDC91BE31F91D7B41 /* GridPersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19750C07C30AA1BB6B943540 /* GridPersistenceTests.swift */; };
 		6F618A911183C516DEAABD80 /* StatisticsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59DCA3B03101E22D046BF00 /* StatisticsStoreTests.swift */; };
@@ -96,12 +108,14 @@
 		7F8CD0574F99BEF23B38AB30 /* TrampboxDifficultyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E5A1015ACFF68AF2B99542 /* TrampboxDifficultyTests.swift */; };
 		7FE9BAAC96770A80AA944C66 /* TowerStackPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = E262C4DB2974F9E84F2ABE6F /* TowerStackPalette.swift */; };
 		81C70AB57237ACC94CF3268D /* DebugLaunchOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24BD87AE662A6346EEFB2E4 /* DebugLaunchOptions.swift */; };
+		821300D2A369A4A94D7D63EE /* TraceGameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7374200B788F05A6E28F190F /* TraceGameLogic.swift */; };
 		83B39D14BFB870E073D0212A /* TimesUpDebugOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25BE85E63F3B48700974A742 /* TimesUpDebugOptions.swift */; };
 		863BC9C925716E85351E1A3B /* GridIntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD523A69704091F3D694EC9 /* GridIntroView.swift */; };
 		87B9065C819D6A0ACD21AAE0 /* PianoTuningStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6E2E71AC2A7CA66D5E9393 /* PianoTuningStore.swift */; };
 		881F884C26E5AF03EF9FBF25 /* KeepUpGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0184A8D9EF2261AE042D062F /* KeepUpGameView.swift */; };
 		8C8FB5D97D7F17CABD0C10E4 /* TimesUpScoringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0C98C882137A49E4BE9D2D /* TimesUpScoringTests.swift */; };
 		8CB5BC7C9186DCDAE40DCF72 /* PianoPerformanceTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4618FC030B3ED492004E1 /* PianoPerformanceTracker.swift */; };
+		8EE2DD37F8B31ED96476C2B7 /* TraceGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E00B450F0B9CA462A5A289C /* TraceGameScene.swift */; };
 		900B625BCDBB2474FCADF0FC /* CenterHitGameConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC20182446F5D872604CF1FB /* CenterHitGameConfig.swift */; };
 		909A006ABB641D172C0BD836 /* CenterHitGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F2629AAF8E0842C6B5DE08C /* CenterHitGameView.swift */; };
 		90A8C0FC35CE3EDEFE88BCF2 /* CenterHitGameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABF47DF73A2BE48FFBCC4DB /* CenterHitGameViewModel.swift */; };
@@ -130,6 +144,8 @@
 		AD7EDDB3964FE3A5F64879ED /* GridGameConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8EE7C41AD568BEA26F790F /* GridGameConfig.swift */; };
 		ADC055CD2452CB16F9830953 /* CenterHitPersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD59BC8C3553E8A25D7FCBB6 /* CenterHitPersistenceTests.swift */; };
 		AF013F23089FC9CF2F61DAD5 /* ReactGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35346B6B9FA348B9B68AF853 /* ReactGeometryTests.swift */; };
+		AF2D2A52A510F38A75F75E79 /* TraceDebugSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D12B441F91D95DF88F892E0 /* TraceDebugSettingsView.swift */; };
+		AFB1C608F7BB757E3136BEC5 /* TraceGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB124E28F4AFDF3DA2E9354 /* TraceGeometry.swift */; };
 		B3AB01EB0C392B3832EE2FE1 /* ReactIntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1314BEFD21488D9C34F0D6E1 /* ReactIntroView.swift */; };
 		B3D227645792586BFD7885AA /* GridScoringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F27E35079731376EB4E9C1 /* GridScoringTests.swift */; };
 		B53DA2DCA12AC15AF0690298 /* TowerStackGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575FBD91E4FB70C8F19042D5 /* TowerStackGameView.swift */; };
@@ -141,6 +157,7 @@
 		BBDDD0A752BDD6308D604291 /* TrampboxGameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8EA6742F837F07EDC494A04 /* TrampboxGameLogic.swift */; };
 		BCE625F0A06053E91EC726D9 /* GameStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 867605D1BF4F8C24F1BC0038 /* GameStatistics.swift */; };
 		C0862CD6A388E02336C57C01 /* TrampboxTuningStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC2D6CC3F722D076621D225 /* TrampboxTuningStore.swift */; };
+		C251AA3D16E6C2A0BE65057D /* TraceGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C715BDEF497E1A970B2C39D /* TraceGameView.swift */; };
 		C61BD6AD0F26083BB0004165 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B55167029A1242F05EFB8D /* AppTheme.swift */; };
 		C801C270766721F8DC1668B5 /* GameRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB7BF40690EE39C63F2D6ED6 /* GameRegistry.swift */; };
 		C8651AE07DAFAC1F81EC56EC /* ReactPerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D15E9EA1A340EDD59E956D /* ReactPerformanceTests.swift */; };
@@ -150,6 +167,7 @@
 		CD8B9AF22C961FBA5DE23103 /* PianoGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E9900B591302503B7DF8E8 /* PianoGameView.swift */; };
 		CDC9BE221724DA0E0A6A209F /* PianoTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 290845F7849A558AFCE92A65 /* PianoTile.swift */; };
 		CE42A3EF233953899D2F101C /* ReactGameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD43B5F146F3BCD7EE485C51 /* ReactGameLogic.swift */; };
+		CFDF8693BEFA303A4E0C9B00 /* TracePatternTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD594116FD4B988F70C1042A /* TracePatternTests.swift */; };
 		D46CE1D6879D63151D439C10 /* GridTuningStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF03F7D0EF205EE9B4BFEAF /* GridTuningStore.swift */; };
 		D4845FEEEF4D5F9771EC72F7 /* TowerStackDifficultyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158F79F237E54AA65C019172 /* TowerStackDifficultyTests.swift */; };
 		D58A2591352C92F47BB96198 /* ReactGameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0FA5656771CFCCDA5D3A15B /* ReactGameViewModel.swift */; };
@@ -174,6 +192,7 @@
 		F4D89E4A388474A155B7D92D /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2638A9E8B721EF2FF8FE49 /* UserPreferences.swift */; };
 		F55DB429BCB38D87E84E47E1 /* GameCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC3C5465F74736704E106CC /* GameCardView.swift */; };
 		F6A6DC1227D6095010302BF7 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91DCA418EC078877ADF2BD7 /* AppEnvironment.swift */; };
+		F74F87DB69B7C686AA5EDD30 /* TraceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F698AC32E537FA61D034DD /* TraceModels.swift */; };
 		F8383A1F836725BF0AB56539 /* KeepUpGameConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1044943033B0A9E55F8AA9EC /* KeepUpGameConfig.swift */; };
 		F87A7A160198D7941DA5370C /* PianoDifficultyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB8DA7B0E8F044171CB5C256 /* PianoDifficultyModel.swift */; };
 		F8DF2F0151B1AF4863EDE4BF /* TimesUpGameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8491CA070C71138F9C78732 /* TimesUpGameViewModel.swift */; };
@@ -202,6 +221,7 @@
 		0ABF47DF73A2BE48FFBCC4DB /* CenterHitGameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterHitGameViewModel.swift; sourceTree = "<group>"; };
 		0B558A54BC73C9CDB4900A9D /* CenterHitPerformanceTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterHitPerformanceTracker.swift; sourceTree = "<group>"; };
 		0BBD7D8357B7F214AC84800D /* KeepUpCeilingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepUpCeilingTests.swift; sourceTree = "<group>"; };
+		0D370B36F110DC448ACC9B13 /* TracePersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracePersistenceTests.swift; sourceTree = "<group>"; };
 		1044943033B0A9E55F8AA9EC /* KeepUpGameConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepUpGameConfig.swift; sourceTree = "<group>"; };
 		10BA519867A67CAE01594B99 /* MiniGameTrainer.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MiniGameTrainer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1314BEFD21488D9C34F0D6E1 /* ReactIntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactIntroView.swift; sourceTree = "<group>"; };
@@ -215,12 +235,14 @@
 		225D09F2A6D47D5FA2C4386C /* PianoGameLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoGameLogic.swift; sourceTree = "<group>"; };
 		2363CF542687B86FC0520D44 /* TrampboxModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrampboxModels.swift; sourceTree = "<group>"; };
 		2475A0B9BD5D5A1689D4B2C4 /* TowerStackProjectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowerStackProjectionTests.swift; sourceTree = "<group>"; };
+		24F698AC32E537FA61D034DD /* TraceModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceModels.swift; sourceTree = "<group>"; };
 		25B917DB7203A890B9504AEC /* CenterHitDebugSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterHitDebugSettingsView.swift; sourceTree = "<group>"; };
 		25BE85E63F3B48700974A742 /* TimesUpDebugOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesUpDebugOptions.swift; sourceTree = "<group>"; };
 		26D40A4D09E51D74E4B4E0E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		28CFFC2A933F20F98D84C69B /* TowerStackPerformanceTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowerStackPerformanceTracker.swift; sourceTree = "<group>"; };
 		290845F7849A558AFCE92A65 /* PianoTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoTile.swift; sourceTree = "<group>"; };
 		2C0089563AF9F216A32D1C04 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
+		2D12B441F91D95DF88F892E0 /* TraceDebugSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceDebugSettingsView.swift; sourceTree = "<group>"; };
 		3151A951CA91135053AE3B26 /* TimesUpPerformanceTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesUpPerformanceTracker.swift; sourceTree = "<group>"; };
 		34C4C547BFFB19C746207F99 /* ReactRandomizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactRandomizationTests.swift; sourceTree = "<group>"; };
 		34DB635827DAD15B8FBDE117 /* TimesUpGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesUpGeometry.swift; sourceTree = "<group>"; };
@@ -239,6 +261,7 @@
 		4F8625D2F3CC0C518F865CC9 /* GridGameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridGameViewModel.swift; sourceTree = "<group>"; };
 		501564BC8B6BE82B4D2AB304 /* GameLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLibraryView.swift; sourceTree = "<group>"; };
 		5022F41F56B4790032D15489 /* MiniGameTrainerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniGameTrainerApp.swift; sourceTree = "<group>"; };
+		51681CB78098AAA39D19935D /* TraceIntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceIntroView.swift; sourceTree = "<group>"; };
 		51AEDB2F09D3B91376D3950F /* PianoIntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoIntroView.swift; sourceTree = "<group>"; };
 		51BC5F8AE0B30B1E44680443 /* TimesUpPersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesUpPersistenceTests.swift; sourceTree = "<group>"; };
 		52CEEB0DEAF9CC329B2FD78E /* TowerStackDebugOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowerStackDebugOptions.swift; sourceTree = "<group>"; };
@@ -253,21 +276,27 @@
 		5AB4618FC030B3ED492004E1 /* PianoPerformanceTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoPerformanceTracker.swift; sourceTree = "<group>"; };
 		5CA702D632A101C816BFD7BF /* GridDebugSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridDebugSettingsView.swift; sourceTree = "<group>"; };
 		5D70412145DE0708BE0D753F /* CenterHitDebugOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterHitDebugOptions.swift; sourceTree = "<group>"; };
+		5E00B450F0B9CA462A5A289C /* TraceGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceGameScene.swift; sourceTree = "<group>"; };
 		5FB9867787EE3BBC7B930ED9 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		616DC29C477856542278A8AF /* ReactDebugOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactDebugOptions.swift; sourceTree = "<group>"; };
+		62FECA0A5FDBC0E06B959479 /* TraceGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceGeometryTests.swift; sourceTree = "<group>"; };
 		64D8213E98E32919CEF89F95 /* KeepUpGameLogicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepUpGameLogicTests.swift; sourceTree = "<group>"; };
 		65F8D037D1E75C2A39EA6C7E /* TimesUpGameModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesUpGameModule.swift; sourceTree = "<group>"; };
+		66FD0E8AAA7462D9FDBE3A3D /* TraceDebugOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceDebugOptions.swift; sourceTree = "<group>"; };
 		694A77B888CABB5C1F36FF33 /* KeepUpPersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepUpPersistenceTests.swift; sourceTree = "<group>"; };
 		695A8C07846A70188AD39B1E /* ReactGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactGameView.swift; sourceTree = "<group>"; };
 		69CED4AC82C0D5E20FA3F5EA /* TrampboxGameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrampboxGameViewModel.swift; sourceTree = "<group>"; };
 		6A650E2C871990731FDDEDA7 /* PianoGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoGeometry.swift; sourceTree = "<group>"; };
 		6B53AC24E88CAF142901E843 /* StatRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatRow.swift; sourceTree = "<group>"; };
 		6E6E2E71AC2A7CA66D5E9393 /* PianoTuningStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoTuningStore.swift; sourceTree = "<group>"; };
+		714C0103B06CD6F39F7E2090 /* TraceTuningStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceTuningStore.swift; sourceTree = "<group>"; };
 		72923CFD21E1D7CDBA4F34C1 /* CenterHitTuningStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterHitTuningStore.swift; sourceTree = "<group>"; };
+		7374200B788F05A6E28F190F /* TraceGameLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceGameLogic.swift; sourceTree = "<group>"; };
 		75A099FA9D9034FF439AF5AC /* PianoSpawnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoSpawnerTests.swift; sourceTree = "<group>"; };
 		7869BA4A0FD2E525D46C5307 /* ReactTuningStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactTuningStore.swift; sourceTree = "<group>"; };
 		78724945E0E2F389F00498DF /* TowerStackGameLogicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowerStackGameLogicTests.swift; sourceTree = "<group>"; };
 		790AE684A4228D511D902CDC /* ReactGameConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactGameConfig.swift; sourceTree = "<group>"; };
+		7C715BDEF497E1A970B2C39D /* TraceGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceGameView.swift; sourceTree = "<group>"; };
 		80345F0978C0033B061685F7 /* TowerStackGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowerStackGameScene.swift; sourceTree = "<group>"; };
 		803B2683418436DE24213876 /* TowerStackOverlapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowerStackOverlapTests.swift; sourceTree = "<group>"; };
 		80C56F77C4AFB555D003C981 /* TrampboxDifficultyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrampboxDifficultyModel.swift; sourceTree = "<group>"; };
@@ -280,6 +309,7 @@
 		86AE9AFFAA9267AB56FFBE75 /* MiniGameModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniGameModule.swift; sourceTree = "<group>"; };
 		876397E67C38ADF5CFFF0E17 /* TrampboxDebugSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrampboxDebugSettingsView.swift; sourceTree = "<group>"; };
 		87AF7EFD233DB9295D759B67 /* KeepUpPhysics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepUpPhysics.swift; sourceTree = "<group>"; };
+		88D42976396613805D490314 /* TraceScoringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceScoringTests.swift; sourceTree = "<group>"; };
 		89063D3246B955E5C204414D /* GridGameModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridGameModule.swift; sourceTree = "<group>"; };
 		8AC3C5465F74736704E106CC /* GameCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCardView.swift; sourceTree = "<group>"; };
 		8AC90CC32C58F83FC1BF481B /* CenterHitGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterHitGameScene.swift; sourceTree = "<group>"; };
@@ -289,6 +319,7 @@
 		8C2634D386BB47699EB0D9E7 /* PianoTileNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoTileNode.swift; sourceTree = "<group>"; };
 		8C3359BB89B36FD20EE4A70D /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		8D10AFCDA776D89463EA4530 /* PianoGameModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoGameModule.swift; sourceTree = "<group>"; };
+		8D354C256FC67E92B58BACDA /* TraceGameModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceGameModule.swift; sourceTree = "<group>"; };
 		8F2629AAF8E0842C6B5DE08C /* CenterHitGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterHitGameView.swift; sourceTree = "<group>"; };
 		92B4D47A19E61445BEAE2DDC /* TrampboxDebugOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrampboxDebugOptions.swift; sourceTree = "<group>"; };
 		941DB0DEF189754E1E49ADB4 /* TrampboxGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrampboxGameScene.swift; sourceTree = "<group>"; };
@@ -310,6 +341,8 @@
 		B15BC063E4C2602F955D70D5 /* TrampboxPerformanceTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrampboxPerformanceTracker.swift; sourceTree = "<group>"; };
 		B3DDBC736158EFB571CFEF8D /* TrampboxPlatformGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrampboxPlatformGenerator.swift; sourceTree = "<group>"; };
 		B4C1B33126887E329EB66919 /* GridGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridGeometryTests.swift; sourceTree = "<group>"; };
+		B5C24F8FB6EF2010AE902F0C /* TraceGameLogicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceGameLogicTests.swift; sourceTree = "<group>"; };
+		B6C6229E72041F80191F2F92 /* TraceDifficultyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceDifficultyModel.swift; sourceTree = "<group>"; };
 		B91DCA418EC078877ADF2BD7 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		B9B2D8C86E429DF1E9AAE947 /* KeepUpGameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepUpGameViewModel.swift; sourceTree = "<group>"; };
 		BA2638A9E8B721EF2FF8FE49 /* UserPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
@@ -342,6 +375,8 @@
 		DA0C98C882137A49E4BE9D2D /* TimesUpScoringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesUpScoringTests.swift; sourceTree = "<group>"; };
 		DA8EE7C41AD568BEA26F790F /* GridGameConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridGameConfig.swift; sourceTree = "<group>"; };
 		DD3A8D0B41BB2352CE265376 /* GridDifficultyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridDifficultyModel.swift; sourceTree = "<group>"; };
+		DD8670D02EC8F53836D90860 /* TracePatternGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracePatternGenerator.swift; sourceTree = "<group>"; };
+		DD932B5BC99B07162116BF00 /* TraceGameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceGameViewModel.swift; sourceTree = "<group>"; };
 		DDA37242263145E938C48AAD /* CenterHitGameLogicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterHitGameLogicTests.swift; sourceTree = "<group>"; };
 		DF8A670558E99FC8D5940AB3 /* TowerStackBlockNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowerStackBlockNode.swift; sourceTree = "<group>"; };
 		DFB4E7A4A5472BA0BB2EFC58 /* GameDifficulty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDifficulty.swift; sourceTree = "<group>"; };
@@ -357,6 +392,7 @@
 		EBE8B0F2561B777CD9A12838 /* FeedbackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackService.swift; sourceTree = "<group>"; };
 		EC7D0DE77517587C1EBD3459 /* ReactGameLogicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactGameLogicTests.swift; sourceTree = "<group>"; };
 		EDC46BEA1D6263BDF0003F38 /* MiniGameDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniGameDescriptor.swift; sourceTree = "<group>"; };
+		EE63190F635D7F32F236EE76 /* TraceGameConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceGameConfig.swift; sourceTree = "<group>"; };
 		EEF527EF0446740C0BECFDD5 /* TimesUpDebugSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesUpDebugSettingsView.swift; sourceTree = "<group>"; };
 		F24BD87AE662A6346EEFB2E4 /* DebugLaunchOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLaunchOptions.swift; sourceTree = "<group>"; };
 		F2F27E35079731376EB4E9C1 /* GridScoringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridScoringTests.swift; sourceTree = "<group>"; };
@@ -365,9 +401,11 @@
 		F6CF7AC9A19F13D9DC2DB27B /* TrampboxGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrampboxGameView.swift; sourceTree = "<group>"; };
 		F9B7E6391DD0087A0F0AEE44 /* ReactPerformanceTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactPerformanceTracker.swift; sourceTree = "<group>"; };
 		FB050ECAA1D22EA28CCBCD94 /* CenterHitTimingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterHitTimingTests.swift; sourceTree = "<group>"; };
+		FBB124E28F4AFDF3DA2E9354 /* TraceGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceGeometry.swift; sourceTree = "<group>"; };
 		FBD523A69704091F3D694EC9 /* GridIntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridIntroView.swift; sourceTree = "<group>"; };
 		FC008A0DF6B9B0636050E02E /* TowerStackMovementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowerStackMovementTests.swift; sourceTree = "<group>"; };
 		FD43B5F146F3BCD7EE485C51 /* ReactGameLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactGameLogic.swift; sourceTree = "<group>"; };
+		FD594116FD4B988F70C1042A /* TracePatternTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracePatternTests.swift; sourceTree = "<group>"; };
 		FD59BC8C3553E8A25D7FCBB6 /* CenterHitPersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterHitPersistenceTests.swift; sourceTree = "<group>"; };
 		FF8B307C626E86BD2AFA0146 /* GridGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridGameView.swift; sourceTree = "<group>"; };
 		FFACE44F6A7B6C60C4F02704 /* TrampboxGameModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrampboxGameModule.swift; sourceTree = "<group>"; };
@@ -431,6 +469,7 @@
 				3F02A293AAC0C14DDD3DD081 /* React */,
 				9964EACCB112BBA58DE0F610 /* TimesUp */,
 				B170F8604A97DE9C54FC2491 /* TowerStack */,
+				9AECC13EDEA755D2CF86CE27 /* Trace */,
 				6AE0008BC1F692694BFA3F39 /* Trampbox */,
 			);
 			path = Games;
@@ -441,6 +480,15 @@
 			children = (
 				92B4D47A19E61445BEAE2DDC /* TrampboxDebugOptions.swift */,
 				876397E67C38ADF5CFFF0E17 /* TrampboxDebugSettingsView.swift */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
+		313444C680E1D007383ECFAA /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				66FD0E8AAA7462D9FDBE3A3D /* TraceDebugOptions.swift */,
+				2D12B441F91D95DF88F892E0 /* TraceDebugSettingsView.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -628,6 +676,26 @@
 			path = TimesUp;
 			sourceTree = "<group>";
 		};
+		9AECC13EDEA755D2CF86CE27 /* Trace */ = {
+			isa = PBXGroup;
+			children = (
+				B6C6229E72041F80191F2F92 /* TraceDifficultyModel.swift */,
+				EE63190F635D7F32F236EE76 /* TraceGameConfig.swift */,
+				7374200B788F05A6E28F190F /* TraceGameLogic.swift */,
+				8D354C256FC67E92B58BACDA /* TraceGameModule.swift */,
+				5E00B450F0B9CA462A5A289C /* TraceGameScene.swift */,
+				7C715BDEF497E1A970B2C39D /* TraceGameView.swift */,
+				DD932B5BC99B07162116BF00 /* TraceGameViewModel.swift */,
+				FBB124E28F4AFDF3DA2E9354 /* TraceGeometry.swift */,
+				51681CB78098AAA39D19935D /* TraceIntroView.swift */,
+				24F698AC32E537FA61D034DD /* TraceModels.swift */,
+				DD8670D02EC8F53836D90860 /* TracePatternGenerator.swift */,
+				714C0103B06CD6F39F7E2090 /* TraceTuningStore.swift */,
+				313444C680E1D007383ECFAA /* Debug */,
+			);
+			path = Trace;
+			sourceTree = "<group>";
+		};
 		9B70591253997E6C5BEF97AF /* Theme */ = {
 			isa = PBXGroup;
 			children = (
@@ -788,6 +856,11 @@
 				FC008A0DF6B9B0636050E02E /* TowerStackMovementTests.swift */,
 				803B2683418436DE24213876 /* TowerStackOverlapTests.swift */,
 				2475A0B9BD5D5A1689D4B2C4 /* TowerStackProjectionTests.swift */,
+				B5C24F8FB6EF2010AE902F0C /* TraceGameLogicTests.swift */,
+				62FECA0A5FDBC0E06B959479 /* TraceGeometryTests.swift */,
+				FD594116FD4B988F70C1042A /* TracePatternTests.swift */,
+				0D370B36F110DC448ACC9B13 /* TracePersistenceTests.swift */,
+				88D42976396613805D490314 /* TraceScoringTests.swift */,
 				853DA5A87A1975E63A72BD57 /* TrampboxCollisionTests.swift */,
 				C9E5A1015ACFF68AF2B99542 /* TrampboxDifficultyTests.swift */,
 				D1D37E9D3AE5C66F094C47F7 /* TrampboxGameLogicTests.swift */,
@@ -962,6 +1035,11 @@
 				099060A25767CE59AB4C249D /* TowerStackMovementTests.swift in Sources */,
 				E22816371C6D6B03EFAEA58F /* TowerStackOverlapTests.swift in Sources */,
 				504D0C2F039FC7BF5123F86B /* TowerStackProjectionTests.swift in Sources */,
+				2296F12A5B4C2160519C5DD0 /* TraceGameLogicTests.swift in Sources */,
+				4503375683C3E13E306E9B65 /* TraceGeometryTests.swift in Sources */,
+				CFDF8693BEFA303A4E0C9B00 /* TracePatternTests.swift in Sources */,
+				619230A8E838F3C4A706DDE4 /* TracePersistenceTests.swift in Sources */,
+				23E60074D72641ECD87ED188 /* TraceScoringTests.swift in Sources */,
 				55E3F5AAFC9C225CAA9F6090 /* TrampboxCollisionTests.swift in Sources */,
 				7F8CD0574F99BEF23B38AB30 /* TrampboxDifficultyTests.swift in Sources */,
 				B67C807E8621F87F5E6EE07C /* TrampboxGameLogicTests.swift in Sources */,
@@ -1093,6 +1171,20 @@
 				DCAD07247D1E301A18E2AD2D /* TowerStackPerformanceTracker.swift in Sources */,
 				EDADFFF62ED90FAC42A31B21 /* TowerStackProjection.swift in Sources */,
 				AA0333364966C24D4E70B695 /* TowerStackTuningStore.swift in Sources */,
+				5FCDB704A20B6345FF892A29 /* TraceDebugOptions.swift in Sources */,
+				AF2D2A52A510F38A75F75E79 /* TraceDebugSettingsView.swift in Sources */,
+				69D46A609D06BF3E31F4451A /* TraceDifficultyModel.swift in Sources */,
+				265FAAB6F1872ECD66E7D815 /* TraceGameConfig.swift in Sources */,
+				821300D2A369A4A94D7D63EE /* TraceGameLogic.swift in Sources */,
+				44BDC94C2C3EA50DBF8F3597 /* TraceGameModule.swift in Sources */,
+				8EE2DD37F8B31ED96476C2B7 /* TraceGameScene.swift in Sources */,
+				C251AA3D16E6C2A0BE65057D /* TraceGameView.swift in Sources */,
+				08B94ED33A6DC8A81783049A /* TraceGameViewModel.swift in Sources */,
+				AFB1C608F7BB757E3136BEC5 /* TraceGeometry.swift in Sources */,
+				18AD582DACB9D7A5D3B1CA6C /* TraceIntroView.swift in Sources */,
+				F74F87DB69B7C686AA5EDD30 /* TraceModels.swift in Sources */,
+				014D9E0B3338003EBB105CD3 /* TracePatternGenerator.swift in Sources */,
+				4D75361ADD98CC5E7B96CBA9 /* TraceTuningStore.swift in Sources */,
 				46B8E1ED1E01EAF8E7D1CC04 /* TrampboxCollisionDetector.swift in Sources */,
 				51B051E73AA511AD0127819A /* TrampboxDebugOptions.swift in Sources */,
 				E5508FD0457B4DD05859BBED /* TrampboxDebugSettingsView.swift in Sources */,

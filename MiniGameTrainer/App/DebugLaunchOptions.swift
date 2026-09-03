@@ -10,6 +10,7 @@ import Foundation
 /// `-timesUpAutoTap`, `-timesUpAutoOffset 0.01`, or `-timesUpScript 0.01,-0.03,-0.16`.
 /// GRID: `-autoPlay grid -gridOverlay -gridAutoCorrect -gridForcePattern -gridSeed 42`
 /// `-gridLevel 10 -gridRows 5 -gridColumns 5 -gridTargets 8 -gridPresentation 0.8 -gridTimeout 5`.
+/// TRACE: `-autoPlay trace -traceOverlay -traceAutoSolve -traceSkipPresentation -traceScore 90`.
 enum DebugLaunchOptions {
     #if DEBUG
     static var autoPlayGameID: String? {
@@ -36,6 +37,20 @@ enum DebugLaunchOptions {
         if pianoShowOverlay { tuning.debugOptions.showPerformanceOverlay = true }
         if pianoShowHitboxes { tuning.debugOptions.showHitboxes = true }
         if pianoAutoStart { tuning.config.requiresTapToStart = false }
+        let trace = TraceTuningStore.shared
+        if flag("traceOverlay") { trace.debugOptions.showOverlay = true }
+        if flag("traceHitboxes") { trace.debugOptions.showHitboxes = true }
+        if flag("traceAutoSolve") { trace.debugOptions.autoSolve = true }
+        if flag("traceAutoSolveWrong") {
+            trace.debugOptions.autoSolve = true
+            trace.debugOptions.autoSolveWrong = true
+        }
+        if flag("traceSkipPresentation") { trace.debugOptions.skipPresentation = true }
+        if let index = CommandLine.arguments.firstIndex(of: "-traceScore"),
+           CommandLine.arguments.indices.contains(index + 1),
+           let value = Int(CommandLine.arguments[index + 1]) {
+            trace.debugOptions.forcedScore = max(0, value)
+        }
         if let gameID = autoPlayGameID, GameRegistry.module(for: gameID) != nil {
             router.path = [.gameIntro(gameID: gameID), .game(gameID: gameID)]
         } else if let gameID = openIntroGameID, GameRegistry.module(for: gameID) != nil {

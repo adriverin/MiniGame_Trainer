@@ -3,12 +3,12 @@
 An iPhone app for practising short reaction/skill minigames. Each game is an isolated module
 plugged into a shared shell (home, library, intro, results, statistics, settings). The library
 contains **Piano**, **Trampbox**, **REACT!**, **Tower Stack**, **Center Hit**, **Keep Up**,
-**TIME'S UP!**, and **GRID**.
+**TIME'S UP!**, **GRID**, and **TRACE**.
 Reference measurements live in `Documentation/GAME_ANALYSIS.md`,
 `Documentation/TRAMPBOX_GAME_ANALYSIS.md`, `Documentation/REACT_GAME_ANALYSIS.md`,
 `Documentation/TOWER_STACK_GAME_ANALYSIS.md`, `Documentation/CENTER_HIT_GAME_ANALYSIS.md`,
-`Documentation/KEEP_UP_GAME_ANALYSIS.md`, `Documentation/TIMES_UP_GAME_ANALYSIS.md`, and
-`Documentation/GRID_GAME_ANALYSIS.md`.
+`Documentation/KEEP_UP_GAME_ANALYSIS.md`, `Documentation/TIMES_UP_GAME_ANALYSIS.md`,
+`Documentation/GRID_GAME_ANALYSIS.md`, and `Documentation/TRACE_GAME_ANALYSIS.md`.
 
 This is an independent training app; it is not affiliated with any game platform and uses only
 original assets.
@@ -177,7 +177,7 @@ include `-autoPlay timesUp`, `-timesUpAutoStart`, `-timesUpOverlay`, `-timesUpGe
 
 ## Tests
 
-`MiniGameTrainerTests` covers all eight games plus shared statistics: scoring, invalid input,
+`MiniGameTrainerTests` covers all nine games plus shared statistics: scoring, invalid input,
 timing arithmetic, randomization, geometry, difficulty curves, frame-rate independence, reset,
 pause/interruption recovery, deterministic seeds, performance summaries, score direction, and
 statistics persistence. Run with the scheme's Test action or the `xcodebuild ... test`
