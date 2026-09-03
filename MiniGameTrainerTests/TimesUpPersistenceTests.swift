@@ -4,8 +4,8 @@ import XCTest
 @MainActor
 final class TimesUpPersistenceTests: XCTestCase {
     func testTimesUpIsRegisteredAsSeventhGame() {
-        XCTAssertEqual(GameRegistry.modules.count, 7)
-        XCTAssertEqual(GameRegistry.modules.last?.descriptor.id, "timesUp")
+        XCTAssertEqual(GameRegistry.modules[5].descriptor.id, "keepUp")
+        XCTAssertEqual(GameRegistry.modules[6].descriptor.id, "timesUp")
         XCTAssertEqual(GameRegistry.descriptor(for: "timesUp"), TimesUpGameModule.descriptor)
         XCTAssertEqual(TimesUpGameModule.descriptor.scorePresentation, .timingErrorSeconds)
         XCTAssertEqual(TimesUpGameModule.descriptor.scorePresentation.comparison, .lowerIsBetter)

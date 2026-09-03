@@ -4,9 +4,9 @@ import XCTest
 final class GridPersistenceTests: XCTestCase {
     @MainActor
     func testGridIsRegisteredAfterKeepUp() {
-        XCTAssertEqual(GameRegistry.modules.count, 7)
         XCTAssertEqual(GameRegistry.modules[5].descriptor.id, "keepUp")
-        XCTAssertEqual(GameRegistry.modules.last?.descriptor.id, "grid")
+        XCTAssertEqual(GameRegistry.modules[6].descriptor.id, "timesUp")
+        XCTAssertEqual(GameRegistry.modules[7].descriptor.id, "grid")
         XCTAssertEqual(GameRegistry.descriptor(for: "grid"), GridGameModule.descriptor)
         XCTAssertEqual(GridGameModule.descriptor.scorePresentation.comparison, .higherIsBetter)
         XCTAssertEqual(GridGameModule.descriptor.scorePresentation.formatted(120), "120")
