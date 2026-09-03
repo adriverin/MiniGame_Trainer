@@ -17,6 +17,9 @@ import Foundation
 /// TAP AT 7: `-autoPlay tapSeven -tapSevenAutoStart -tapSevenOverlay -tapSevenGeometry`,
 /// `-tapSevenAutoTap`, `-tapSevenAutoOffset 0.01`, `-tapSevenTarget 7`, `-tapSevenPerfect 0.0005`,
 /// `-tapSevenMax 15`.
+/// SWIPE FAST: `-autoPlay swipeFast -swipeFastAutoPlay -swipeFastOverlay -swipeFastGeometry`,
+/// `-swipeFastScore 70 -swipeFastSeed 1 -swipeFastAllowedTime 1.2 -swipeFastWrongFails`,
+/// `-swipeFastAutoExpire -swipeFastAutoWrong`.
 enum DebugLaunchOptions {
     #if DEBUG
     static var autoPlayGameID: String? {

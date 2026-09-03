@@ -43,7 +43,8 @@ final class CenterHitPersistenceTests: XCTestCase {
         XCTAssertEqual(TowerStackGameModule.descriptor.scorePresentation.comparison, .higherIsBetter)
         XCTAssertEqual(CenterHitGameModule.descriptor.scorePresentation.comparison, .higherIsBetter)
         let ids = Set(GameRegistry.modules.map { $0.descriptor.id })
-        XCTAssertTrue(["piano", "trampbox", "react", "towerStack", "centerHit", "keepUp", "timesUp", "grid", "trace", "directions"].allSatisfy(ids.contains))
+        XCTAssertTrue(["piano", "trampbox", "react", "towerStack", "centerHit", "keepUp", "timesUp", "grid", "trace", "directions", "tapSeven", "swipeFast"].allSatisfy(ids.contains))
+        XCTAssertEqual(ids.count, GameRegistry.modules.count)
     }
 
     private func result(_ score: Int) -> GameResult {

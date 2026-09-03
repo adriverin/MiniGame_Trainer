@@ -3,13 +3,14 @@
 An iPhone app for practising short reaction/skill minigames. Each game is an isolated module
 plugged into a shared shell (home, library, intro, results, statistics, settings). The library
 contains **Piano**, **Trampbox**, **REACT!**, **Tower Stack**, **Center Hit**, **Keep Up**,
-**TIME'S UP!**, **GRID**, **TRACE**, **Directions**, and **TAP AT 7**.
+**TIME'S UP!**, **GRID**, **TRACE**, **Directions**, **TAP AT 7**, and **SWIPE FAST**.
 Reference measurements live in `Documentation/GAME_ANALYSIS.md`,
 `Documentation/TRAMPBOX_GAME_ANALYSIS.md`, `Documentation/REACT_GAME_ANALYSIS.md`,
 `Documentation/TOWER_STACK_GAME_ANALYSIS.md`, `Documentation/CENTER_HIT_GAME_ANALYSIS.md`,
 `Documentation/KEEP_UP_GAME_ANALYSIS.md`, `Documentation/TIMES_UP_GAME_ANALYSIS.md`,
 `Documentation/GRID_GAME_ANALYSIS.md`, `Documentation/TRACE_GAME_ANALYSIS.md`,
-`Documentation/DIRECTIONS_GAME_ANALYSIS.md`, and `Documentation/TAP_SEVEN_GAME_ANALYSIS.md`.
+`Documentation/DIRECTIONS_GAME_ANALYSIS.md`, `Documentation/TAP_SEVEN_GAME_ANALYSIS.md`, and
+`Documentation/SWIPE_FAST_GAME_ANALYSIS.md`.
 
 This is an independent training app; it is not affiliated with any game platform and uses only
 original assets.
@@ -189,9 +190,16 @@ signed and absolute error, ring progress, state, and clock timestamps. Visual-QA
 include `-autoPlay tapSeven`, `-tapSevenAutoStart`, `-tapSevenOverlay`, `-tapSevenGeometry`,
 `-tapSevenAutoTap` (exact), and `-tapSevenAutoOffset 0.01`.
 
+SWIPE FAST has DEBUG controls for per-box allowed time, gesture distance, wrong-swipe behavior,
+forced score/directions, auto-play (correct / wrong / expire), and a live overlay of each box's
+direction, age, remaining fraction, and bar color. Launch aids include `-autoPlay swipeFast`,
+`-swipeFastAutoPlay`, `-swipeFastOverlay`, `-swipeFastGeometry`, `-swipeFastScore 70`,
+`-swipeFastSeed 1`, `-swipeFastAllowedTime 1.2`, `-swipeFastWrongFails`, `-swipeFastAutoExpire`,
+and `-swipeFastAutoWrong`.
+
 ## Tests
 
-`MiniGameTrainerTests` covers all eleven games plus shared statistics: scoring, invalid input,
+`MiniGameTrainerTests` covers all twelve games plus shared statistics: scoring, invalid input,
 timing arithmetic, randomization, geometry, difficulty curves, frame-rate independence, reset,
 pause/interruption recovery, deterministic seeds, performance summaries, score direction, and
 statistics persistence. Run with the scheme's Test action or the `xcodebuild ... test`
