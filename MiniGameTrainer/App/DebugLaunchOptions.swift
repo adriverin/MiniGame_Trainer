@@ -20,6 +20,9 @@ import Foundation
 /// SWIPE FAST: `-autoPlay swipeFast -swipeFastAutoPlay -swipeFastOverlay -swipeFastGeometry`,
 /// `-swipeFastScore 70 -swipeFastSeed 1 -swipeFastAllowedTime 1.2 -swipeFastWrongFails`,
 /// `-swipeFastAutoExpire -swipeFastAutoWrong`.
+/// TARGET SPEED: `-autoPlay targetSpeed -targetSpeedAutoHit -targetSpeedAutoMiss -targetSpeedOverlay`,
+/// `-targetSpeedHitboxes -targetSpeedScore 400 -targetSpeedLives 3 -targetSpeedSeed 1`,
+/// `-targetSpeedLifetime 1.2 -targetSpeedSpawn 0.22 -targetSpeedMaxActive 4`.
 enum DebugLaunchOptions {
     #if DEBUG
     static var autoPlayGameID: String? {
