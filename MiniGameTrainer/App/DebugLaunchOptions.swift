@@ -20,6 +20,8 @@ import Foundation
 /// SWIPE FAST: `-autoPlay swipeFast -swipeFastAutoPlay -swipeFastOverlay -swipeFastGeometry`,
 /// `-swipeFastScore 70 -swipeFastSeed 1 -swipeFastAllowedTime 1.2 -swipeFastWrongFails`,
 /// `-swipeFastAutoExpire -swipeFastAutoWrong`.
+/// BLOOPY: `-autoPlay bloopy -bloopyAutoSteer -bloopyOverlay -bloopyGeometry`,
+/// `-bloopyScore 400 -bloopySeed 17602 -bloopyNoTrail`.
 enum DebugLaunchOptions {
     #if DEBUG
     static var autoPlayGameID: String? {
@@ -59,6 +61,21 @@ enum DebugLaunchOptions {
            CommandLine.arguments.indices.contains(index + 1),
            let value = Int(CommandLine.arguments[index + 1]) {
             trace.debugOptions.forcedScore = max(0, value)
+        }
+        let bloopy = BloopyTuningStore.shared
+        if flag("bloopyOverlay") { bloopy.debugOptions.showOverlay = true }
+        if flag("bloopyGeometry") { bloopy.debugOptions.showGeometry = true }
+        if flag("bloopyAutoSteer") { bloopy.debugOptions.autoSteer = true }
+        if flag("bloopyNoTrail") { bloopy.debugOptions.showTrail = false }
+        if let index = CommandLine.arguments.firstIndex(of: "-bloopyScore"),
+           CommandLine.arguments.indices.contains(index + 1),
+           let value = Int(CommandLine.arguments[index + 1]) {
+            bloopy.debugOptions.forcedScore = max(0, value)
+        }
+        if let index = CommandLine.arguments.firstIndex(of: "-bloopySeed"),
+           CommandLine.arguments.indices.contains(index + 1),
+           let value = UInt64(CommandLine.arguments[index + 1]) {
+            bloopy.config.randomSeed = value
         }
         if let gameID = autoPlayGameID, GameRegistry.module(for: gameID) != nil {
             router.path = [.gameIntro(gameID: gameID), .game(gameID: gameID)]
