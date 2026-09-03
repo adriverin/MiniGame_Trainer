@@ -63,6 +63,7 @@ final class StatisticsStoreTests: XCTestCase {
         XCTAssertEqual(SwipeFastGameModule.descriptor.scorePresentation.comparison, .higherIsBetter)
         XCTAssertEqual(TargetSpeedGameModule.descriptor.scorePresentation.comparison, .higherIsBetter)
         XCTAssertEqual(BloopyGameModule.descriptor.scorePresentation.comparison, .higherIsBetter)
+        XCTAssertEqual(ColorReflexGameModule.descriptor.scorePresentation.comparison, .higherIsBetter)
         let moduleIDs = GameRegistry.modules.map { $0.descriptor.id }
         let ids = Set(moduleIDs)
         XCTAssertEqual(ids.count, moduleIDs.count)
@@ -79,6 +80,7 @@ final class StatisticsStoreTests: XCTestCase {
         XCTAssertTrue(ids.contains("swipeFast"))
         XCTAssertTrue(ids.contains("targetSpeed"))
         XCTAssertTrue(ids.contains("bloopy"))
+        XCTAssertTrue(ids.contains("colorReflex"))
     }
 
     func testAggregatesAndBestReaction() {
