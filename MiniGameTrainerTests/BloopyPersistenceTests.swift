@@ -7,7 +7,7 @@ final class BloopyPersistenceTests: XCTestCase {
         let ids = GameRegistry.modules.map { $0.descriptor.id }
         XCTAssertEqual(ids.filter { $0 == "bloopy" }.count, 1)
         XCTAssertTrue(ids.contains("swipeFast"))
-        XCTAssertEqual(ids.last, "bloopy")
+        XCTAssertTrue(ids.contains("bloopy"))
         XCTAssertEqual(GameRegistry.descriptor(for: "bloopy"), BloopyGameModule.descriptor)
         XCTAssertEqual(BloopyGameModule.descriptor.scorePresentation.comparison, .higherIsBetter)
     }

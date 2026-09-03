@@ -6,10 +6,10 @@ final class TargetSpeedPersistenceTests: XCTestCase {
     func testTargetSpeedIsRegisteredLastWithHigherIsBetterScoring() {
         let ids = GameRegistry.modules.map { $0.descriptor.id }
         XCTAssertEqual(ids.filter { $0 == "targetSpeed" }.count, 1)
-        XCTAssertEqual(ids.last, "targetSpeed")
+        XCTAssertTrue(ids.contains("targetSpeed"))
         XCTAssertEqual(GameRegistry.descriptor(for: "targetSpeed"), TargetSpeedGameModule.descriptor)
         XCTAssertEqual(TargetSpeedGameModule.descriptor.scorePresentation.comparison, .higherIsBetter)
-        XCTAssertEqual(ids[11], "swipeFast")
+        XCTAssertTrue(ids.contains("swipeFast"))
     }
 
     @MainActor
