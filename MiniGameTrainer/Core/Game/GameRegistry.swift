@@ -13,6 +13,7 @@ enum GameRegistry {
         TimesUpGameModule.self,
         GridGameModule.self,
         TraceGameModule.self,
+        DirectionsGameModule.self,
     ]
 
     static var descriptors: [MiniGameDescriptor] {

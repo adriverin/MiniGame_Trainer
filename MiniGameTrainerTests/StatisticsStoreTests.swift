@@ -55,14 +55,20 @@ final class StatisticsStoreTests: XCTestCase {
         XCTAssertEqual(ReactGameModule.descriptor.scorePresentation.comparison, .lowerIsBetter)
         XCTAssertEqual(TowerStackGameModule.descriptor.scorePresentation.comparison, .higherIsBetter)
         XCTAssertEqual(KeepUpGameModule.descriptor.scorePresentation.comparison, .higherIsBetter)
+        XCTAssertEqual(TimesUpGameModule.descriptor.scorePresentation.comparison, .lowerIsBetter)
         XCTAssertEqual(GridGameModule.descriptor.scorePresentation.comparison, .higherIsBetter)
+        XCTAssertEqual(TraceGameModule.descriptor.scorePresentation.comparison, .higherIsBetter)
+        XCTAssertEqual(DirectionsGameModule.descriptor.scorePresentation.comparison, .higherIsBetter)
         let ids = Set(GameRegistry.modules.map { $0.descriptor.id })
         XCTAssertTrue(ids.contains("piano"))
         XCTAssertTrue(ids.contains("trampbox"))
         XCTAssertTrue(ids.contains("react"))
         XCTAssertTrue(ids.contains("towerStack"))
         XCTAssertTrue(ids.contains("keepUp"))
+        XCTAssertTrue(ids.contains("timesUp"))
         XCTAssertTrue(ids.contains("grid"))
+        XCTAssertTrue(ids.contains("trace"))
+        XCTAssertTrue(ids.contains("directions"))
     }
 
     func testAggregatesAndBestReaction() {

@@ -3,12 +3,13 @@
 An iPhone app for practising short reaction/skill minigames. Each game is an isolated module
 plugged into a shared shell (home, library, intro, results, statistics, settings). The library
 contains **Piano**, **Trampbox**, **REACT!**, **Tower Stack**, **Center Hit**, **Keep Up**,
-**TIME'S UP!**, **GRID**, and **TRACE**.
+**TIME'S UP!**, **GRID**, **TRACE**, and **Directions**.
 Reference measurements live in `Documentation/GAME_ANALYSIS.md`,
 `Documentation/TRAMPBOX_GAME_ANALYSIS.md`, `Documentation/REACT_GAME_ANALYSIS.md`,
 `Documentation/TOWER_STACK_GAME_ANALYSIS.md`, `Documentation/CENTER_HIT_GAME_ANALYSIS.md`,
 `Documentation/KEEP_UP_GAME_ANALYSIS.md`, `Documentation/TIMES_UP_GAME_ANALYSIS.md`,
-`Documentation/GRID_GAME_ANALYSIS.md`, and `Documentation/TRACE_GAME_ANALYSIS.md`.
+`Documentation/GRID_GAME_ANALYSIS.md`, `Documentation/TRACE_GAME_ANALYSIS.md`, and
+`Documentation/DIRECTIONS_GAME_ANALYSIS.md`.
 
 This is an independent training app; it is not affiliated with any game platform and uses only
 original assets.
@@ -175,9 +176,16 @@ visibility cutoff, state, last errors, average, and clock timestamps. Visual-QA 
 include `-autoPlay timesUp`, `-timesUpAutoStart`, `-timesUpOverlay`, `-timesUpGeometry`,
 `-timesUpAutoTap` (exact), `-timesUpAutoOffset 0.01`, and `-timesUpScript 0.01,-0.03,-0.16`.
 
+DIRECTIONS has DEBUG controls for sequence length offset/cap, arrow-on duration, inter-arrow
+gap, recall transition, D-pad geometry, deterministic seed, forced level/sequence, skip
+presentation, auto-input, and intentional fail-at-index. Launch aids include
+`-autoPlay directions`, `-directionsAutoInput`, `-directionsOverlay`, `-directionsGeometry`,
+`-directionsSkipPresentation`, `-directionsLevel 12`, `-directionsSeed 1`,
+`-directionsFailAt 3`, and `-directionsSequence up,left,down,right`.
+
 ## Tests
 
-`MiniGameTrainerTests` covers all nine games plus shared statistics: scoring, invalid input,
+`MiniGameTrainerTests` covers all ten games plus shared statistics: scoring, invalid input,
 timing arithmetic, randomization, geometry, difficulty curves, frame-rate independence, reset,
 pause/interruption recovery, deterministic seeds, performance summaries, score direction, and
 statistics persistence. Run with the scheme's Test action or the `xcodebuild ... test`

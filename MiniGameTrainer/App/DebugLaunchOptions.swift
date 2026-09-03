@@ -11,6 +11,9 @@ import Foundation
 /// GRID: `-autoPlay grid -gridOverlay -gridAutoCorrect -gridForcePattern -gridSeed 42`
 /// `-gridLevel 10 -gridRows 5 -gridColumns 5 -gridTargets 8 -gridPresentation 0.8 -gridTimeout 5`.
 /// TRACE: `-autoPlay trace -traceOverlay -traceAutoSolve -traceSkipPresentation -traceScore 90`.
+/// DIRECTIONS: `-autoPlay directions -directionsAutoInput -directionsOverlay -directionsGeometry`,
+/// `-directionsSkipPresentation -directionsLevel 12 -directionsSeed 1 -directionsFailAt 3`,
+/// `-directionsSequence up,left,down,right`.
 enum DebugLaunchOptions {
     #if DEBUG
     static var autoPlayGameID: String? {
