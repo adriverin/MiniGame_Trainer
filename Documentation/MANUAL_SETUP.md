@@ -21,6 +21,10 @@ Exact proposed subscription product IDs derived from the current bundle ID:
 
 Configured in `MiniGameTrainer/Features/Monetization/MonetizationConfiguration.swift`.
 
+Once created in App Store Connect, these product IDs are effectively permanent.
+Apple does not allow changing a product ID; a wrong ID requires creating new products
+and leaving the old ones unused. Confirm the bundle ID before creating either product.
+
 ## B. Apple Developer / Agreements
 
 In App Store Connect / Apple Developer:
@@ -135,7 +139,10 @@ The app calls `requestConsentInfoUpdate` on every launch, then
 
 DEBUG testing helpers (optional UserDefaults):
 
-- `umpDebugGeography` = `eea` | `disabled` | `regulated`
+- `umpDebugGeography` = `eea` | `other` | `disabled` | `regulated`
+  (`eea` simulates EEA consent-required; `other` simulates a region with no
+  regulation in force / consent often not required; `disabled` turns off
+  geography debugging so UMP uses the real device region)
 - `umpDebugDeviceIdentifier` = UMP test device ID
 - Settings → Monetization Debug → Reset UMP consent
 

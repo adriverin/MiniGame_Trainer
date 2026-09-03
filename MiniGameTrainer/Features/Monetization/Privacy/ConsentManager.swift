@@ -55,20 +55,46 @@ final class ConsentManager: ObservableObject {
         refreshPublishedState()
     }
 
+    /// Maps `umpDebugGeography` UserDefaults values onto UMP's geography enum.
+    /// `other` / `notrequired` must be `.other` (no regulation), not `.disabled`.
+    enum DebugGeography: Equatable {
+        case eea
+        case other
+        case disabled
+        case regulatedUSState
+
+        static func parse(_ rawValue: String) -> DebugGeography? {
+            switch rawValue.lowercased() {
+            case "eea":
+                return .eea
+            case "other", "notrequired":
+                return .other
+            case "disabled":
+                return .disabled
+            case "regulated":
+                return .regulatedUSState
+            default:
+                return nil
+            }
+        }
+
+        var umpGeography: UMPDebugGeography {
+            switch self {
+            case .eea: return .EEA
+            case .other: return .other
+            case .disabled: return .disabled
+            case .regulatedUSState: return .regulatedUSState
+            }
+        }
+    }
+
     private static func debugParameters() -> UMPDebugSettings? {
-        let geography = UserDefaults.standard.string(forKey: "umpDebugGeography")?.lowercased()
-        guard let geography else { return nil }
-        let settings = UMPDebugSettings()
-        switch geography {
-        case "eea":
-            settings.geography = .EEA
-        case "disabled", "notrequired", "other":
-            settings.geography = .disabled
-        case "regulated":
-            settings.geography = .regulatedUSState
-        default:
+        guard let raw = UserDefaults.standard.string(forKey: "umpDebugGeography"),
+              let mapped = DebugGeography.parse(raw) else {
             return nil
         }
+        let settings = UMPDebugSettings()
+        settings.geography = mapped.umpGeography
         if let device = UserDefaults.standard.string(forKey: "umpDebugDeviceIdentifier") {
             settings.testDeviceIdentifiers = [device]
         }
