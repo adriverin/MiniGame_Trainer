@@ -14,6 +14,9 @@ import Foundation
 /// DIRECTIONS: `-autoPlay directions -directionsAutoInput -directionsOverlay -directionsGeometry`,
 /// `-directionsSkipPresentation -directionsLevel 12 -directionsSeed 1 -directionsFailAt 3`,
 /// `-directionsSequence up,left,down,right`.
+/// TAP AT 7: `-autoPlay tapSeven -tapSevenAutoStart -tapSevenOverlay -tapSevenGeometry`,
+/// `-tapSevenAutoTap`, `-tapSevenAutoOffset 0.01`, `-tapSevenTarget 7`, `-tapSevenPerfect 0.0005`,
+/// `-tapSevenMax 15`.
 enum DebugLaunchOptions {
     #if DEBUG
     static var autoPlayGameID: String? {
