@@ -7,7 +7,9 @@ import SwiftUI
 /// Adding a new game:
 /// 1. Create `Features/Games/<Name>/` with a type conforming to `MiniGameModule`.
 /// 2. Register it in `GameRegistry.modules`.
-/// 3. When the game ends, build a `GameResult` and hand it to `GameSessionHost.finish(_:)`,
+/// 3. Start playable runs through `AppRouter.startGame` (Intro PLAY). Attempt gating is
+///    applied there automatically — no game-specific monetization code.
+/// 4. When the game ends, build a `GameResult` and hand it to `GameSessionHost.finish(_:)`,
 ///    which persists statistics and navigates to the shared results screen.
 @MainActor
 protocol MiniGameModule {

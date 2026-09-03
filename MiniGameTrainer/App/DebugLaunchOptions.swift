@@ -25,6 +25,8 @@ import Foundation
 /// `-targetSpeedLifetime 1.2 -targetSpeedSpawn 0.22 -targetSpeedMaxActive 4`.
 /// BLOOPY: `-autoPlay bloopy -bloopyAutoSteer -bloopyOverlay -bloopyGeometry`,
 /// `-bloopyScore 400 -bloopySeed 17602 -bloopyNoTrail`.
+/// Monetization (DEBUG): `-forcePro` / `-simulatePro`, `-forceFree`, `-setAttempts0`,
+/// `-grantBonus`, `forceDayIdentifier`, `monetizationGameID`, `-showAttemptState`.
 enum DebugLaunchOptions {
     #if DEBUG
     static var autoPlayGameID: String? {
@@ -45,7 +47,7 @@ enum DebugLaunchOptions {
     }
 
     @MainActor
-    static func apply(router: AppRouter) {
+    static func apply(router: AppRouter, environment: AppEnvironment? = nil) {
         let tuning = PianoTuningStore.shared
         if pianoSkipCountdown { tuning.debugOptions.skipCountdown = true }
         if pianoShowOverlay { tuning.debugOptions.showPerformanceOverlay = true }
@@ -80,14 +82,43 @@ enum DebugLaunchOptions {
            let value = UInt64(CommandLine.arguments[index + 1]) {
             bloopy.config.randomSeed = value
         }
+        applyMonetizationDebug(environment: environment)
         if let gameID = autoPlayGameID, GameRegistry.module(for: gameID) != nil {
-            router.path = [.gameIntro(gameID: gameID), .game(gameID: gameID)]
+            router.path = [.gameIntro(gameID: gameID)]
+            router.startGame(gameID)
         } else if let gameID = openIntroGameID, GameRegistry.module(for: gameID) != nil {
             router.path = [.gameIntro(gameID: gameID)]
         }
     }
+
+    @MainActor
+    private static func applyMonetizationDebug(environment: AppEnvironment?) {
+        guard let environment else { return }
+        if flag("forcePro") || flag("simulatePro") {
+            environment.purchaseManager.debugOverride = .forcePro
+        }
+        if flag("forceFree") {
+            environment.purchaseManager.debugOverride = .forceFree
+        }
+        if let gameID = UserDefaults.standard.string(forKey: "monetizationGameID")
+            ?? autoPlayGameID
+            ?? openIntroGameID {
+            if flag("setAttempts0") {
+                environment.attemptManager.debugSetAttemptsExhausted(for: gameID)
+            }
+            if flag("grantBonus") {
+                environment.attemptManager.debugGrantRewardedAttempts(for: gameID)
+            }
+        }
+        if let day = UserDefaults.standard.string(forKey: "forceDayIdentifier"), !day.isEmpty {
+            environment.attemptManager.debugDayIdentifierOverride = day
+        }
+        if flag("showAttemptState") {
+            MonetizationLog.debug(environment.attemptManager.debugDumpState())
+        }
+    }
     #else
     @MainActor
-    static func apply(router: AppRouter) {}
+    static func apply(router: AppRouter, environment: AppEnvironment? = nil) {}
     #endif
 }
