@@ -6,6 +6,8 @@ import Foundation
 /// `-towerStackAutoPlace 0` (perfect) / `0.05` (5 % offset), `-towerStackMissAt 20`, `-towerStackPauseAtScore 12`.
 /// KEEP UP: `-autoPlay keepUp -keepUpAutoCatch -keepUpOverlay -keepUpGeometry`,
 /// `-keepUpEdgeCatch 0.75`, `-keepUpMissAt 100`, `-keepUpPhysicsScore 40`, or `-keepUpNoTrail`.
+/// GRID: `-autoPlay grid -gridOverlay -gridAutoCorrect -gridForcePattern -gridSeed 42`
+/// `-gridLevel 10 -gridRows 5 -gridColumns 5 -gridTargets 8 -gridPresentation 0.8 -gridTimeout 5`.
 enum DebugLaunchOptions {
     #if DEBUG
     static var autoPlayGameID: String? {
