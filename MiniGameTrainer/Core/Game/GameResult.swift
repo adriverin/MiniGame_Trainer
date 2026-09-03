@@ -17,20 +17,46 @@ struct ScorePresentation: Hashable, Codable {
     let label: String
     let unit: String?
     let comparison: ScoreComparison
+    /// Number of stored integer units per one displayed unit. A scale of 100 stores hundredths
+    /// without changing the long-standing integer persistence format.
+    let storageScale: Int
+    let valueFractionDigits: Int
+    let averageFractionDigits: Int
+    let separatesUnit: Bool
 
-    init(label: String = "Score", unit: String? = nil, comparison: ScoreComparison = .higherIsBetter) {
+    init(
+        label: String = "Score",
+        unit: String? = nil,
+        comparison: ScoreComparison = .higherIsBetter,
+        storageScale: Int = 1,
+        valueFractionDigits: Int = 0,
+        averageFractionDigits: Int = 1,
+        separatesUnit: Bool = true
+    ) {
         self.label = label
         self.unit = unit
         self.comparison = comparison
+        self.storageScale = max(1, storageScale)
+        self.valueFractionDigits = max(0, valueFractionDigits)
+        self.averageFractionDigits = max(0, averageFractionDigits)
+        self.separatesUnit = separatesUnit
     }
 
     func formatted(_ value: Int) -> String {
-        unit.map { "\(value) \($0)" } ?? "\(value)"
+        let number = storageScale == 1 && valueFractionDigits == 0
+            ? "\(value)"
+            : String(format: "%.*f", valueFractionDigits, Double(value) / Double(storageScale))
+        return appendingUnit(to: number)
     }
 
     func formattedAverage(_ value: Double) -> String {
-        let number = String(format: "%.1f", value)
-        return unit.map { "\(number) \($0)" } ?? number
+        let number = String(format: "%.*f", averageFractionDigits, value / Double(storageScale))
+        return appendingUnit(to: number)
+    }
+
+    private func appendingUnit(to number: String) -> String {
+        guard let unit else { return number }
+        return separatesUnit ? "\(number) \(unit)" : "\(number)\(unit)"
     }
 
     static let points = ScorePresentation()
@@ -39,6 +65,31 @@ struct ScorePresentation: Hashable, Codable {
         unit: "ms",
         comparison: .lowerIsBetter
     )
+    /// Center Hit persists percentage hundredths as basis points: 97.89% is stored as 9789.
+    static let precisionPercent = ScorePresentation(
+        label: "Precision",
+        unit: "%",
+        comparison: .higherIsBetter,
+        storageScale: 100,
+        valueFractionDigits: 2,
+        averageFractionDigits: 2,
+        separatesUnit: false
+    )
+
+    private enum CodingKeys: String, CodingKey {
+        case label, unit, comparison, storageScale, valueFractionDigits, averageFractionDigits, separatesUnit
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        label = try values.decodeIfPresent(String.self, forKey: .label) ?? "Score"
+        unit = try values.decodeIfPresent(String.self, forKey: .unit)
+        comparison = try values.decodeIfPresent(ScoreComparison.self, forKey: .comparison) ?? .higherIsBetter
+        storageScale = max(1, try values.decodeIfPresent(Int.self, forKey: .storageScale) ?? 1)
+        valueFractionDigits = max(0, try values.decodeIfPresent(Int.self, forKey: .valueFractionDigits) ?? 0)
+        averageFractionDigits = max(0, try values.decodeIfPresent(Int.self, forKey: .averageFractionDigits) ?? 1)
+        separatesUnit = try values.decodeIfPresent(Bool.self, forKey: .separatesUnit) ?? true
+    }
 }
 
 /// Outcome of one finished game session. Generic across all minigames; game-specific numbers go

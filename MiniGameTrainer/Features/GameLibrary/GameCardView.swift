@@ -5,6 +5,10 @@ struct GameCardView: View {
     let statistics: GameStatistics
     let onPlay: () -> Void
 
+    var formattedBestScore: String {
+        descriptor.scorePresentation.formatted(statistics.bestScore)
+    }
+
     var body: some View {
         Button(action: onPlay) {
             CardContainer {
@@ -39,7 +43,7 @@ struct GameCardView: View {
                             Text("Best")
                                 .font(AppTheme.Fonts.caption)
                                 .foregroundStyle(AppTheme.Colors.textSecondary)
-                            Text("\(statistics.bestScore)")
+                            Text(formattedBestScore)
                                 .font(AppTheme.Fonts.display(28).monospacedDigit())
                                 .foregroundStyle(AppTheme.Colors.textPrimary)
                         }
@@ -67,7 +71,7 @@ struct GameCardView: View {
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(descriptor.name). \(descriptor.subtitle). Best score \(statistics.bestScore).")
+        .accessibilityLabel("\(descriptor.name). \(descriptor.subtitle). Best score \(formattedBestScore).")
         .accessibilityHint("Opens the game")
         .accessibilityAddTraits(.isButton)
     }

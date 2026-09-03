@@ -16,7 +16,7 @@ struct SettingsView: View {
                 ForEach(GameRegistry.descriptors) { descriptor in
                     let stats = statistics.statistics(for: descriptor.id)
                     LabeledContent(descriptor.name) {
-                        Text("Best \(stats.bestScore) · \(stats.gamesPlayed) played")
+                        Text("Best \(descriptor.scorePresentation.formatted(stats.bestScore)) · \(stats.gamesPlayed) played")
                             .foregroundStyle(AppTheme.Colors.textSecondary)
                     }
                 }

@@ -32,7 +32,11 @@ The moving indicator is a bright white vertical capsule approximately 13 px wide
 
 ## Center Marker
 
-The static target is distinct from the moving indicator. It consists of a thin white line at x ≈ 589.5, approximately 5 px wide and confined to the bar, plus a small dark-green linked-circle/target ornament around the exact center. The collision/scoring origin is the mathematical center of the bar. The trainer should preserve the thin fixed line and a subtle center ornament without treating the ornament as a separate scoring region.
+The static target is distinct from the moving indicator. It is a thin white line at x ≈ 589.5, approximately 5 px wide and confined to the bar. Before the first tap there are no circles beside it. The collision/scoring origin is the mathematical center of the bar.
+
+## Tap Markers
+
+Frame comparison around all tap transitions shows that each real tap adds one small circular marker at the timestamp-resolved moving-indicator position. Previous markers remain for the session; closely grouped high-precision attempts therefore look like linked circles around the center. Before attempt one there are zero markers. The marker is centered vertically inside the bar, approximately 23–24 px in diameter (about 11.5% of the 207 px bar height), with transparent fill and a dark-green stroke roughly 4 px wide. No measurable fade or appearance animation is visible. Retry/reset removes the complete history.
 
 ## Initial State
 
@@ -119,7 +123,8 @@ The instruction states approximately 10 seconds. The first scored tap appears at
 ## High-Confidence Observations
 
 - One horizontal capsule, seven symmetric colored zones.
-- Thin fixed center line and separate taller moving line.
+- Thin fixed center line, separate taller moving line, and no pre-existing tap circles.
+- Every tap adds a retained outlined marker at the evaluated moving-line position.
 - Initial moving-line state is center, moving right, with automatic start.
 - Continuous constant-velocity motion and instantaneous edge reflection.
 - First five gameplay taps score; any-screen tap is the supported interpretation.

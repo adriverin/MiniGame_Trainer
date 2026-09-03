@@ -8,6 +8,8 @@ enum GameRegistry {
         TrampboxGameModule.self,
         ReactGameModule.self,
         TowerStackGameModule.self,
+        CenterHitGameModule.self,
+        KeepUpGameModule.self,
     ]
 
     static var descriptors: [MiniGameDescriptor] {

@@ -2,9 +2,11 @@
 
 An iPhone app for practising short reaction/skill minigames. Each game is an isolated module
 plugged into a shared shell (home, library, intro, results, statistics, settings). The library
-currently contains **Piano**, **Trampbox**, and the five-round visual reaction trainer **REACT!**.
+contains **Piano**, **Trampbox**, **REACT!**, **Tower Stack**, **Center Hit**, and **Keep Up**.
 Reference measurements live in `Documentation/GAME_ANALYSIS.md`,
-`Documentation/TRAMPBOX_GAME_ANALYSIS.md`, and `Documentation/REACT_GAME_ANALYSIS.md`.
+`Documentation/TRAMPBOX_GAME_ANALYSIS.md`, `Documentation/REACT_GAME_ANALYSIS.md`,
+`Documentation/TOWER_STACK_GAME_ANALYSIS.md`, `Documentation/CENTER_HIT_GAME_ANALYSIS.md`, and
+`Documentation/KEEP_UP_GAME_ANALYSIS.md`.
 
 This is an independent training app; it is not affiliated with any game platform and uses only
 original assets.
@@ -157,12 +159,20 @@ repeat prevention, seed, hitboxes, and timing overlay. Launch aids include `-aut
 `-reactSkipStart`, `-reactOverlay`, `-reactHitboxes`, `-reactSeed <value>`, and the visual-QA-only
 `-reactAutoTap`.
 
+KEEP UP has DEBUG calibration for two-axis platform bounds, the physical ceiling (visible line
+and collision Y are the same value), initial state, gravity, bounce impulse, ceiling restitution,
+X/Y velocity transfer, catch tolerance, side walls, failure boundary, and trail behavior. Its
+overlay shows live ball/platform/relative physics, ceiling distance, sweep geometry, and predicted
+trajectory. Visual-QA launch aids include `-autoPlay keepUp`, `-keepUpAutoCatch`,
+`-keepUpOverlay`, `-keepUpGeometry`, `-keepUpEdgeCatch <offset>`, `-keepUpMissAt <score>`, and
+`-keepUpNoTrail`.
+
 ## Tests
 
-`MiniGameTrainerTests` covers all three games plus shared statistics: scoring, invalid input,
+`MiniGameTrainerTests` covers all six games plus shared statistics: scoring, invalid input,
 timing arithmetic, randomization, geometry, difficulty curves, frame-rate independence, reset,
 pause/interruption recovery, deterministic seeds, performance summaries, score direction, and
-statistics persistence (86 tests). Run with the scheme's Test action or the `xcodebuild ... test`
+statistics persistence (212 tests). Run with the scheme's Test action or the `xcodebuild ... test`
 command above.
 # MiniGame_Trainer
 # MiniGame_Trainer
