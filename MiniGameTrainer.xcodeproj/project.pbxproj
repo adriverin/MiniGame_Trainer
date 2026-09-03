@@ -241,7 +241,7 @@
 		0BBD7D8357B7F214AC84800D /* KeepUpCeilingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepUpCeilingTests.swift; sourceTree = "<group>"; };
 		0D370B36F110DC448ACC9B13 /* TracePersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracePersistenceTests.swift; sourceTree = "<group>"; };
 		1044943033B0A9E55F8AA9EC /* KeepUpGameConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepUpGameConfig.swift; sourceTree = "<group>"; };
-		10BA519867A67CAE01594B99 /* MiniGameTrainer.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MiniGameTrainer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		10BA519867A67CAE01594B99 /* MiniGameTrainer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MiniGameTrainer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1314BEFD21488D9C34F0D6E1 /* ReactIntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactIntroView.swift; sourceTree = "<group>"; };
 		158F79F237E54AA65C019172 /* TowerStackDifficultyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowerStackDifficultyTests.swift; sourceTree = "<group>"; };
 		160BC7068CE5182E229705CF /* SeededRandomNumberGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeededRandomNumberGenerator.swift; sourceTree = "<group>"; };
@@ -1030,7 +1030,6 @@
 						ProvisioningStyle = Automatic;
 					};
 					D294488BB188067F975F479A = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -1451,6 +1450,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = CA4ZH8R7Y7;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = MiniGameTrainer/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1487,6 +1487,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = CA4ZH8R7Y7;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = MiniGameTrainer/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
