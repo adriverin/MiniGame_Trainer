@@ -62,6 +62,8 @@
 		546DCD0A7ADCCE2F61969120 /* CenterHitTuningStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72923CFD21E1D7CDBA4F34C1 /* CenterHitTuningStore.swift */; };
 		554549570087688988C674BA /* KeepUpPhysicsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57556D8F73902EB4A022471 /* KeepUpPhysicsTests.swift */; };
 		A11C0001CE11CE0000000001 /* KeepUpCeilingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22C0001CE11CE0000000001 /* KeepUpCeilingTests.swift */; };
+		A33C1002CE11CE0000000001 /* KeepUpDifficultyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A33C1001CE11CE0000000001 /* KeepUpDifficultyModel.swift */; };
+		A33C1004CE11CE0000000001 /* KeepUpDifficultyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A33C1003CE11CE0000000001 /* KeepUpDifficultyTests.swift */; };
 		55E3F5AAFC9C225CAA9F6090 /* TrampboxCollisionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853DA5A87A1975E63A72BD57 /* TrampboxCollisionTests.swift */; };
 		575297903F0F730558ECA8B2 /* CenterHitIntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFDC263BCFC40427D726A6E /* CenterHitIntroView.swift */; };
 		5828C750466CE4F42203FECE /* KeepUpPerformanceTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C5C22962B836B5938A7731 /* KeepUpPerformanceTracker.swift */; };
@@ -275,6 +277,8 @@
 		D43574D37CDE5FD247ADB7D9 /* PianoDebugSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoDebugSettingsView.swift; sourceTree = "<group>"; };
 		D57556D8F73902EB4A022471 /* KeepUpPhysicsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepUpPhysicsTests.swift; sourceTree = "<group>"; };
 		B22C0001CE11CE0000000001 /* KeepUpCeilingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepUpCeilingTests.swift; sourceTree = "<group>"; };
+		A33C1001CE11CE0000000001 /* KeepUpDifficultyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepUpDifficultyModel.swift; sourceTree = "<group>"; };
+		A33C1003CE11CE0000000001 /* KeepUpDifficultyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepUpDifficultyTests.swift; sourceTree = "<group>"; };
 		D59DCA3B03101E22D046BF00 /* StatisticsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsStoreTests.swift; sourceTree = "<group>"; };
 		D6D15E9EA1A340EDD59E956D /* ReactPerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactPerformanceTests.swift; sourceTree = "<group>"; };
 		D7E9900B591302503B7DF8E8 /* PianoGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoGameView.swift; sourceTree = "<group>"; };
@@ -578,6 +582,7 @@
 			isa = PBXGroup;
 			children = (
 				1044943033B0A9E55F8AA9EC /* KeepUpGameConfig.swift */,
+				A33C1001CE11CE0000000001 /* KeepUpDifficultyModel.swift */,
 				E92F9831192EF3574C0641C2 /* KeepUpGameLogic.swift */,
 				D2FC4EAB7F0A08A4E49E6EEC /* KeepUpGameModule.swift */,
 				BE98DBC57745FA7C0C6AA316 /* KeepUpGameScene.swift */,
@@ -638,6 +643,7 @@
 				FB050ECAA1D22EA28CCBCD94 /* CenterHitTimingTests.swift */,
 				4AE9D0EC3C044EECD3FC20F0 /* KeepUpCollisionTests.swift */,
 				B22C0001CE11CE0000000001 /* KeepUpCeilingTests.swift */,
+				A33C1003CE11CE0000000001 /* KeepUpDifficultyTests.swift */,
 				64D8213E98E32919CEF89F95 /* KeepUpGameLogicTests.swift */,
 				694A77B888CABB5C1F36FF33 /* KeepUpPersistenceTests.swift */,
 				D57556D8F73902EB4A022471 /* KeepUpPhysicsTests.swift */,
@@ -802,6 +808,7 @@
 				2F5B04CF04982CA59CD16B06 /* CenterHitTimingTests.swift in Sources */,
 				B638A05EF085298C604DEDFA /* KeepUpCollisionTests.swift in Sources */,
 				A11C0001CE11CE0000000001 /* KeepUpCeilingTests.swift in Sources */,
+				A33C1004CE11CE0000000001 /* KeepUpDifficultyTests.swift in Sources */,
 				421744908638C5617F7268CD /* KeepUpGameLogicTests.swift in Sources */,
 				198B023B1608B7CE8F97BF88 /* KeepUpPersistenceTests.swift in Sources */,
 				554549570087688988C674BA /* KeepUpPhysicsTests.swift in Sources */,
@@ -857,6 +864,7 @@
 				A17B4BF8C8F576994FB2C4E9 /* KeepUpDebugOptions.swift in Sources */,
 				4672D1058CF177A7F9D06BD5 /* KeepUpDebugSettingsView.swift in Sources */,
 				F8383A1F836725BF0AB56539 /* KeepUpGameConfig.swift in Sources */,
+				A33C1002CE11CE0000000001 /* KeepUpDifficultyModel.swift in Sources */,
 				0AC890FEF6BCDAED4E55EE6E /* KeepUpGameLogic.swift in Sources */,
 				2F22321875F063E8A9BB9D65 /* KeepUpGameModule.swift in Sources */,
 				2F787C40FB4DFBC66332FDCD /* KeepUpGameScene.swift in Sources */,

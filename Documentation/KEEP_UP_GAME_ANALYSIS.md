@@ -28,9 +28,15 @@ Clean vertical encounters (unique frames, ball top flush with the line):
 
 There is no pause, no flattening of the ball, and no randomized deflection. Horizontal velocity is unchanged at the ceiling unless a side wall is also nearby. Residual upward speed at contact is clearly non-zero, so this is a rebound rather than a gravitational apex. Raw |out|/|in| on the cleanest vertical hit is order-one; gravity across duplicate frames accounts for the apparent 0.84–1.12 scatter. Restitution is therefore **1.0** (elastic). Ceiling contact never increments score.
 
-The previous gravity `3.4 H/s²` and impulse `1.76 H/s` were fitted so a **ballistic** apex would sit near the line **without** a wall. Unique-frame second differences on the score-2 rise (before contact) give g ≈ 1.05 H/s² of full-screen height. Compiled values are `gravityHeightRatio = 1.15` and `bounceImpulseHeightRatio = 1.52`, which from the default platform Y produce platform→ceiling ≈ 0.37 s with leftover speed at the line, matching the early ceiling cadence rather than an artificial apex.
+The previous gravity `3.4 H/s²` and impulse `1.76 H/s` were fitted so a **ballistic** apex would sit near the line **without** a wall. Unique-frame second differences on the score-2 rise (before contact) give g ≈ 1.05 H/s² of full-screen height. Compiled **base** values remain `gravityHeightRatio = 1.15` and `bounceImpulseHeightRatio = 1.52`, which from the default platform Y produce platform→ceiling ≈ 0.37 s with leftover speed at the line, matching the early ceiling cadence rather than an artificial apex.
 
-Score-grouped platform→ceiling times do **not** support a simple acceleration curve: later intervals shrink while travel distance and horizontal speed both explode, and many late contacts are wall/side-of-platform chains. Physics stay constant with score.
+Score-grouped platform→ceiling times **do** support score-based acceleration once platform height is controlled for. A later KEEP UP difficulty-calibration pass compared the original score-41 recording with a trainer run that reached ~40 at nearly constant ~0.95 s catch intervals. At comparable LOW platform heights (center Y < 0.25H), original catch-to-catch times shrink from ~0.85–0.87 s around score 20 to ~0.43–0.50 s around score 36–40, while platform→ceiling time falls from ~0.46 s to ~0.28 s (score 35 native-frame) and ~0.19–0.22 s in the fastest late catches. The trainer’s LOW-platform cadence stayed ~0.88–0.98 s at every score.
+
+The compiled model is therefore a **global physics time scale** `s(score)` with piecewise-linear anchors:
+
+`score 0 → 1.00`, `10 → 1.00`, `20 → 1.08`, `30 → 1.40`, `40 → 2.15`, then held constant.
+
+Velocity (bounce impulse, max outgoing VX, starting velocity) scales with `s`. Gravity scales with `s²`, so spatial trajectories stay approximately similar while time compresses by `s`. Platform size, catch radius, controls, and collision tolerance do not change with score.
 
 Collision is also corrected for the moving platform. Each physics step sweeps the ball's previous/current center against the platform's previous/current center in relative space. A contact is valid only on the configured upper-facing arc, inside the effective horizontal catch span, and while relative motion approaches the contact normal. This admits a platform moving upward into a ball and a platform crossing a genuine ball trajectory, while rejecting lower-face contacts, separating motion, and equatorial sideways sweeps. Output horizontal velocity remains the measured impact-offset response. Platform velocity transfer is independently configurable in X and Y but defaults to zero because the recording does not isolate a reliable transfer coefficient. Visual viewport clipping never truncates the logical platform: collision always uses its full circle. Adding the ceiling does not remove this sweep.
 
@@ -117,9 +123,9 @@ The apex is the highest reliably visible detected ball point. `Y` uses source to
 
 ## Timing, progression, and source-rate uncertainty
 
-The first scored catch occurs around 2.567 s and score 41 around 32.133 s. Identifying ceiling contacts separately from platform catches shows that many previously quoted “bounce durations” were actually platform→ceiling→platform trips. Early clean vertical ceiling cadence is about 0.32–0.38 s each way. Later raw catch-to-catch intervals shrink, but platform height, horizontal speed, wall chains, and source-frame duplication all move at the same time. That is not enough evidence for score-based gravity or impulse acceleration.
+The first scored catch occurs around 2.567 s and score 41 around 32.133 s. Identifying ceiling contacts separately from platform catches shows that many previously quoted “bounce durations” were actually platform→ceiling→platform trips. Early clean vertical ceiling cadence is about 0.32–0.38 s each way. Later raw catch-to-catch intervals shrink. After grouping by platform height, late LOW catches are genuinely faster than early/mid LOW catches, which is score-based physics acceleration rather than only a lower paddle. See the difficulty-calibration section above for the compiled time-scale anchors.
 
-The trainer therefore uses constant gravity, bounce impulse, ceiling restitution, platform size, catch radius, and horizontal response at every score. Difficulty emerges from player-created impact offsets and resulting wall-reflected trajectories.
+The trainer therefore uses `KeepUpDifficultyModel.physicsSpeedScale(forScore:)` with those anchors. Difficulty still also emerges from player-created impact offsets and wall-reflected trajectories, on top of the accelerating ball.
 
 ## Control model
 
@@ -150,4 +156,18 @@ Representative frames show approximately 10–16 visible dots. On a clear vertic
 
 High confidence: object proportions, one-point scoring, one-miss failure, gravity plus an elastic physical ceiling at the visible upper line, impact-offset steering, two-dimensional direct-feeling platform control, side-wall reflection, bounded historical trail, stable camera, and no hard 15-second timer.
 
-Ambiguous: exact collision forgiveness, exact gravity/impulse (source frames duplicate and the score occludes some contacts), exact impact curve, whether late-game speed-up is native progression or video/player effects, the source's precise control bounds beyond the observed run, and the precise result delay. Platform and ball fills are nearly flat on JPEG samples, with only restrained radial volume added to match the live reference’s slight disc shading.
+Ambiguous: exact collision forgiveness, exact impact curve, the source's precise control bounds beyond the observed run, and the precise result delay. Physics time-scale anchors above 40 are intentionally capped because no reference footage exists beyond the score-41 run.
+
+# Final visual pass — disc shading
+
+Side-by-side samples from the original Shorts recording (`ScreenRecording_09-02-2026 16-34-51_1.MP4`) and the score-16 trainer recording (`ScreenRecording_09-03-2026 10-30-48_1.MP4`). Luminance is Rec.709 `0.2126R + 0.7152G + 0.0722B` on unclipped discs.
+
+Reference platform (45 unclipped frames): radial inner–outer ΔL median **0.0** (mean 0.2). Radial bins 0–0.88R sit at 185.4 → 185.2. Best-preserved frames are a flat fill **RGB (200, 199, 202)**, matching `platformColor`. Some Shorts frames show a top-to-bottom encode falloff; that is not a central hotspot and is not a dark rim.
+
+Trainer before: radial inner–outer ΔL median **28.9** (center L ≈ 213, edge L ≈ 173). Radial bins 208 → 178 plus an offset white shine and a 0.22-alpha stroke. That is the spherical/glossy look.
+
+Compiled platform fill is therefore a faint vertical gradient around the measured flat color, **RGB (204, 203, 206) → (196, 195, 198)** (ΔL ≈ 8), with no radial body, no offset highlight, and no stroke. The collision circle is unchanged.
+
+Reference ball: inner–outer ΔL median **0.5**, center near white. Trainer before: ΔL **15.1** (inner ≈ 249, outer ≈ 234) plus a 0.55-alpha stroke. Compiled ball fill is **white → RGB (250, 250, 252)** with no stroke.
+
+Trail samples from the score-16 trainer run already match the reference readability band; trail parameters are unchanged in this pass.

@@ -73,6 +73,37 @@ struct KeepUpDebugSettingsView: View {
                     slider("Maximum frame delta", value: $store.config.maximumFrameDelta, in: 0.02...0.25, format: "%.3f s")
                 }
 
+                Section("Difficulty") {
+                    let anchors = zip(store.config.difficultyAnchorScores, store.config.difficultyAnchorScales)
+                    ForEach(Array(anchors.enumerated()), id: \.offset) { _, pair in
+                        HStack {
+                            Text("Score \(pair.0)")
+                            Spacer()
+                            Text(String(format: "× %.2f", Double(pair.1)))
+                                .foregroundStyle(.secondary)
+                                .monospacedDigit()
+                        }
+                    }
+                    Text("Time scale: velocity × s, gravity × s², max VX × s. Capped at the last anchor.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Picker("Physics preview score", selection: Binding(
+                        get: { store.debugOptions.physicsScoreOverride ?? -1 },
+                        set: { store.debugOptions.physicsScoreOverride = $0 < 0 ? nil : $0 }
+                    )) {
+                        Text("Live").tag(-1)
+                        Text("0").tag(0)
+                        Text("10").tag(10)
+                        Text("20").tag(20)
+                        Text("30").tag(30)
+                        Text("40").tag(40)
+                    }
+                    Toggle("Lock auto-catch platform Y", isOn: Binding(
+                        get: { store.debugOptions.autoCatchPlatformYRatio != nil },
+                        set: { store.debugOptions.autoCatchPlatformYRatio = $0 ? store.config.startingPlatformYRatio : nil }
+                    ))
+                }
+
                 Section("Deterministic QA") {
                     Toggle("Performance overlay", isOn: $store.debugOptions.showOverlay)
                     Toggle("Geometry + trajectory", isOn: $store.debugOptions.showGeometry)

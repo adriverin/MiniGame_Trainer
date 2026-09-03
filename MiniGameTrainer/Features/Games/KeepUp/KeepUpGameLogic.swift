@@ -13,6 +13,7 @@ struct KeepUpTrailSample: Equatable {
 final class KeepUpGameLogic {
     let config: KeepUpGameConfig
     let geometry: KeepUpGeometry
+    let difficulty: KeepUpDifficultyModel
 
     private(set) var state: KeepUpGameState = .ready
     private(set) var score = 0
@@ -35,6 +36,10 @@ final class KeepUpGameLogic {
     private(set) var lastPlatformToCeilingTime: TimeInterval = 0
     private(set) var lastCeilingToPlatformTime: TimeInterval = 0
     private(set) var lastCeilingContactTime: TimeInterval = 0
+    private(set) var lastCatchInterval: TimeInterval = 0
+    private(set) var lastCatchPlatformY: CGFloat = 0
+    /// DEBUG/QA: evaluate physics as if `score` were this value. Does not change displayed score.
+    var physicsScoreOverride: Int?
 
     private var events: [KeepUpGameEvent] = []
     private var trailAccumulator: TimeInterval = 0
@@ -44,15 +49,13 @@ final class KeepUpGameLogic {
 
     init(config: KeepUpGameConfig, sceneSize: CGSize) {
         self.config = config
+        difficulty = KeepUpDifficultyModel(config: config)
         geometry = KeepUpGeometry(sceneSize: sceneSize, config: config)
         let startX = sceneSize.width * config.startingBallXRatio
         let startY = sceneSize.height * config.startingBallYRatio
         ballPosition = CGPoint(x: startX, y: startY)
         previousBallPosition = ballPosition
-        ballVelocity = CGVector(
-            dx: sceneSize.width * config.startingHorizontalVelocityWidthRatio,
-            dy: sceneSize.height * config.startingVerticalVelocityHeightRatio
-        )
+        ballVelocity = .zero
         let startPlatform = geometry.clampedPlatformPosition(CGPoint(
             x: sceneSize.width * config.startingPlatformXRatio,
             y: sceneSize.height * config.startingPlatformYRatio
@@ -61,15 +64,21 @@ final class KeepUpGameLogic {
         platformPosition = startPlatform
         previousPlatformPosition = startPlatform
         lastPlatformSweepStart = startPlatform
+        lastCatchPlatformY = startPlatform.y
+        applyInitialBallVelocity()
     }
 
     var isFinished: Bool { state == .gameOver }
     var platformCenter: CGPoint { platformPosition }
     var platformX: CGFloat { platformPosition.x }
     var platformY: CGFloat { platformPosition.y }
-    var gravity: CGFloat { geometry.sceneSize.height * config.gravityHeightRatio }
-    var bounceImpulse: CGFloat { geometry.sceneSize.height * config.bounceImpulseHeightRatio }
-    var maximumHorizontalBounceSpeed: CGFloat { geometry.sceneSize.width * config.maximumHorizontalBounceSpeedWidthRatio }
+    var effectivePhysicsScore: Int { physicsScoreOverride ?? score }
+    var physicsSpeedScale: CGFloat { difficulty.physicsSpeedScale(forScore: effectivePhysicsScore) }
+    var gravity: CGFloat { difficulty.gravity(forScore: effectivePhysicsScore, sceneHeight: geometry.sceneSize.height) }
+    var bounceImpulse: CGFloat { difficulty.bounceImpulse(forScore: effectivePhysicsScore, sceneHeight: geometry.sceneSize.height) }
+    var maximumHorizontalBounceSpeed: CGFloat {
+        difficulty.maximumHorizontalBounceSpeed(forScore: effectivePhysicsScore, sceneWidth: geometry.sceneSize.width)
+    }
     var trailCapacity: Int { max(1, config.trailMaximumCount) }
     var timeSinceLastPlatformBounce: TimeInterval { elapsedTime - lastBounceTime }
     var ballTopY: CGFloat { ballPosition.y + geometry.ballRadius }
@@ -77,6 +86,7 @@ final class KeepUpGameLogic {
 
     func start() {
         guard state == .ready else { return }
+        applyInitialBallVelocity()
         state = .running
     }
 
@@ -153,10 +163,7 @@ final class KeepUpGameLogic {
             y: geometry.sceneSize.height * config.startingBallYRatio
         )
         previousBallPosition = ballPosition
-        ballVelocity = CGVector(
-            dx: geometry.sceneSize.width * config.startingHorizontalVelocityWidthRatio,
-            dy: geometry.sceneSize.height * config.startingVerticalVelocityHeightRatio
-        )
+        applyInitialBallVelocity()
         platformPosition = geometry.clampedPlatformPosition(CGPoint(
             x: geometry.sceneSize.width * config.startingPlatformXRatio,
             y: geometry.sceneSize.height * config.startingPlatformYRatio
@@ -178,8 +185,17 @@ final class KeepUpGameLogic {
         lastPlatformToCeilingTime = 0
         lastCeilingToPlatformTime = 0
         lastCeilingContactTime = 0
+        lastCatchInterval = 0
+        lastCatchPlatformY = platformPosition.y
         performance.reset()
         events = []
+    }
+
+    private func applyInitialBallVelocity() {
+        ballVelocity = CGVector(
+            dx: difficulty.startingHorizontalVelocity(forScore: effectivePhysicsScore, sceneWidth: geometry.sceneSize.width),
+            dy: difficulty.startingVerticalVelocity(forScore: effectivePhysicsScore, sceneHeight: geometry.sceneSize.height)
+        )
     }
 
     func drainEvents() -> [KeepUpGameEvent] {
@@ -267,6 +283,8 @@ final class KeepUpGameLogic {
                 contactNormal: collision.normal,
                 bounceDuration: elapsedTime - lastBounceTime
             )
+            lastCatchInterval = elapsedTime - lastBounceTime
+            lastCatchPlatformY = collision.platformPoint.y
             lastBounceTime = elapsedTime
             if lastCeilingContactTime > 0 {
                 lastCeilingToPlatformTime = elapsedTime - lastCeilingContactTime

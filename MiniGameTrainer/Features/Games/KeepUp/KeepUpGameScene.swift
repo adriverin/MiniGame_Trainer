@@ -65,11 +65,13 @@ final class KeepUpGameScene: SKScene {
 
     override func didMove(to view: SKView) {
         view.isMultipleTouchEnabled = false
+        logic.physicsScoreOverride = debugOptions.physicsScoreOverride
         logic.start()
         syncPresentation()
     }
 
     override func update(_ currentTime: TimeInterval) {
+        logic.physicsScoreOverride = debugOptions.physicsScoreOverride
         if let previousFrameTime {
             let delta = min(max(0, currentTime - previousFrameTime), config.maximumFrameDelta)
             if delta > 0 {
@@ -175,26 +177,22 @@ final class KeepUpGameScene: SKScene {
         platformNode.fillColor = .white
         platformNode.fillTexture = KeepUpDiscShading.texture(
             diameter: geometry.platformRadius * 2,
-            inner: UIColor(red: 214 / 255, green: 214 / 255, blue: 218 / 255, alpha: 1),
-            outer: UIColor(red: 176 / 255, green: 175 / 255, blue: 182 / 255, alpha: 1),
-            highlight: UIColor(white: 1, alpha: 0.22),
-            highlightOffset: CGVector(dx: -0.12, dy: -0.16)
+            top: UIColor(red: 204 / 255, green: 203 / 255, blue: 206 / 255, alpha: 1),
+            bottom: UIColor(red: 196 / 255, green: 195 / 255, blue: 198 / 255, alpha: 1)
         )
-        platformNode.strokeColor = UIColor.white.withAlphaComponent(0.22)
-        platformNode.lineWidth = max(1, size.width * 0.003)
+        platformNode.strokeColor = .clear
+        platformNode.lineWidth = 0
         platformNode.zPosition = 4
         addChild(platformNode)
 
         ballNode.fillColor = .white
         ballNode.fillTexture = KeepUpDiscShading.texture(
             diameter: geometry.ballRadius * 2,
-            inner: UIColor(white: 1, alpha: 1),
-            outer: UIColor(red: 226 / 255, green: 227 / 255, blue: 232 / 255, alpha: 1),
-            highlight: UIColor(white: 1, alpha: 0.28),
-            highlightOffset: CGVector(dx: -0.10, dy: -0.14)
+            top: UIColor(white: 1, alpha: 1),
+            bottom: UIColor(red: 250 / 255, green: 250 / 255, blue: 252 / 255, alpha: 1)
         )
-        ballNode.strokeColor = UIColor.white.withAlphaComponent(0.55)
-        ballNode.lineWidth = max(0.5, size.width * 0.0015)
+        ballNode.strokeColor = .clear
+        ballNode.lineWidth = 0
         ballNode.zPosition = 6
         addChild(ballNode)
 
@@ -284,9 +282,15 @@ final class KeepUpGameScene: SKScene {
             logic.setPlatformPosition(CGPoint(x: destination, y: geometry.minimumPlatformY))
         } else {
             let targetX = logic.ballPosition.x - debugOptions.autoCatchOffset * geometry.effectiveCatchRadius
-            let verticalTravel = geometry.sceneSize.height * 0.020
-            let targetY = geometry.sceneSize.height * config.startingPlatformYRatio
-                + CGFloat(sin(logic.elapsedTime * 0.8)) * verticalTravel
+            let platformYRatio = debugOptions.autoCatchPlatformYRatio ?? config.startingPlatformYRatio
+            let targetY: CGFloat
+            if debugOptions.autoCatchPlatformYRatio != nil || debugOptions.physicsScoreOverride != nil {
+                targetY = geometry.sceneSize.height * platformYRatio
+            } else {
+                let verticalTravel = geometry.sceneSize.height * 0.020
+                targetY = geometry.sceneSize.height * platformYRatio
+                    + CGFloat(sin(logic.elapsedTime * 0.8)) * verticalTravel
+            }
             logic.setPlatformPosition(CGPoint(x: targetX, y: targetY))
         }
         #endif
@@ -415,6 +419,15 @@ final class KeepUpGameScene: SKScene {
         debugLabel.text = [
             "FPS: \(Int(measuredFPS.rounded()))",
             "Score: \(logic.score)",
+            String(format: "Difficulty multiplier: %.3f", logic.physicsSpeedScale),
+            "Physics score: \(logic.effectivePhysicsScore)",
+            String(format: "Current gravity: %.1f", logic.gravity),
+            String(format: "Current bounce impulse: %.1f", logic.bounceImpulse),
+            String(format: "Max outgoing VX: %.1f", logic.maximumHorizontalBounceSpeed),
+            String(format: "Last catch interval: %.3f s", logic.lastCatchInterval),
+            String(format: "Time platform→ceiling: %.3f s", logic.lastPlatformToCeilingTime),
+            String(format: "Time ceiling→platform: %.3f s", logic.lastCeilingToPlatformTime),
+            String(format: "Platform Y at last catch: %.1f", logic.lastCatchPlatformY),
             String(format: "Ball X/Y: %.1f, %.1f", logic.ballPosition.x, logic.ballPosition.y),
             String(format: "Ball VX/VY: %.1f, %.1f", logic.ballVelocity.dx, logic.ballVelocity.dy),
             String(format: "Platform X/Y: %.1f, %.1f", logic.platformX, logic.platformY),
@@ -433,8 +446,6 @@ final class KeepUpGameScene: SKScene {
             String(format: "Ceiling restitution: %.3f", config.ceilingRestitution),
             "Ceiling contacts: \(logic.ceilingContactCount)",
             String(format: "Time since platform bounce: %.3f s", logic.timeSinceLastPlatformBounce),
-            String(format: "Time platform→ceiling: %.3f s", logic.lastPlatformToCeilingTime),
-            String(format: "Time ceiling→platform: %.3f s", logic.lastCeilingToPlatformTime),
             String(format: "Expected landing X: %.1f", expectedLandingX),
             "Trail samples: \(logic.trailSamples.count) / \(logic.trailCapacity)",
             String(format: "Game time: %.2f s", logic.elapsedTime),
@@ -472,49 +483,26 @@ final class KeepUpGameScene: SKScene {
 }
 
 enum KeepUpDiscShading {
-    static func texture(
-        diameter: CGFloat,
-        inner: UIColor,
-        outer: UIColor,
-        highlight: UIColor,
-        highlightOffset: CGVector
-    ) -> SKTexture {
+    /// Nearly-flat disc with a faint top-to-bottom falloff. No radial hotspot or offset shine.
+    static func texture(diameter: CGFloat, top: UIColor, bottom: UIColor) -> SKTexture {
         let size = max(16, ceil(diameter))
         let image = UIGraphicsImageRenderer(size: CGSize(width: size, height: size)).image { renderer in
             let bounds = CGRect(x: 0, y: 0, width: size, height: size)
-            let center = CGPoint(x: size / 2, y: size / 2)
             renderer.cgContext.addEllipse(in: bounds)
             renderer.cgContext.clip()
 
             let space = CGColorSpaceCreateDeviceRGB()
-            var bodyLocations: [CGFloat] = [0, 1]
-            if let body = CGGradient(colorsSpace: space, colors: [inner.cgColor, outer.cgColor] as CFArray, locations: &bodyLocations) {
-                renderer.cgContext.drawRadialGradient(
-                    body,
-                    startCenter: center,
-                    startRadius: 0,
-                    endCenter: center,
-                    endRadius: size / 2,
-                    options: [.drawsAfterEndLocation]
-                )
-            }
-            var highlightLocations: [CGFloat] = [0, 1]
-            if let shine = CGGradient(
+            var locations: [CGFloat] = [0, 1]
+            if let gradient = CGGradient(
                 colorsSpace: space,
-                colors: [highlight.cgColor, highlight.withAlphaComponent(0).cgColor] as CFArray,
-                locations: &highlightLocations
+                colors: [top.cgColor, bottom.cgColor] as CFArray,
+                locations: &locations
             ) {
-                let shineCenter = CGPoint(
-                    x: center.x + highlightOffset.dx * size,
-                    y: center.y + highlightOffset.dy * size
-                )
-                renderer.cgContext.drawRadialGradient(
-                    shine,
-                    startCenter: shineCenter,
-                    startRadius: 0,
-                    endCenter: shineCenter,
-                    endRadius: size * 0.42,
-                    options: []
+                renderer.cgContext.drawLinearGradient(
+                    gradient,
+                    start: CGPoint(x: size / 2, y: 0),
+                    end: CGPoint(x: size / 2, y: size),
+                    options: [.drawsBeforeStartLocation, .drawsAfterEndLocation]
                 )
             }
         }

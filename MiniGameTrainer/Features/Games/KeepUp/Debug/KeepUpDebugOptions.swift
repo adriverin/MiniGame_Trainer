@@ -9,6 +9,10 @@ struct KeepUpDebugOptions: Equatable {
     var autoCatch = false
     /// Signed normalized ball-to-platform impact offset requested by auto-catch.
     var autoCatchOffset: CGFloat = 0
+    /// When set, auto-catch holds this platform-center Y ratio instead of a small sine wobble.
+    var autoCatchPlatformYRatio: CGFloat?
+    /// Inspect physics at a calibrated score without playing up to that score.
+    var physicsScoreOverride: Int?
     var intentionalMissAtScore: Int?
 
     static let none = KeepUpDebugOptions()

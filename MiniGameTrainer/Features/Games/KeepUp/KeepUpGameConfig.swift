@@ -32,6 +32,11 @@ struct KeepUpGameConfig: Equatable, Codable {
     var platformHorizontalVelocityTransferCoefficient: CGFloat = 0.000
     var platformVerticalVelocityTransferCoefficient: CGFloat = 0.000
 
+    /// Piecewise physics time-scale anchors. Linear interpolation between scores; last value is the cap.
+    /// Derived from height-normalized original vs trainer catch cadence (see KEEP_UP_GAME_ANALYSIS.md).
+    var difficultyAnchorScores: [Int] = [0, 10, 20, 30, 40]
+    var difficultyAnchorScales: [CGFloat] = [1.00, 1.00, 1.08, 1.40, 2.15]
+
     // Collision and boundaries
     var effectiveCatchRadiusRatio: CGFloat = 0.920
     var landingToleranceWidthRatio: CGFloat = 0.004
