@@ -6,6 +6,8 @@ import Foundation
 /// `-towerStackAutoPlace 0` (perfect) / `0.05` (5 % offset), `-towerStackMissAt 20`, `-towerStackPauseAtScore 12`.
 /// KEEP UP: `-autoPlay keepUp -keepUpAutoCatch -keepUpOverlay -keepUpGeometry`,
 /// `-keepUpEdgeCatch 0.75`, `-keepUpMissAt 100`, `-keepUpPhysicsScore 40`, or `-keepUpNoTrail`.
+/// TIME'S UP: `-autoPlay timesUp -timesUpAutoStart -timesUpOverlay -timesUpGeometry`,
+/// `-timesUpAutoTap`, `-timesUpAutoOffset 0.01`, or `-timesUpScript 0.01,-0.03,-0.16`.
 enum DebugLaunchOptions {
     #if DEBUG
     static var autoPlayGameID: String? {

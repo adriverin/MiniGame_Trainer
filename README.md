@@ -2,11 +2,12 @@
 
 An iPhone app for practising short reaction/skill minigames. Each game is an isolated module
 plugged into a shared shell (home, library, intro, results, statistics, settings). The library
-contains **Piano**, **Trampbox**, **REACT!**, **Tower Stack**, **Center Hit**, and **Keep Up**.
+contains **Piano**, **Trampbox**, **REACT!**, **Tower Stack**, **Center Hit**, **Keep Up**, and
+**TIME'S UP!**.
 Reference measurements live in `Documentation/GAME_ANALYSIS.md`,
 `Documentation/TRAMPBOX_GAME_ANALYSIS.md`, `Documentation/REACT_GAME_ANALYSIS.md`,
-`Documentation/TOWER_STACK_GAME_ANALYSIS.md`, `Documentation/CENTER_HIT_GAME_ANALYSIS.md`, and
-`Documentation/KEEP_UP_GAME_ANALYSIS.md`.
+`Documentation/TOWER_STACK_GAME_ANALYSIS.md`, `Documentation/CENTER_HIT_GAME_ANALYSIS.md`,
+`Documentation/KEEP_UP_GAME_ANALYSIS.md`, and `Documentation/TIMES_UP_GAME_ANALYSIS.md`.
 
 This is an independent training app; it is not affiliated with any game platform and uses only
 original assets.
@@ -167,12 +168,18 @@ trajectory. Visual-QA launch aids include `-autoPlay keepUp`, `-keepUpAutoCatch`
 `-keepUpOverlay`, `-keepUpGeometry`, `-keepUpEdgeCatch <offset>`, `-keepUpMissAt <score>`, and
 `-keepUpNoTrail`.
 
+TIME'S UP has DEBUG calibration for per-level target durations, visibility fraction, bar
+geometry, start flow, and disappearance. Its overlay shows level, target, elapsed, remaining,
+visibility cutoff, state, last errors, average, and clock timestamps. Visual-QA launch aids
+include `-autoPlay timesUp`, `-timesUpAutoStart`, `-timesUpOverlay`, `-timesUpGeometry`,
+`-timesUpAutoTap` (exact), `-timesUpAutoOffset 0.01`, and `-timesUpScript 0.01,-0.03,-0.16`.
+
 ## Tests
 
-`MiniGameTrainerTests` covers all six games plus shared statistics: scoring, invalid input,
+`MiniGameTrainerTests` covers all seven games plus shared statistics: scoring, invalid input,
 timing arithmetic, randomization, geometry, difficulty curves, frame-rate independence, reset,
 pause/interruption recovery, deterministic seeds, performance summaries, score direction, and
-statistics persistence (212 tests). Run with the scheme's Test action or the `xcodebuild ... test`
+statistics persistence. Run with the scheme's Test action or the `xcodebuild ... test`
 command above.
 # MiniGame_Trainer
 # MiniGame_Trainer

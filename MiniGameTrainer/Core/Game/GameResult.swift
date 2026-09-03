@@ -65,6 +65,15 @@ struct ScorePresentation: Hashable, Codable {
         unit: "ms",
         comparison: .lowerIsBetter
     )
+    /// TIME'S UP persists mean absolute error in milliseconds: 0.06 s is stored as 60.
+    static let timingErrorSeconds = ScorePresentation(
+        label: "Average",
+        unit: "s",
+        comparison: .lowerIsBetter,
+        storageScale: 1000,
+        valueFractionDigits: 2,
+        averageFractionDigits: 2
+    )
     /// Center Hit persists percentage hundredths as basis points: 97.89% is stored as 9789.
     static let precisionPercent = ScorePresentation(
         label: "Precision",
