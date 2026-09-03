@@ -2,11 +2,11 @@
 
 An iPhone app for practising short reaction/skill minigames. Each game is an isolated module
 plugged into a shared shell (home, library, intro, results, statistics, settings). The library
-contains **Piano**, **Trampbox**, **REACT!**, **Tower Stack**, **Center Hit**, and **Keep Up**.
+contains **Piano**, **Trampbox**, **REACT!**, **Tower Stack**, **Center Hit**, **Keep Up**, and **Directions**.
 Reference measurements live in `Documentation/GAME_ANALYSIS.md`,
 `Documentation/TRAMPBOX_GAME_ANALYSIS.md`, `Documentation/REACT_GAME_ANALYSIS.md`,
-`Documentation/TOWER_STACK_GAME_ANALYSIS.md`, `Documentation/CENTER_HIT_GAME_ANALYSIS.md`, and
-`Documentation/KEEP_UP_GAME_ANALYSIS.md`.
+`Documentation/TOWER_STACK_GAME_ANALYSIS.md`, `Documentation/CENTER_HIT_GAME_ANALYSIS.md`,
+`Documentation/KEEP_UP_GAME_ANALYSIS.md`, and `Documentation/DIRECTIONS_GAME_ANALYSIS.md`.
 
 This is an independent training app; it is not affiliated with any game platform and uses only
 original assets.
@@ -167,12 +167,19 @@ trajectory. Visual-QA launch aids include `-autoPlay keepUp`, `-keepUpAutoCatch`
 `-keepUpOverlay`, `-keepUpGeometry`, `-keepUpEdgeCatch <offset>`, `-keepUpMissAt <score>`, and
 `-keepUpNoTrail`.
 
+DIRECTIONS has DEBUG controls for sequence length offset/cap, arrow-on duration, inter-arrow
+gap, recall transition, D-pad geometry, deterministic seed, forced level/sequence, skip
+presentation, auto-input, and intentional fail-at-index. Launch aids include
+`-autoPlay directions`, `-directionsAutoInput`, `-directionsOverlay`, `-directionsGeometry`,
+`-directionsSkipPresentation`, `-directionsLevel 12`, `-directionsSeed 1`,
+`-directionsFailAt 3`, and `-directionsSequence up,left,down,right`.
+
 ## Tests
 
-`MiniGameTrainerTests` covers all six games plus shared statistics: scoring, invalid input,
+`MiniGameTrainerTests` covers all seven games plus shared statistics: scoring, invalid input,
 timing arithmetic, randomization, geometry, difficulty curves, frame-rate independence, reset,
 pause/interruption recovery, deterministic seeds, performance summaries, score direction, and
-statistics persistence (212 tests). Run with the scheme's Test action or the `xcodebuild ... test`
+statistics persistence (253 tests). Run with the scheme's Test action or the `xcodebuild ... test`
 command above.
 # MiniGame_Trainer
 # MiniGame_Trainer

@@ -4,8 +4,8 @@ import XCTest
 final class KeepUpPersistenceTests: XCTestCase {
     @MainActor
     func testKeepUpIsRegisteredAsSixthGame() {
-        XCTAssertEqual(GameRegistry.modules.count, 6)
-        XCTAssertEqual(GameRegistry.modules.last?.descriptor.id, "keepUp")
+        XCTAssertGreaterThanOrEqual(GameRegistry.modules.count, 6)
+        XCTAssertEqual(GameRegistry.modules[5].descriptor.id, "keepUp")
         XCTAssertEqual(GameRegistry.descriptor(for: "keepUp"), KeepUpGameModule.descriptor)
     }
 
