@@ -48,7 +48,7 @@
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.minigametrainer.app.pro.monthly",
+          "productID" : "com.gamewe.minigametrainer.pro.monthly",
           "recurringSubscriptionPeriod" : "P1M",
           "referenceName" : "Pro Monthly",
           "subscriptionGroupID" : "D3E4F5A6",
@@ -70,7 +70,7 @@
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.minigametrainer.app.pro.yearly",
+          "productID" : "com.gamewe.minigametrainer.pro.yearly",
           "recurringSubscriptionPeriod" : "P1Y",
           "referenceName" : "Pro Annual",
           "subscriptionGroupID" : "D3E4F5A6",

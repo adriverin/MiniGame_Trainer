@@ -40,18 +40,18 @@ final class EntitlementEvaluatorTests: XCTestCase {
     }
 
     func testCanonicalProductIDsMatchStoreKitConfiguration() {
-        XCTAssertEqual(MonetizationConfiguration.monthlyProductID, "com.minigametrainer.app.pro.monthly")
-        XCTAssertEqual(MonetizationConfiguration.yearlyProductID, "com.minigametrainer.app.pro.yearly")
+        XCTAssertEqual(MonetizationConfiguration.monthlyProductID, "com.gamewe.minigametrainer.pro.monthly")
+        XCTAssertEqual(MonetizationConfiguration.yearlyProductID, "com.gamewe.minigametrainer.pro.yearly")
         XCTAssertFalse(MonetizationConfiguration.monthlyProductID.contains(" "))
         XCTAssertFalse(MonetizationConfiguration.yearlyProductID.contains(" "))
         XCTAssertEqual(
             MonetizationConfiguration.proProductIDs,
             [
-                "com.minigametrainer.app.pro.monthly",
-                "com.minigametrainer.app.pro.yearly"
+                "com.gamewe.minigametrainer.pro.monthly",
+                "com.gamewe.minigametrainer.pro.yearly"
             ]
         )
-        XCTAssertEqual(MonetizationConfiguration.currentBundleID, "com.minigametrainer.app")
+        XCTAssertEqual(MonetizationConfiguration.currentBundleID, "com.gamewe.minigametrainer")
     }
 
     func testEitherMonthlyOrAnnualGrantsPro() {

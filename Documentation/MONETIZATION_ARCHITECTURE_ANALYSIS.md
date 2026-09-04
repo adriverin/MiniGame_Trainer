@@ -19,7 +19,7 @@ MiniGame Trainer is a SwiftUI shell plus SpriteKit minigames. The shell never de
 | Settings | `Features/Settings/SettingsView.swift` | Sound, haptics, per-game stats, reset, version |
 | Debug | `App/DebugLaunchOptions.swift` | DEBUG launch arguments / UserDefaults (`autoPlay`, `openIntro`, per-game flags) |
 
-Deployment target is **iOS 17.0**, Swift 5, XcodeGen-driven (`project.yml`). Bundle ID is `com.minigametrainer.app`. There are **no Swift packages** today.
+Deployment target is **iOS 17.0**, Swift 5, XcodeGen-driven (`project.yml`). Final production bundle ID is `com.gamewe.minigametrainer`. There are **no Swift packages** today.
 
 Registered game IDs (source of truth for attempt accounting):
 
@@ -101,12 +101,12 @@ iOS 17 supports StoreKit 2:
 
 `PurchaseManager` is the single owner. Entitlement (`isPro`) is derived only from **verified** current entitlements for the configured monthly/yearly product IDs. Product-price loading is a separate concern so a catalog fetch failure cannot strip an already-verified Pro user.
 
-Current project bundle ID: `com.minigametrainer.app`. Proposed product IDs (derived, not guessed from a different brand):
+Final production bundle ID: `com.gamewe.minigametrainer`. Final App Store Connect product IDs:
 
-- `com.minigametrainer.app.pro.monthly`
-- `com.minigametrainer.app.pro.yearly`
+- `com.gamewe.minigametrainer.pro.monthly`
+- `com.gamewe.minigametrainer.pro.yearly`
 
-Confirm the bundle ID before creating App Store Connect products.
+Create these identifiers in App Store Connect. They have not been created yet.
 
 ## Advertising Integration Point
 

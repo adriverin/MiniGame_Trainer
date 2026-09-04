@@ -1924,7 +1924,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.minigametrainer.app.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gamewe.minigametrainer.tests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MiniGameTrainer.app/MiniGameTrainer";
@@ -2073,7 +2073,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.minigametrainer.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gamewe.minigametrainer;
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2090,7 +2090,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.minigametrainer.app.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gamewe.minigametrainer.tests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MiniGameTrainer.app/MiniGameTrainer";
@@ -2110,7 +2110,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.minigametrainer.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gamewe.minigametrainer;
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = 1;

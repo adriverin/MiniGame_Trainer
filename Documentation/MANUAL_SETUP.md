@@ -7,23 +7,23 @@ only**. App Store Connect remains the production source of products.
 
 ## A. Finalize Bundle Identifier
 
-Detected current project bundle ID (`project.yml` `PRODUCT_BUNDLE_IDENTIFIER`):
+Final production bundle ID (`project.yml` `PRODUCT_BUNDLE_IDENTIFIER`):
 
-`com.minigametrainer.app`
+`com.gamewe.minigametrainer`
 
-This is the identifier currently in the repo. Confirm it is the final App Store
-bundle ID before creating products. If it changes, update product IDs to match.
+Create this App ID in Apple Developer and App Store Connect. These are the
+**final** identifiers. Do not create products under any previous placeholder ID.
 
-Exact proposed subscription product IDs derived from the current bundle ID:
+Final subscription product IDs (create these in App Store Connect):
 
-- Monthly: `com.minigametrainer.app.pro.monthly`
-- Annual: `com.minigametrainer.app.pro.yearly`
+- Monthly: `com.gamewe.minigametrainer.pro.monthly`
+- Annual: `com.gamewe.minigametrainer.pro.yearly`
 
 Configured in `MiniGameTrainer/Features/Monetization/MonetizationConfiguration.swift`.
 
 Once created in App Store Connect, these product IDs are effectively permanent.
 Apple does not allow changing a product ID; a wrong ID requires creating new products
-and leaving the old ones unused. Confirm the bundle ID before creating either product.
+and leaving the old ones unused.
 
 ## B. Apple Developer / Agreements
 
@@ -44,7 +44,7 @@ Both monthly and yearly products belong to this **same** group.
 
 ## D. Monthly Subscription
 
-- Product ID: `com.minigametrainer.app.pro.monthly`
+- Product ID: `com.gamewe.minigametrainer.pro.monthly`
 - Reference name: Pro Monthly
 - Duration: 1 month
 - Type: Auto-renewable subscription
@@ -54,7 +54,7 @@ The UI must **not** hard-code €3.99. It shows StoreKit `displayPrice`.
 
 ## E. Annual Subscription
 
-- Product ID: `com.minigametrainer.app.pro.yearly`
+- Product ID: `com.gamewe.minigametrainer.pro.yearly`
 - Reference name: Pro Annual
 - Duration: 1 year
 - Type: Auto-renewable subscription
@@ -91,7 +91,12 @@ Create or use an existing Google AdMob account and accept the terms.
 
 ## I. AdMob App
 
-Register an iOS app with the **exact** production bundle ID.
+Register an iOS app with the **exact** final production bundle ID:
+
+`com.gamewe.minigametrainer`
+
+The future production AdMob app must use this identifier. Do not register
+AdMob against any previous placeholder bundle ID.
 
 Obtain the AdMob App ID (`ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy`).
 

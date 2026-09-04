@@ -8,12 +8,12 @@ enum MonetizationConfiguration {
     static let persistenceVersion = 1
     static let persistenceKey = "attempts.v1"
 
-    /// Current project bundle ID from `project.yml` (`PRODUCT_BUNDLE_IDENTIFIER`).
-    /// Confirm before creating App Store Connect products.
-    static let currentBundleID = "com.minigametrainer.app"
+    /// Final production bundle ID from `project.yml` (`PRODUCT_BUNDLE_IDENTIFIER`).
+    /// Create this App ID in Apple Developer / App Store Connect.
+    static let currentBundleID = "com.gamewe.minigametrainer"
 
-    static let monthlyProductID = "com.minigametrainer.app.pro.monthly"
-    static let yearlyProductID = "com.minigametrainer.app.pro.yearly"
+    static let monthlyProductID = "com.gamewe.minigametrainer.pro.monthly"
+    static let yearlyProductID = "com.gamewe.minigametrainer.pro.yearly"
     static let subscriptionGroupName = "MiniGameTrainer Pro"
 
     static var proProductIDs: Set<String> {
