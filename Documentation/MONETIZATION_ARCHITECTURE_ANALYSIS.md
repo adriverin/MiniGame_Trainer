@@ -132,7 +132,7 @@ Geography is not hard-coded; UMP uses the AdMob Privacy & Messaging configuratio
 
 `project.yml` generates `MiniGameTrainer/Resources/Info.plist`. New keys must be declared there:
 
-- `GADApplicationIdentifier` — official Google **sample** App ID until production is supplied (`ca-app-pub-3940256099942544~1458002511`)
+- `GADApplicationIdentifier` — `$(GAD_APPLICATION_IDENTIFIER)`: DEBUG uses Google's sample App ID (`ca-app-pub-3940256099942544~1458002511`); Release uses the production App ID (`ca-app-pub-2544426617197908~2256365307`)
 - `SKAdNetworkItems` — official Google list from the iOS quick-start (retrieved 2026-09-02), not an old blog post
 
 No ATT key unless ATT is actually implemented (it will not be; see MANUAL_SETUP).

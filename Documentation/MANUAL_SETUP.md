@@ -1,7 +1,8 @@
 # MiniGameTrainer Monetization Manual Setup
 
-This file is the production checklist. Code uses explicit placeholders until these
-steps are finished. The StoreKit Configuration file
+This file is the production checklist. Production AdMob IDs and legal URLs are
+configured in code. App Store Connect product creation and review answers remain
+operator steps. The StoreKit Configuration file
 (`MiniGameTrainer/Resources/Monetization.storekit`) is for **local Xcode testing
 only**. App Store Connect remains the production source of products.
 
@@ -98,28 +99,28 @@ Register an iOS app with the **exact** final production bundle ID:
 The future production AdMob app must use this identifier. Do not register
 AdMob against any previous placeholder bundle ID.
 
-Obtain the AdMob App ID (`ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy`).
+Configured AdMob App IDs:
 
-Paste it here, then run `xcodegen generate`:
+- Release: `ca-app-pub-2544426617197908~2256365307`
+  (`MonetizationConfiguration.Ads.productionAdMobAppID`,
+  `project.yml` `settings.configs.Release.GAD_APPLICATION_IDENTIFIER`)
+- DEBUG: Google's official sample App ID
+  `ca-app-pub-3940256099942544~1458002511`
 
-1. `project.yml` → `targets.MiniGameTrainer.info.properties.GADApplicationIdentifier`
-2. That regenerates `MiniGameTrainer/Resources/Info.plist`
-
-The current value is Google's **official sample** App ID
-`ca-app-pub-3940256099942544~1458002511` for development. It is **not** a
-production App ID.
-
-`MonetizationConfiguration.Ads.productionAdMobAppIDPlaceholder` documents the
-same replacement.
+`Info.plist` `GADApplicationIdentifier` is `$(GAD_APPLICATION_IDENTIFIER)` so
+Release cannot ship the sample App ID. After changing the IDs, run
+`xcodegen generate`.
 
 ## J. Rewarded Ad Unit
 
 Create a **Rewarded** ad unit only. Do not create interstitial, rewarded
 interstitial, banner, native, or app-open units for this app.
 
-Paste the production rewarded unit ID into:
+Production rewarded unit (Release only):
 
-`MonetizationConfiguration.Ads.productionRewardedAdUnitIDPlaceholder`
+`ca-app-pub-2544426617197908/1399895858`
+
+(`MonetizationConfiguration.Ads.productionRewardedAdUnitID`)
 
 DEBUG / development builds **always** use Google's official test unit:
 
@@ -185,13 +186,11 @@ Apple. There is no first-party analytics SDK in the project today.
 
 ## N. Privacy Policy
 
-A production Privacy Policy URL is required before release.
+Configured Privacy Policy URL:
 
-Replace:
+`https://adriverin.github.io/gamewe_support/#privacy`
 
-`MonetizationConfiguration.privacyPolicyURL`
-
-Current placeholder: `https://EXAMPLE-REQUIRED-PRIVACY-POLICY.invalid/privacy`
+(`MonetizationConfiguration.privacyPolicyURL`)
 
 The policy should address at least:
 
@@ -205,11 +204,11 @@ Do not claim collection that is not implemented.
 
 ## O. Terms of Use
 
-Replace:
+Configured Terms of Use URL:
 
-`MonetizationConfiguration.termsOfUseURL`
+`https://adriverin.github.io/gamewe_support/#terms`
 
-Current placeholder: `https://EXAMPLE-REQUIRED-TERMS.invalid/terms`
+(`MonetizationConfiguration.termsOfUseURL`)
 
 Alternatively use Apple's standard EULA (Paid Applications / custom license
 setting in App Store Connect). If you use the standard EULA, the paywall
@@ -250,15 +249,15 @@ removed.
 
 Before App Store submission verify:
 
-- [ ] Real AdMob App ID in `project.yml` / generated Info.plist
-- [ ] Real rewarded unit in `MonetizationConfiguration.Ads`
-- [ ] DEBUG test ad unit is not used in Release
+- [x] Real AdMob App ID in Release `GAD_APPLICATION_IDENTIFIER`
+- [x] Real rewarded unit in `MonetizationConfiguration.Ads`
+- [x] DEBUG test ad unit is not used in Release
 - [ ] StoreKit products approved / ready to submit
 - [ ] Both products in subscription group MiniGameTrainer Pro
 - [ ] Paywall shows localized StoreKit prices (not hard-coded €)
 - [ ] Restore Purchases
-- [ ] Privacy Policy URL
-- [ ] Terms / Apple EULA
+- [x] Privacy Policy URL
+- [x] Terms / Apple EULA
 - [ ] UMP European message configured
 - [ ] App Privacy questionnaire updated from Google's docs
 - [ ] ATT still intentionally omitted, or added if tracking was enabled

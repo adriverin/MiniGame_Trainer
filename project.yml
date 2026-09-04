@@ -19,8 +19,10 @@ settings:
     Debug:
       SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
       SWIFT_OPTIMIZATION_LEVEL: -Onone
+      GAD_APPLICATION_IDENTIFIER: ca-app-pub-3940256099942544~1458002511
     Release:
       SWIFT_OPTIMIZATION_LEVEL: -O
+      GAD_APPLICATION_IDENTIFIER: ca-app-pub-2544426617197908~2256365307
 
 packages:
   GoogleMobileAds:
@@ -60,7 +62,7 @@ targets:
         UIStatusBarStyle: UIStatusBarStyleLightContent
         UIViewControllerBasedStatusBarAppearance: true
         ITSAppUsesNonExemptEncryption: false
-        GADApplicationIdentifier: ca-app-pub-3940256099942544~1458002511
+        GADApplicationIdentifier: $(GAD_APPLICATION_IDENTIFIER)
         SKAdNetworkItems:
           - SKAdNetworkIdentifier: cstr6suwn9.skadnetwork
           - SKAdNetworkIdentifier: 4fzdc2evr5.skadnetwork
