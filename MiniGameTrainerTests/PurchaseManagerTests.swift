@@ -30,6 +30,51 @@ final class EntitlementEvaluatorTests: XCTestCase {
         XCTAssertFalse(EntitlementEvaluator.isPro(verifiedQualifyingProductIDs: entitled, configuredProductIDs: configured))
     }
 
+    func testInactiveTransactionIsNotPro() {
+        let entitled = EntitlementEvaluator.entitledProductIDs(
+            from: [.inactive(productID: MonetizationConfiguration.monthlyProductID)],
+            configuredProductIDs: configured
+        )
+        XCTAssertTrue(entitled.isEmpty)
+        XCTAssertFalse(EntitlementEvaluator.isPro(verifiedQualifyingProductIDs: entitled, configuredProductIDs: configured))
+    }
+
+    func testCanonicalProductIDsMatchStoreKitConfiguration() {
+        XCTAssertEqual(MonetizationConfiguration.monthlyProductID, "com.minigametrainer.app.pro.monthly")
+        XCTAssertEqual(MonetizationConfiguration.yearlyProductID, "com.minigametrainer.app.pro.yearly")
+        XCTAssertFalse(MonetizationConfiguration.monthlyProductID.contains(" "))
+        XCTAssertFalse(MonetizationConfiguration.yearlyProductID.contains(" "))
+        XCTAssertEqual(
+            MonetizationConfiguration.proProductIDs,
+            [
+                "com.minigametrainer.app.pro.monthly",
+                "com.minigametrainer.app.pro.yearly"
+            ]
+        )
+        XCTAssertEqual(MonetizationConfiguration.currentBundleID, "com.minigametrainer.app")
+    }
+
+    func testEitherMonthlyOrAnnualGrantsPro() {
+        XCTAssertTrue(
+            EntitlementEvaluator.isPro(
+                verifiedQualifyingProductIDs: [MonetizationConfiguration.monthlyProductID],
+                configuredProductIDs: configured
+            )
+        )
+        XCTAssertTrue(
+            EntitlementEvaluator.isPro(
+                verifiedQualifyingProductIDs: [MonetizationConfiguration.yearlyProductID],
+                configuredProductIDs: configured
+            )
+        )
+        XCTAssertTrue(
+            EntitlementEvaluator.isPro(
+                verifiedQualifyingProductIDs: MonetizationConfiguration.proProductIDs,
+                configuredProductIDs: configured
+            )
+        )
+    }
+
     func testUnrelatedVerifiedProductIsNotPro() {
         let entitled = EntitlementEvaluator.entitledProductIDs(
             from: [.verified(productID: "com.other.app.pro")],
@@ -45,6 +90,8 @@ final class MockStoreKitClient: StoreKitClient {
     var products: [StoreProduct]
     var purchaseOutcome: PurchaseOutcome
     var syncShouldFail = false
+    var finishCount = 0
+    var finishHandler: (() -> Void)?
     private var updateContinuation: AsyncStream<TransactionTrust>.Continuation?
 
     init(
@@ -80,6 +127,11 @@ final class MockStoreKitClient: StoreKitClient {
         }
     }
 
+    func finishDeliveredTransactions() async {
+        finishCount += 1
+        finishHandler?()
+    }
+
     func emit(_ trust: TransactionTrust) {
         updateContinuation?.yield(trust)
     }
@@ -87,23 +139,39 @@ final class MockStoreKitClient: StoreKitClient {
 
 @MainActor
 final class PurchaseManagerTests: XCTestCase {
-    func testVerifiedPurchaseUnlocksPro() async {
+    func testVerifiedPurchaseUnlocksProImmediatelyWithoutCurrentEntitlementsOrUpdates() async {
         let client = MockStoreKitClient(
             entitlements: [],
             purchaseOutcome: .verified(productID: MonetizationConfiguration.monthlyProductID)
         )
         let manager = PurchaseManager(client: client)
         await manager.refreshEntitlement()
+        XCTAssertFalse(manager.isPro)
         XCTAssertFalse(manager.verifiedPro)
 
-        client.entitlements = [.verified(productID: MonetizationConfiguration.monthlyProductID)]
-        if let monthly = manager.monthlyProduct {
-            await manager.purchase(monthly)
-        } else {
-            await manager.loadProducts()
-            await manager.purchase(manager.monthlyProduct!)
-        }
+        var isProWhenFinished = false
+        client.finishHandler = { isProWhenFinished = manager.isPro }
+
+        await manager.loadProducts()
+        await manager.purchase(manager.monthlyProduct!)
+
+        XCTAssertTrue(manager.isPro, "Verified monthly purchase must unlock Pro without Transaction.updates or currentEntitlements")
+        XCTAssertTrue(manager.verifiedPro)
+        XCTAssertTrue(client.entitlements.isEmpty, "Regression: unlock must not require seeding currentEntitlements")
+        XCTAssertTrue(isProWhenFinished, "Entitlement must be delivered before the transaction is finished")
+        XCTAssertEqual(client.finishCount, 1)
+    }
+
+    func testVerifiedAnnualPurchaseUnlocksProImmediately() async {
+        let client = MockStoreKitClient(
+            entitlements: [],
+            purchaseOutcome: .verified(productID: MonetizationConfiguration.yearlyProductID)
+        )
+        let manager = PurchaseManager(client: client)
+        await manager.loadProducts()
+        await manager.purchase(manager.yearlyProduct!)
         XCTAssertTrue(manager.isPro)
+        XCTAssertTrue(manager.verifiedPro)
     }
 
     func testUnverifiedPurchaseDoesNotUnlockPro() async {
@@ -116,6 +184,34 @@ final class PurchaseManagerTests: XCTestCase {
         await manager.purchase(manager.yearlyProduct!)
         XCTAssertFalse(manager.isPro)
         XCTAssertEqual(manager.actionState, .failed("Purchase could not be verified."))
+    }
+
+    func testVerifiedUnrelatedProductDoesNotUnlockPro() async {
+        let client = MockStoreKitClient(
+            entitlements: [],
+            purchaseOutcome: .verified(productID: "com.other.app.pro")
+        )
+        let manager = PurchaseManager(client: client)
+        await manager.loadProducts()
+        await manager.purchase(manager.monthlyProduct!)
+        XCTAssertFalse(manager.isPro)
+        XCTAssertFalse(manager.verifiedPro)
+    }
+
+    func testExpiredEntitlementRefreshClearsProAfterPurchase() async {
+        let client = MockStoreKitClient(
+            entitlements: [],
+            purchaseOutcome: .verified(productID: MonetizationConfiguration.monthlyProductID)
+        )
+        let manager = PurchaseManager(client: client)
+        await manager.loadProducts()
+        await manager.purchase(manager.monthlyProduct!)
+        XCTAssertTrue(manager.isPro)
+
+        client.entitlements = []
+        await manager.refreshEntitlement()
+        XCTAssertFalse(manager.isPro)
+        XCTAssertFalse(manager.verifiedPro)
     }
 
     func testProductLoadFailureDoesNotClearExistingPro() async {
@@ -137,6 +233,16 @@ final class PurchaseManagerTests: XCTestCase {
         await manager.restore()
         XCTAssertFalse(manager.isPro)
         XCTAssertEqual(manager.actionState, .restored)
+    }
+
+    func testRelaunchRefreshRestoresProFromCurrentEntitlements() async {
+        let client = MockStoreKitClient(
+            entitlements: [.verified(productID: MonetizationConfiguration.monthlyProductID)]
+        )
+        let manager = PurchaseManager(client: client)
+        await manager.refreshEntitlement()
+        XCTAssertTrue(manager.isPro)
+        XCTAssertTrue(manager.verifiedPro)
     }
 
     #if DEBUG

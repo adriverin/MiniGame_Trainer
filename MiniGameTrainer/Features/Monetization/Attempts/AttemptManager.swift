@@ -35,6 +35,7 @@ final class AttemptManager: ObservableObject {
         self.freeLimit = freeLimit
         self.rewardGrant = rewardGrant
         self.records = store.load()
+        MonetizationLog.debug("AttemptManager entitlement=\(ObjectIdentifier(entitlement))")
     }
 
     var isPro: Bool { entitlement.isPro }

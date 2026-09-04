@@ -31,6 +31,9 @@ final class AppEnvironment: ObservableObject {
         )
         consentManager = ConsentManager()
         rewardedAdManager = RewardedAdManager(consent: consentManager, entitlement: purchaseManager)
+        MonetizationLog.debug(
+            "AppEnvironment purchaseManager=\(ObjectIdentifier(purchaseManager)) attemptManager=\(ObjectIdentifier(attemptManager))"
+        )
     }
 
     func startMonetization() async {

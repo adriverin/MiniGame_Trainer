@@ -17,6 +17,7 @@ struct AttemptGateView: View {
 
     var body: some View {
         let _ = attempts.revision
+        let _ = purchases.isPro
         ZStack {
             ScreenBackground()
             ScrollView {

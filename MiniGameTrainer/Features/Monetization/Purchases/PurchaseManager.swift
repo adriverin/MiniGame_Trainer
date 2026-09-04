@@ -38,6 +38,9 @@ final class PurchaseManager: ObservableObject, ProEntitlementStatus {
     private let client: StoreKitClient
     private let configuredProductIDs: Set<String>
     private var updatesTask: Task<Void, Never>?
+    /// Invalidates in-flight entitlement refreshes so a lagging `currentEntitlements`
+    /// query cannot overwrite a just-applied verified purchase.
+    private var entitlementEpoch = 0
 
     var isPro: Bool {
         #if DEBUG
@@ -80,6 +83,9 @@ final class PurchaseManager: ObservableObject, ProEntitlementStatus {
 
     func start() {
         guard updatesTask == nil else { return }
+        MonetizationLog.debug(
+            "PurchaseManager start instance=\(ObjectIdentifier(self)) products=\(configuredProductIDs.sorted())"
+        )
         listenForTransactionUpdates()
         Task { await refreshEntitlement() }
         Task { await loadProducts() }
@@ -100,33 +106,14 @@ final class PurchaseManager: ObservableObject, ProEntitlementStatus {
     }
 
     func refreshEntitlement() async {
-        let trusts = await client.currentEntitlements()
-        let entitled = EntitlementEvaluator.entitledProductIDs(
-            from: trusts,
-            configuredProductIDs: configuredProductIDs
-        )
-        let next = EntitlementEvaluator.isPro(
-            verifiedQualifyingProductIDs: entitled,
-            configuredProductIDs: configuredProductIDs
-        )
-        if verifiedPro != next {
-            MonetizationLog.debug("Pro entitlement changed to \(next)")
-        }
-        verifiedPro = next
-        objectWillChange.send()
-    }
-
-    func purchase(_ product: StoreProduct) async {
-        guard !isBusy else { return }
-        actionState = .purchasing
-        let outcome = await client.purchase(productID: product.id)
-        await handle(outcome)
+        await refreshEntitlement(including: [])
     }
 
     func restore() async {
         guard !isBusy else { return }
         actionState = .restoring
         do {
+            entitlementEpoch += 1
             try await client.sync()
             await refreshEntitlement()
             actionState = .restored
@@ -137,24 +124,68 @@ final class PurchaseManager: ObservableObject, ProEntitlementStatus {
         }
     }
 
+    func purchase(_ product: StoreProduct) async {
+        guard !isBusy else { return }
+        actionState = .purchasing
+        MonetizationLog.debug("Purchase begin productID=\(product.id) isPro=\(isPro)")
+        let outcome = await client.purchase(productID: product.id)
+        await handle(outcome)
+    }
+
     func clearActionMessage() {
         actionState = .idle
     }
 
     private func handle(_ outcome: PurchaseOutcome) async {
         switch outcome {
-        case .verified:
-            await refreshEntitlement()
+        case .verified(let productID):
+            MonetizationLog.debug("Purchase verified productID=\(productID)")
+            entitlementEpoch += 1
+            applyEntitlement(from: [.verified(productID: productID)])
+            await refreshEntitlement(including: [.verified(productID: productID)])
+            await client.finishDeliveredTransactions()
             actionState = .idle
-        case .unverified:
+            MonetizationLog.debug("Purchase complete isPro=\(isPro) verifiedPro=\(verifiedPro)")
+        case .unverified(let productID):
+            MonetizationLog.debug("Purchase unverified productID=\(productID)")
             actionState = .failed("Purchase could not be verified.")
         case .pending:
             actionState = .pending
         case .userCancelled:
             actionState = .cancelled
         case .failed(let message):
+            await client.finishDeliveredTransactions()
             actionState = .failed(message)
         }
+    }
+
+    private func refreshEntitlement(including extra: [TransactionTrust]) async {
+        let epoch = entitlementEpoch
+        let fromStore = await client.currentEntitlements()
+        guard epoch == entitlementEpoch else {
+            MonetizationLog.debug("Skipped stale entitlement refresh epoch=\(epoch) current=\(entitlementEpoch)")
+            return
+        }
+        applyEntitlement(from: fromStore + extra)
+    }
+
+    private func applyEntitlement(from trusts: [TransactionTrust]) {
+        let entitled = EntitlementEvaluator.entitledProductIDs(
+            from: trusts,
+            configuredProductIDs: configuredProductIDs
+        )
+        let next = EntitlementEvaluator.isPro(
+            verifiedQualifyingProductIDs: entitled,
+            configuredProductIDs: configuredProductIDs
+        )
+        MonetizationLog.debug(
+            "Entitlement entitled=\(entitled.sorted()) isPro=\(next) instance=\(ObjectIdentifier(self))"
+        )
+        if verifiedPro != next {
+            MonetizationLog.debug("Pro entitlement changed to \(next)")
+        }
+        verifiedPro = next
+        objectWillChange.send()
     }
 
     private func listenForTransactionUpdates() {
@@ -163,7 +194,14 @@ final class PurchaseManager: ObservableObject, ProEntitlementStatus {
             for await trust in self.client.transactionUpdates() {
                 if Task.isCancelled { break }
                 MonetizationLog.debug("Transaction update \(trust)")
-                await self.refreshEntitlement()
+                self.entitlementEpoch += 1
+                switch trust {
+                case .verified(let productID):
+                    await self.refreshEntitlement(including: [.verified(productID: productID)])
+                case .unverified, .inactive:
+                    await self.refreshEntitlement()
+                }
+                await self.client.finishDeliveredTransactions()
             }
         }
     }
