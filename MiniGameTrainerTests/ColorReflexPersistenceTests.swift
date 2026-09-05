@@ -6,7 +6,7 @@ final class ColorReflexPersistenceTests: XCTestCase {
     func testColorReflexIsRegisteredWithHigherIsBetterPoints() {
         let ids = GameRegistry.modules.map { $0.descriptor.id }
         XCTAssertEqual(ids.filter { $0 == "colorReflex" }.count, 1)
-        XCTAssertEqual(ids.last, "colorReflex")
+        XCTAssertEqual(ids.dropLast().last, "colorReflex")
         XCTAssertEqual(GameRegistry.descriptor(for: "colorReflex"), ColorReflexGameModule.descriptor)
         XCTAssertEqual(ColorReflexGameModule.descriptor.scorePresentation, .points)
         XCTAssertEqual(ColorReflexGameModule.descriptor.scorePresentation.comparison, .higherIsBetter)

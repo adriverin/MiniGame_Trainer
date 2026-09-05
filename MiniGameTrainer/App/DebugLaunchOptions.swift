@@ -25,6 +25,8 @@ import Foundation
 /// `-targetSpeedLifetime 1.2 -targetSpeedSpawn 0.22 -targetSpeedMaxActive 4`.
 /// BLOOPY: `-autoPlay bloopy -bloopyAutoSteer -bloopyOverlay -bloopyGeometry`,
 /// `-bloopyScore 400 -bloopySeed 17602 -bloopyNoTrail`.
+/// JUMPY: `-autoPlay jumpy -jumpyAutoAdvance -jumpyControlQA -jumpyOverlay -jumpyHitboxes`,
+/// `-jumpyScore 75 -jumpyDifficulty 120 -jumpySeed 42 -jumpyHoldCollision`.
 /// Monetization (DEBUG): `-forcePro` / `-simulatePro`, `-forceFree`, `-setAttempts0`,
 /// `-grantBonus`, `forceDayIdentifier`, `monetizationGameID`, `-showAttemptState`.
 enum DebugLaunchOptions {
@@ -81,6 +83,31 @@ enum DebugLaunchOptions {
            CommandLine.arguments.indices.contains(index + 1),
            let value = UInt64(CommandLine.arguments[index + 1]) {
             bloopy.config.randomSeed = value
+        }
+        let jumpy = JumpyTuningStore.shared
+        if flag("jumpyOverlay") { jumpy.debugOptions.showOverlay = true }
+        if flag("jumpyHitboxes") { jumpy.debugOptions.showHitboxes = true }
+        if flag("jumpyAutoAdvance") { jumpy.debugOptions.autoAdvance = true }
+        if flag("jumpyHoldCollision") { jumpy.debugOptions.holdCollision = true }
+        if flag("jumpyControlQA") {
+            jumpy.debugOptions.controlQAScript = true
+            jumpy.debugOptions.disableCollisions = true
+            jumpy.debugOptions.showOverlay = true
+        }
+        if let index = CommandLine.arguments.firstIndex(of: "-jumpyScore"),
+           CommandLine.arguments.indices.contains(index + 1),
+           let value = Int(CommandLine.arguments[index + 1]) {
+            jumpy.config.startingScore = max(0, value)
+        }
+        if let index = CommandLine.arguments.firstIndex(of: "-jumpyDifficulty"),
+           CommandLine.arguments.indices.contains(index + 1),
+           let value = Int(CommandLine.arguments[index + 1]) {
+            jumpy.debugOptions.forcedDifficultyScore = max(0, value)
+        }
+        if let index = CommandLine.arguments.firstIndex(of: "-jumpySeed"),
+           CommandLine.arguments.indices.contains(index + 1),
+           let value = UInt64(CommandLine.arguments[index + 1]) {
+            jumpy.config.randomSeed = value
         }
         applyMonetizationDebug(environment: environment)
         if let gameID = autoPlayGameID, GameRegistry.module(for: gameID) != nil {

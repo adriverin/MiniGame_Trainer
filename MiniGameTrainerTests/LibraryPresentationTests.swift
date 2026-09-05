@@ -4,7 +4,7 @@ import XCTest
 @MainActor
 final class LibraryPresentationTests: XCTestCase {
     func testRegisteredGamesUseTitleCaseSkillLabels() {
-        XCTAssertEqual(GameRegistry.descriptors.count, 15)
+        XCTAssertEqual(GameRegistry.descriptors.count, 16)
         for descriptor in GameRegistry.descriptors {
             XCTAssertFalse(descriptor.skills.isEmpty, descriptor.name)
             for skill in descriptor.skills {

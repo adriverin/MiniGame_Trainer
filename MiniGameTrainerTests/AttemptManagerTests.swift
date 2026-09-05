@@ -146,7 +146,7 @@ final class AttemptManagerTests: XCTestCase {
         let attempts = manager()
         let ids = GameRegistry.modules.map { $0.descriptor.id }
         XCTAssertEqual(Set(ids).count, ids.count)
-        XCTAssertEqual(ids.count, 15)
+        XCTAssertEqual(ids.count, 16)
         for id in ids {
             XCTAssertFalse(id.isEmpty)
             XCTAssertEqual(attempts.availability(for: id), .free(remaining: 7))
