@@ -9,10 +9,11 @@ final class TraceGameLogic {
     private(set) var phase: TracePhase = .ready
     private(set) var score = 0
     private(set) var roundIndex = 0
-    private(set) var grid = TraceGridSize.smallest
+    private(set) var field = TraceHexField.smallest
     private(set) var targetSequence: [TraceNode] = []
     private(set) var playerSequence: [TraceNode] = []
     private(set) var visibleReferenceCount = 0
+    private(set) var recallAnchor: TraceNode?
     private(set) var lastTouch: CGPoint?
     private(set) var isTouching = false
     private(set) var elapsedTime: TimeInterval = 0
@@ -25,7 +26,7 @@ final class TraceGameLogic {
     private(set) var segmentsScored = 0
     private(set) var seed: UInt64
     var scoreOverride: Int?
-    var forcedGrid: TraceGridSize?
+    var forcedField: TraceHexField?
     var forcedTargetCount: Int?
     var forcedPattern: [TraceNode]?
     var skipPresentation = false
@@ -41,8 +42,8 @@ final class TraceGameLogic {
     init(config: TraceGameConfig, sceneSize: CGSize, seed: UInt64? = nil) {
         self.config = config
         difficulty = TraceDifficultyModel(config: config)
-        grid = difficulty.grid(forScore: 0)
-        geometry = TraceGeometry(sceneSize: sceneSize, config: config, grid: grid)
+        field = difficulty.field(forRoundIndex: 0)
+        geometry = TraceGeometry(sceneSize: sceneSize, config: config, field: field)
         generator = TracePatternGenerator(config: config)
         self.seed = seed ?? 0x54_52_41_43_45
         rng = .seeded(seed)
@@ -57,16 +58,19 @@ final class TraceGameLogic {
         return CGFloat(min(max(recallRemaining / recallDuration, 0), 1))
     }
     var effectiveScoreForDifficulty: Int { scoreOverride ?? score }
-    var currentDifficultyStage: Int { difficulty.stageIndex(forScore: effectiveScoreForDifficulty) }
+    var currentBoardRadius: Int { field.radius }
 
     func resize(sceneSize: CGSize) {
-        geometry = TraceGeometry(sceneSize: sceneSize, config: config, grid: grid)
+        geometry = TraceGeometry(sceneSize: sceneSize, config: config, field: field)
     }
 
     func start() {
         guard phase == .ready || phase == .gameOver else { return }
         resetSession()
-        if let scoreOverride { score = max(0, scoreOverride) }
+        if let scoreOverride {
+            score = max(0, scoreOverride)
+            roundIndex = difficulty.roundIndex(afterCompletedScore: score)
+        }
         beginPattern()
     }
 
@@ -80,6 +84,7 @@ final class TraceGameLogic {
         guard delta > 0, phase != .paused, phase != .gameOver, phase != .ready else { return }
         elapsedTime += delta
         if config.sessionDuration > 0, elapsedTime >= config.sessionDuration {
+            lastFailure = .sessionTimeout
             endSession()
             return
         }
@@ -133,13 +138,15 @@ final class TraceGameLogic {
         guard acceptsInput, geometry.contains(node) else { return .ignored }
         if playerSequence.last == node { return .duplicate }
         if playerSequence.isEmpty {
-            let expected = config.acceptReverseSequence ? [targetSequence.first, targetSequence.last] : [targetSequence.first]
+            let expected: [TraceNode?] = config.acceptReverseSequence
+                ? [targetSequence.first, targetSequence.last]
+                : [targetSequence.first]
             guard expected.contains(where: { $0 == node }) else {
-                failPattern(.wrongNode)
-                return .rejected
+                return .ignored
             }
             if config.acceptReverseSequence, node == targetSequence.last, node != targetSequence.first {
                 targetSequence.reverse()
+                recallAnchor = targetSequence.first
             }
             playerSequence = [node]
             phase = .tracing
@@ -195,17 +202,18 @@ final class TraceGameLogic {
         isTouching = false
         lastTouch = nil
         visibleReferenceCount = 0
+        recallAnchor = nil
         patternElapsed = 0
         recallElapsed = 0
         if skipPresentation {
-            phase = .awaitingTrace
-            emit(.patternStarted(sequence: targetSequence, grid: grid))
+            enterRecall()
+            emit(.patternStarted(sequence: targetSequence, field: field))
             emit(.patternHidden)
             return
         }
         phase = .showingPattern
         advanceReveal()
-        emit(.patternStarted(sequence: targetSequence, grid: grid))
+        emit(.patternStarted(sequence: targetSequence, field: field))
     }
 
     func applyDebugSolve(correct: Bool) {
@@ -252,25 +260,29 @@ final class TraceGameLogic {
         lastFailure = nil
         playerSequence = []
         targetSequence = []
+        recallAnchor = nil
+        visibleReferenceCount = 0
         isTouching = false
         lastTouch = nil
         events.removeAll()
         storedPhaseBeforePause = nil
+        field = difficulty.field(forRoundIndex: 0)
+        geometry = TraceGeometry(sceneSize: geometry.sceneSize, config: config, field: field)
     }
 
     private func beginPattern() {
         lastFailure = nil
         playerSequence = []
+        recallAnchor = nil
         isTouching = false
         lastTouch = nil
-        let difficultyScore = effectiveScoreForDifficulty
-        grid = forcedGrid ?? difficulty.grid(forScore: difficultyScore)
-        geometry = TraceGeometry(sceneSize: geometry.sceneSize, config: config, grid: grid)
-        let length = forcedTargetCount ?? difficulty.samplePathLength(forScore: difficultyScore, grid: grid, rng: &rng)
-        if let forcedPattern, generator.isValid(forcedPattern, grid: grid, requireAdjacent: config.requireAdjacentSteps) {
+        field = forcedField ?? difficulty.field(forRoundIndex: roundIndex)
+        geometry = TraceGeometry(sceneSize: geometry.sceneSize, config: config, field: field)
+        let length = forcedTargetCount ?? difficulty.nodeCount(forRoundIndex: roundIndex, field: field)
+        if let forcedPattern, generator.isValid(forcedPattern, field: field, requireAdjacent: config.requireAdjacentSteps) {
             targetSequence = forcedPattern
         } else {
-            targetSequence = generator.generate(grid: grid, length: length, rng: &rng)
+            targetSequence = generator.generate(field: field, length: length, rng: &rng)
         }
         recallDuration = difficulty.recallDuration(segmentCount: max(0, targetSequence.count - 1))
         recallElapsed = 0
@@ -278,16 +290,14 @@ final class TraceGameLogic {
         visibleReferenceCount = 0
         scoreAtPatternStart = score
         if skipPresentation {
-            visibleReferenceCount = 0
-            phase = .awaitingTrace
-            recallElapsed = 0
-            emit(.patternStarted(sequence: targetSequence, grid: grid))
+            enterRecall()
+            emit(.patternStarted(sequence: targetSequence, field: field))
             emit(.patternHidden)
             return
         }
         phase = .showingPattern
         advanceReveal()
-        emit(.patternStarted(sequence: targetSequence, grid: grid))
+        emit(.patternStarted(sequence: targetSequence, field: field))
     }
 
     private func advanceReveal() {
@@ -308,10 +318,16 @@ final class TraceGameLogic {
         }
         if patternElapsed >= revealEnd + hold {
             visibleReferenceCount = 0
-            phase = .awaitingTrace
-            recallElapsed = 0
+            enterRecall()
             emit(.patternHidden)
         }
+    }
+
+    private func enterRecall() {
+        visibleReferenceCount = 0
+        recallAnchor = targetSequence.first
+        phase = .awaitingTrace
+        recallElapsed = 0
     }
 
     private func completePattern() {
@@ -319,27 +335,10 @@ final class TraceGameLogic {
         roundIndex += 1
         isTouching = false
         lastTouch = nil
+        recallAnchor = nil
         phase = .evaluating
         evaluationRemaining = max(0, config.evaluationDuration)
         emit(.patternCompleted)
-    }
-
-    private func failPattern(_ reason: TraceFailureReason) {
-        guard phase == .awaitingTrace || phase == .tracing else { return }
-        lastFailure = reason
-        patternsFailed += 1
-        roundIndex += 1
-        isTouching = false
-        lastTouch = nil
-        emit(.patternFailed(reason))
-        if (reason == .wrongNode && config.wrongNodeEndsSession)
-            || (reason == .incompleteLift && config.incompleteLiftEndsSession)
-            || (reason == .recallTimeout && config.timeoutEndsSession) {
-            endSession()
-            return
-        }
-        phase = .evaluating
-        evaluationRemaining = max(0, config.evaluationDuration)
     }
 
     private func enterTransition() {
@@ -347,7 +346,31 @@ final class TraceGameLogic {
         transitionRemaining = max(0, config.transitionDuration)
         playerSequence = []
         visibleReferenceCount = 0
+        recallAnchor = nil
         lastTouch = nil
+    }
+
+    private func failPattern(_ reason: TraceFailureReason) {
+        guard phase == .awaitingTrace || phase == .tracing else { return }
+        lastFailure = reason
+        patternsFailed += 1
+        isTouching = false
+        lastTouch = nil
+        emit(.patternFailed(reason))
+        if shouldEndSession(reason) {
+            endSession()
+            return
+        }
+        phase = .evaluating
+    }
+
+    private func shouldEndSession(_ reason: TraceFailureReason) -> Bool {
+        switch reason {
+        case .wrongNode: return config.wrongNodeEndsSession
+        case .incompleteLift: return config.incompleteLiftEndsSession
+        case .recallTimeout: return config.timeoutEndsSession
+        case .sessionTimeout: return true
+        }
     }
 
     private func endSession() {

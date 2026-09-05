@@ -8,19 +8,26 @@ struct TraceDebugSettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Grid") {
-                    Stepper("Forced rows: \(store.debugOptions.forcedRows.map(String.init) ?? "Off")", value: intOptional($store.debugOptions.forcedRows), in: 0...12)
-                    Stepper("Forced columns: \(store.debugOptions.forcedColumns.map(String.init) ?? "Off")", value: intOptional($store.debugOptions.forcedColumns), in: 0...12)
-                    Stepper("Forced target count: \(store.debugOptions.forcedTargetCount.map(String.init) ?? "Off")", value: intOptional($store.debugOptions.forcedTargetCount), in: 0...20)
+                Section("Board") {
+                    Stepper(
+                        "Forced radius: \(store.debugOptions.forcedRadius.map(String.init) ?? "Off")",
+                        value: intOptional($store.debugOptions.forcedRadius),
+                        in: 0...3
+                    )
+                    Stepper(
+                        "Forced target count: \(store.debugOptions.forcedTargetCount.map(String.init) ?? "Off")",
+                        value: intOptional($store.debugOptions.forcedTargetCount),
+                        in: 0...37
+                    )
                     slider("Footprint width", value: $store.config.gridWidthRatio, in: 0.4...0.95, format: "%.3f")
                     slider("Footprint height", value: $store.config.gridHeightRatio, in: 0.3...0.75, format: "%.3f")
                     slider("Center Y", value: $store.config.gridCenterYRatio, in: 0.25...0.6, format: "%.3f")
                 }
 
                 Section("Nodes and hit") {
-                    slider("Visual radius / spacing", value: $store.config.nodeVisualRadiusToSpacing, in: 0.10...0.40, format: "%.3f")
-                    slider("Hit radius / spacing", value: $store.config.nodeHitRadiusToSpacing, in: 0.20...0.55, format: "%.3f")
-                    slider("Line width / spacing", value: $store.config.lineWidthToSpacing, in: 0.15...0.70, format: "%.3f")
+                    slider("Visual radius / spacing", value: $store.config.nodeVisualRadiusToSpacing, in: 0.06...0.22, format: "%.3f")
+                    slider("Hit radius / spacing", value: $store.config.nodeHitRadiusToSpacing, in: 0.20...0.50, format: "%.3f")
+                    slider("Line width / spacing", value: $store.config.lineWidthToSpacing, in: 0.03...0.16, format: "%.3f")
                     Toggle("Require adjacent steps", isOn: $store.config.requireAdjacentSteps)
                     Toggle("Accept reverse sequence", isOn: $store.config.acceptReverseSequence)
                 }

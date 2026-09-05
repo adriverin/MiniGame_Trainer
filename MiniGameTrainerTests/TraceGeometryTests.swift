@@ -4,13 +4,61 @@ import XCTest
 final class TraceGeometryTests: XCTestCase {
     private let sceneSize = CGSize(width: 393, height: 852)
 
+    func testRadiusOneHasSevenNodesAndRowCountsTwoThreeTwo() {
+        let field = TraceHexField(radius: 1)
+        XCTAssertEqual(field.nodeCount, 7)
+        XCTAssertEqual(field.allNodes.count, 7)
+        XCTAssertEqual(field.rowCounts, [2, 3, 2])
+    }
+
+    func testRadiusTwoHasNineteenNodesAndSymmetricRows() {
+        let field = TraceHexField(radius: 2)
+        XCTAssertEqual(field.nodeCount, 19)
+        XCTAssertEqual(field.allNodes.count, 19)
+        XCTAssertEqual(field.rowCounts, [3, 4, 5, 4, 3])
+    }
+
+    func testRadiusThreeHasThirtySevenNodesAndSymmetricRows() {
+        let field = TraceHexField(radius: 3)
+        XCTAssertEqual(field.nodeCount, 37)
+        XCTAssertEqual(field.allNodes.count, 37)
+        XCTAssertEqual(field.rowCounts, [4, 5, 6, 7, 6, 5, 4])
+    }
+
+    func testEveryNeighborIsOnTheFieldAndInteriorNodesHaveSix() {
+        for radius in 1...3 {
+            let field = TraceHexField(radius: radius)
+            let nodes = Set(field.allNodes)
+            for node in field.allNodes {
+                let neighbors = TraceHexNeighbors.neighbors(of: node)
+                XCTAssertEqual(neighbors.count, 6)
+                XCTAssertEqual(Set(neighbors).count, 6)
+                let onField = neighbors.filter(field.contains)
+                XCTAssertTrue(onField.allSatisfy { nodes.contains($0) })
+                for neighbor in onField {
+                    XCTAssertTrue(TraceHexNeighbors.isNeighbor(neighbor, node))
+                }
+            }
+            XCTAssertEqual(TraceHexNeighbors.neighbors(of: TraceNode(q: 0, r: 0)).filter(field.contains).count, 6)
+        }
+    }
+
+    func testNeighborDistancesAreEqual() {
+        let geometry = TraceGeometry(sceneSize: sceneSize, config: .reference, field: TraceHexField(radius: 2))
+        let origin = TraceNode(q: 0, r: 0)
+        let distances = TraceHexNeighbors.neighbors(of: origin).map { neighbor in
+            let a = geometry.position(for: origin)
+            let b = geometry.position(for: neighbor)
+            return hypot(a.x - b.x, a.y - b.y)
+        }
+        for distance in distances {
+            XCTAssertEqual(distance, geometry.spacing, accuracy: 1e-6)
+        }
+    }
+
     func testHitInsideRadiusIsAcceptedAndOutsideIsNot() {
-        let geometry = TraceGeometry(
-            sceneSize: sceneSize,
-            config: .reference,
-            grid: TraceGridSize(rows: 3, columns: 2)
-        )
-        let node = TraceNode(row: 1, column: 0)
+        let geometry = TraceGeometry(sceneSize: sceneSize, config: .reference, field: TraceHexField(radius: 1))
+        let node = TraceNode(q: 0, r: 0)
         let center = geometry.position(for: node)
         XCTAssertEqual(geometry.node(at: center), node)
         XCTAssertTrue(geometry.isInsideHitRadius(point: center, node: node))
@@ -27,13 +75,9 @@ final class TraceGeometryTests: XCTestCase {
     }
 
     func testHitCirclesDoNotSwallowNeighborCenters() {
-        let geometry = TraceGeometry(
-            sceneSize: sceneSize,
-            config: .reference,
-            grid: TraceGridSize(rows: 3, columns: 2)
-        )
-        let a = TraceNode(row: 0, column: 0)
-        let b = TraceNode(row: 0, column: 1)
+        let geometry = TraceGeometry(sceneSize: sceneSize, config: .reference, field: TraceHexField(radius: 1))
+        let a = TraceNode(q: 0, r: 0)
+        let b = TraceNode(q: 1, r: 0)
         XCTAssertTrue(TraceHexNeighbors.isNeighbor(a, b))
         let centerB = geometry.position(for: b)
         XCTAssertEqual(geometry.node(at: centerB), b)
@@ -41,8 +85,16 @@ final class TraceGeometryTests: XCTestCase {
         XCTAssertLessThan(geometry.nodeHitRadius * 2, geometry.spacing + 1e-6)
     }
 
+    func testVisualRadiusIsSmallerThanHitRadiusAndLineIsThinnerThanNodeDiameter() {
+        let geometry = TraceGeometry(sceneSize: sceneSize, config: .reference, field: TraceHexField(radius: 3))
+        XCTAssertLessThan(geometry.nodeVisualRadius, geometry.nodeHitRadius)
+        XCTAssertLessThan(geometry.lineWidth * 2, geometry.nodeVisualRadius * 2)
+        XCTAssertGreaterThan(geometry.nodeVisualRadius, 0)
+        XCTAssertGreaterThan(geometry.lineWidth, 0)
+    }
+
     func testNormalizedHUDRatiosAreFinite() {
-        let geometry = TraceGeometry(sceneSize: sceneSize, config: .reference, grid: .smallest)
+        let geometry = TraceGeometry(sceneSize: sceneSize, config: .reference, field: .smallest)
         XCTAssertGreaterThan(geometry.timerFrame.width, 0)
         XCTAssertGreaterThan(geometry.timerFrame.height, 0)
         XCTAssertEqual(geometry.scorePosition.x, sceneSize.width / 2, accuracy: 1e-9)

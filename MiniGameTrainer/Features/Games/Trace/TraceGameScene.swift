@@ -27,6 +27,7 @@ final class TraceGameScene: SKScene {
     private let referencePathNode = SKShapeNode()
     private let playerPathNode = SKShapeNode()
     private let livePathNode = SKShapeNode()
+    private let startPulseNode = SKShapeNode()
     private let debugLabel = SKLabelNode(fontNamed: "Menlo")
     private var nodeShapes: [TraceNode: SKShapeNode] = [:]
     private var hitboxShapes: [TraceNode: SKShapeNode] = [:]
@@ -36,6 +37,15 @@ final class TraceGameScene: SKScene {
     private var measuredFPS = 0.0
     private var autoSolveAccumulator: TimeInterval = 0
     private var activeTouch: UITouch?
+
+    private enum Z {
+        static let dimDots: CGFloat = 1
+        static let pathStroke: CGFloat = 2
+        static let startPulse: CGFloat = 3
+        static let pathNodes: CGFloat = 4
+        static let hud: CGFloat = 20
+        static let debug: CGFloat = 40
+    }
 
     init(size: CGSize, config: TraceGameConfig, debugOptions: TraceDebugOptions) {
         self.config = config
@@ -147,42 +157,48 @@ final class TraceGameScene: SKScene {
     }
 
     private func setupNodes() {
+        gridNode.zPosition = Z.dimDots
         addChild(gridNode)
-        referencePathNode.lineCap = .round
-        referencePathNode.lineJoin = .round
-        referencePathNode.fillColor = .clear
-        referencePathNode.strokeColor = config.referenceColor
-        addChild(referencePathNode)
-        playerPathNode.lineCap = .round
-        playerPathNode.lineJoin = .round
-        playerPathNode.fillColor = .clear
-        playerPathNode.strokeColor = config.playerColor
-        addChild(playerPathNode)
-        livePathNode.lineCap = .round
-        livePathNode.lineJoin = .round
-        livePathNode.fillColor = .clear
-        livePathNode.strokeColor = config.playerColor
-        addChild(livePathNode)
+        configureStroke(referencePathNode, color: config.referenceColor)
+        configureStroke(playerPathNode, color: config.playerColor)
+        configureStroke(livePathNode, color: config.playerColor)
+        startPulseNode.fillColor = .clear
+        startPulseNode.strokeColor = config.playerColor
+        startPulseNode.lineWidth = 2
+        startPulseNode.zPosition = Z.startPulse
+        startPulseNode.isHidden = true
+        addChild(startPulseNode)
         timerTrack.fillColor = config.timerTrackColor
         timerTrack.strokeColor = .clear
+        timerTrack.zPosition = Z.hud
         addChild(timerTrack)
         timerFill.fillColor = config.timerFillColor
         timerFill.strokeColor = .clear
+        timerFill.zPosition = Z.hud
         addChild(timerFill)
         scoreLabel.fontColor = config.scoreColor
         scoreLabel.horizontalAlignmentMode = .center
         scoreLabel.verticalAlignmentMode = .center
-        scoreLabel.zPosition = 20
+        scoreLabel.zPosition = Z.hud
         addChild(scoreLabel)
         debugLabel.fontSize = 11
         debugLabel.fontColor = AppTheme.UIColors.debugText
         debugLabel.horizontalAlignmentMode = .left
         debugLabel.verticalAlignmentMode = .top
         debugLabel.numberOfLines = 0
-        debugLabel.zPosition = 40
+        debugLabel.zPosition = Z.debug
         debugLabel.isHidden = true
         addChild(debugLabel)
         layoutHUD()
+    }
+
+    private func configureStroke(_ node: SKShapeNode, color: UIColor) {
+        node.lineCap = .round
+        node.lineJoin = .round
+        node.fillColor = .clear
+        node.strokeColor = color
+        node.zPosition = Z.pathStroke
+        addChild(node)
     }
 
     private func layoutHUD() {
@@ -197,12 +213,12 @@ final class TraceGameScene: SKScene {
         nodeShapes.removeAll()
         hitboxShapes.removeAll()
         let geometry = logic.geometry
-        for node in geometry.grid.allNodes {
+        for node in geometry.field.allNodes {
             let shape = SKShapeNode(circleOfRadius: geometry.nodeVisualRadius)
             shape.fillColor = config.inactiveNodeColor
             shape.strokeColor = .clear
             shape.position = geometry.position(for: node)
-            shape.zPosition = 2
+            shape.zPosition = Z.dimDots
             gridNode.addChild(shape)
             nodeShapes[node] = shape
             let hit = SKShapeNode(circleOfRadius: geometry.nodeHitRadius)
@@ -210,7 +226,7 @@ final class TraceGameScene: SKScene {
             hit.strokeColor = AppTheme.UIColors.debugHitbox
             hit.lineWidth = 1
             hit.position = shape.position
-            hit.zPosition = 3
+            hit.zPosition = Z.pathNodes
             hit.isHidden = !debugOptions.showHitboxes
             gridNode.addChild(hit)
             hitboxShapes[node] = hit
@@ -222,10 +238,10 @@ final class TraceGameScene: SKScene {
         logic.scoreOverride = debugOptions.forcedScore
         logic.forcedTargetCount = debugOptions.forcedTargetCount
         logic.forcedPattern = debugOptions.forcedPattern
-        if let rows = debugOptions.forcedRows, let columns = debugOptions.forcedColumns {
-            logic.forcedGrid = TraceGridSize(rows: rows, columns: columns)
+        if let radius = debugOptions.forcedRadius {
+            logic.forcedField = TraceHexField(radius: radius)
         } else {
-            logic.forcedGrid = nil
+            logic.forcedField = nil
         }
         hitboxShapes.values.forEach { $0.isHidden = !debugOptions.showHitboxes }
         debugLabel.isHidden = !debugOptions.showOverlay
@@ -257,13 +273,13 @@ final class TraceGameScene: SKScene {
                 break
             }
         }
-        if logic.geometry.grid != gridFromShapes {
+        if logic.geometry.field != renderedField {
             rebuildGrid()
         }
     }
 
-    private var gridFromShapes: TraceGridSize {
-        logic.geometry.grid
+    private var renderedField: TraceHexField {
+        logic.geometry.field
     }
 
     private func syncPresentation() {
@@ -284,7 +300,7 @@ final class TraceGameScene: SKScene {
         let referenceVisible = Array(logic.targetSequence.prefix(logic.visibleReferenceCount))
         referencePathNode.path = path(for: referenceVisible)
         referencePathNode.strokeColor = config.referenceColor
-        let failed = logic.lastFailure != nil && (logic.phase == .evaluating || logic.phase == .transitioning)
+        let failed = logic.lastFailure != nil
         playerPathNode.path = path(for: logic.playerSequence)
         playerPathNode.strokeColor = failed ? config.incorrectColor : config.playerColor
         if logic.phase == .tracing, let last = logic.playerSequence.last, let touch = logic.lastTouch {
@@ -292,36 +308,79 @@ final class TraceGameScene: SKScene {
             live.move(to: geometry.position(for: last))
             live.addLine(to: touch)
             livePathNode.path = live
+            livePathNode.strokeColor = failed ? config.incorrectColor : config.playerColor
             livePathNode.isHidden = false
         } else {
             livePathNode.path = nil
             livePathNode.isHidden = true
         }
+        syncStartPulse(geometry: geometry)
         let referenceSet = Set(referenceVisible)
         let playerSet = Set(logic.playerSequence)
+        let anchor = logic.recallAnchor
         for (node, shape) in nodeShapes {
+            let isPathNode: Bool
             if failed, playerSet.contains(node) {
                 shape.fillColor = config.incorrectColor
+                isPathNode = true
             } else if playerSet.contains(node) {
                 shape.fillColor = config.playerColor
+                isPathNode = true
             } else if referenceSet.contains(node) {
                 shape.fillColor = config.referenceColor
+                isPathNode = true
+            } else if node == anchor, logic.phase == .awaitingTrace || logic.phase == .tracing || failed {
+                shape.fillColor = failed ? config.incorrectColor : config.playerColor
+                isPathNode = true
             } else {
                 shape.fillColor = config.inactiveNodeColor
+                isPathNode = false
             }
-            shape.setScale(playerSet.contains(node) || referenceSet.contains(node) ? 1.08 : 1)
+            shape.zPosition = isPathNode ? Z.pathNodes : Z.dimDots
+            shape.setScale(isPathNode ? 1.06 : 1)
+        }
+    }
+
+    private func syncStartPulse(geometry: TraceGeometry) {
+        let shouldShow = logic.phase == .awaitingTrace
+            && logic.playerSequence.isEmpty
+            && logic.recallAnchor != nil
+            && logic.lastFailure == nil
+        guard shouldShow, let anchor = logic.recallAnchor else {
+            startPulseNode.isHidden = true
+            startPulseNode.removeAllActions()
+            return
+        }
+        let radius = geometry.nodeVisualRadius * 1.85
+        startPulseNode.path = CGPath(
+            ellipseIn: CGRect(x: -radius, y: -radius, width: radius * 2, height: radius * 2),
+            transform: nil
+        )
+        startPulseNode.position = geometry.position(for: anchor)
+        startPulseNode.strokeColor = config.playerColor
+        startPulseNode.lineWidth = max(1.5, geometry.lineWidth)
+        startPulseNode.isHidden = false
+        if startPulseNode.action(forKey: "pulse") == nil {
+            startPulseNode.setScale(1)
+            startPulseNode.alpha = 0.85
+            let pulse = SKAction.repeatForever(.sequence([
+                .group([
+                    .scale(to: 1.55, duration: 0.65),
+                    .fadeAlpha(to: 0.12, duration: 0.65),
+                ]),
+                .group([
+                    .scale(to: 1.0, duration: 0.65),
+                    .fadeAlpha(to: 0.85, duration: 0.65),
+                ]),
+            ]))
+            startPulseNode.run(pulse, withKey: "pulse")
         }
     }
 
     private func path(for nodes: [TraceNode]) -> CGPath? {
-        guard let first = nodes.first else { return nil }
+        guard nodes.count >= 2, let first = nodes.first else { return nil }
         let path = CGMutablePath()
         path.move(to: logic.geometry.position(for: first))
-        if nodes.count == 1 {
-            let radius = logic.geometry.lineWidth / 2
-            path.addEllipse(in: CGRect(x: path.currentPoint.x - radius, y: path.currentPoint.y - radius, width: radius * 2, height: radius * 2))
-            return path
-        }
         for node in nodes.dropFirst() {
             path.addLine(to: logic.geometry.position(for: node))
         }
@@ -333,16 +392,15 @@ final class TraceGameScene: SKScene {
         let target = logic.phase == .showingPattern || debugOptions.showOverlay
             ? logic.targetSequence.map(\.description).joined(separator: "→")
             : "(hidden during recall)"
-        // Overlay is DEBUG-only. Target is listed here for QA; the gameplay path is never shown in recall.
         debugLabel.text = """
         TRACE DEBUG
         score \(logic.score)  round \(logic.roundIndex)
-        grid \(logic.grid.rows)×\(logic.grid.columns)
+        hex r\(logic.field.radius)  nodes \(logic.field.nodeCount)
         target \(logic.targetSequence.count)  player \(logic.playerSequence.count)
         state \(logic.phase.rawValue)
         expose \(String(format: "%.2f", logic.patternElapsed))s
         recall \(String(format: "%.2f", logic.recallRemaining)) / \(String(format: "%.2f", logic.recallDuration))s
-        stage \(logic.currentDifficultyStage)  seed \(logic.seed)
+        seed \(logic.seed)
         fps \(String(format: "%.0f", measuredFPS))
         target \(target)
         """

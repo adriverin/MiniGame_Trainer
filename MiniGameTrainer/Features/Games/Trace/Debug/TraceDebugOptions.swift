@@ -7,8 +7,7 @@ struct TraceDebugOptions: Equatable {
     var autoSolveWrong = false
     var skipPresentation = false
     var forcedScore: Int?
-    var forcedRows: Int?
-    var forcedColumns: Int?
+    var forcedRadius: Int?
     var forcedTargetCount: Int?
     var forcedSeed: UInt64?
     var forcedPattern: [TraceNode]?

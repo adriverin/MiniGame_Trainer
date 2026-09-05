@@ -3,34 +3,29 @@ import Foundation
 struct TraceDifficultyModel: Equatable {
     var config: TraceGameConfig
 
-    func grid(forScore score: Int) -> TraceGridSize {
-        let index = stageIndex(forScore: max(0, score))
-        let rows = config.gridAnchorRows.indices.contains(index) ? config.gridAnchorRows[index] : (config.gridAnchorRows.last ?? 3)
-        let columns = config.gridAnchorColumns.indices.contains(index) ? config.gridAnchorColumns[index] : (config.gridAnchorColumns.last ?? 2)
-        return TraceGridSize(rows: max(1, rows), columns: max(1, columns))
+    func radius(forRoundIndex roundIndex: Int) -> Int {
+        let index = max(0, roundIndex)
+        let radius: Int
+        if index < 2 {
+            radius = 1
+        } else if index < 5 {
+            radius = 2
+        } else {
+            radius = 3
+        }
+        return min(max(1, radius), max(1, config.maximumBoardRadius))
     }
 
-    func typicalPathLength(forScore score: Int) -> Int {
-        let index = stageIndex(forScore: max(0, score))
-        return config.pathTypicalCounts.indices.contains(index)
-            ? config.pathTypicalCounts[index]
-            : (config.pathTypicalCounts.last ?? config.minimumPathLength)
+    func field(forRoundIndex roundIndex: Int) -> TraceHexField {
+        TraceHexField(radius: radius(forRoundIndex: roundIndex))
     }
 
-    func pathLengthRange(forScore score: Int, grid: TraceGridSize) -> ClosedRange<Int> {
-        let typical = typicalPathLength(forScore: score)
-        let jitter = max(0, config.pathLengthJitter)
-        let upperBound = max(2, min(config.maximumPathLength, grid.nodeCount))
-        let lower = min(max(config.minimumPathLength, typical - jitter), upperBound)
-        let upper = min(max(lower, typical + jitter), upperBound)
-        return lower...upper
+    func edgeCount(forRoundIndex roundIndex: Int) -> Int {
+        max(0, roundIndex) + max(0, config.baseEdgeCount)
     }
 
-    func samplePathLength(forScore score: Int, grid: TraceGridSize, rng: inout some RandomNumberGenerator) -> Int {
-        let range = pathLengthRange(forScore: score, grid: grid)
-        let span = range.upperBound - range.lowerBound
-        guard span > 0 else { return range.lowerBound }
-        return range.lowerBound + Int.random(in: 0...span, using: &rng)
+    func nodeCount(forRoundIndex roundIndex: Int, field: TraceHexField) -> Int {
+        min(edgeCount(forRoundIndex: roundIndex) + 1, field.nodeCount)
     }
 
     func recallDuration(segmentCount: Int) -> TimeInterval {
@@ -42,24 +37,31 @@ struct TraceDifficultyModel: Equatable {
         return TimeInterval(segments) * max(0, config.segmentRevealDuration) + max(0, config.patternHoldDuration)
     }
 
-    func stageIndex(forScore score: Int) -> Int {
-        let anchors = config.gridAnchorScores
-        guard !anchors.isEmpty else { return 0 }
-        var index = 0
-        for candidate in anchors.indices where anchors[candidate] <= score {
-            index = candidate
+    /// Largest completed-round count whose cumulative score is still ≤ `score`.
+    func roundIndex(afterCompletedScore score: Int) -> Int {
+        let value = max(0, score)
+        var completed = 0
+        while Self.cumulativeScore(afterCompletedRounds: completed + 1) <= value, completed < 256 {
+            completed += 1
         }
-        return index
+        return completed
     }
+
+    static func cumulativeScore(afterCompletedRounds completed: Int) -> Int {
+        let n = max(0, completed)
+        return n * (n + 5) / 2
+    }
+
+    static let successfulMilestones = [3, 7, 12, 18, 25, 33, 42, 52, 63, 75, 88]
 }
 
 enum TraceHexNeighbors {
-    /// Odd-r horizontal layout: even rows unshifted, odd rows shifted +0.5 column.
+    static let directions: [(q: Int, r: Int)] = [
+        (1, 0), (-1, 0), (0, 1), (0, -1), (1, -1), (-1, 1),
+    ]
+
     static func neighbors(of node: TraceNode) -> [TraceNode] {
-        let even = [(1, 0), (-1, 0), (0, -1), (-1, -1), (0, 1), (-1, 1)]
-        let odd = [(1, 0), (-1, 0), (1, -1), (0, -1), (1, 1), (0, 1)]
-        let deltas = node.row & 1 == 0 ? even : odd
-        return deltas.map { TraceNode(row: node.row + $0.1, column: node.column + $0.0) }
+        directions.map { TraceNode(q: node.q + $0.q, r: node.r + $0.r) }
     }
 
     static func isNeighbor(_ a: TraceNode, _ b: TraceNode) -> Bool {

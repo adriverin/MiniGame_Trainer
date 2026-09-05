@@ -37,34 +37,45 @@ private struct TracePreviewIllustration: View {
         GeometryReader { proxy in
             let width = proxy.size.width
             let height = proxy.size.height
-            let nodes: [(CGFloat, CGFloat)] = [
-                (0.22, 0.62), (0.40, 0.38), (0.58, 0.58), (0.74, 0.30),
+            let field = TraceHexField(radius: 1)
+            let geometry = TraceGeometry(
+                sceneSize: CGSize(width: width, height: height),
+                config: config,
+                field: field
+            )
+            let previewPath = [
+                TraceNode(q: 0, r: 0),
+                TraceNode(q: 1, r: 0),
+                TraceNode(q: 1, r: -1),
+                TraceNode(q: 0, r: -1),
             ]
             ZStack {
                 Color(config.backgroundColor)
-                ForEach(0..<12, id: \.self) { index in
-                    let col = index % 4
-                    let row = index / 4
+                ForEach(field.allNodes, id: \.self) { node in
+                    let point = geometry.position(for: node)
                     Circle()
                         .fill(Color(config.inactiveNodeColor))
-                        .frame(width: 14, height: 14)
-                        .position(
-                            x: width * (0.22 + CGFloat(col) * 0.18 + (row % 2 == 1 ? 0.06 : 0)),
-                            y: height * (0.28 + CGFloat(row) * 0.22)
-                        )
+                        .frame(width: geometry.nodeVisualRadius * 2, height: geometry.nodeVisualRadius * 2)
+                        .position(x: point.x, y: height - point.y)
                 }
                 Path { path in
-                    path.move(to: CGPoint(x: width * nodes[0].0, y: height * nodes[0].1))
-                    for node in nodes.dropFirst() {
-                        path.addLine(to: CGPoint(x: width * node.0, y: height * node.1))
+                    let first = geometry.position(for: previewPath[0])
+                    path.move(to: CGPoint(x: first.x, y: height - first.y))
+                    for node in previewPath.dropFirst() {
+                        let point = geometry.position(for: node)
+                        path.addLine(to: CGPoint(x: point.x, y: height - point.y))
                     }
                 }
-                .stroke(Color(config.referenceColor), style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round))
-                ForEach(0..<nodes.count, id: \.self) { index in
+                .stroke(
+                    Color(config.referenceColor),
+                    style: StrokeStyle(lineWidth: geometry.lineWidth, lineCap: .round, lineJoin: .round)
+                )
+                ForEach(previewPath, id: \.self) { node in
+                    let point = geometry.position(for: node)
                     Circle()
                         .fill(Color(config.referenceColor))
-                        .frame(width: 18, height: 18)
-                        .position(x: width * nodes[index].0, y: height * nodes[index].1)
+                        .frame(width: geometry.nodeVisualRadius * 2, height: geometry.nodeVisualRadius * 2)
+                        .position(x: point.x, y: height - point.y)
                 }
             }
             .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))

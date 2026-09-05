@@ -142,6 +142,7 @@
 		653C9A02DBB528C7897FE6DB /* TowerStackModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42CE29396E9F559BD54C460 /* TowerStackModels.swift */; };
 		665F2743F0EEB9571472A92B /* BloopyIntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1202D89AC458200D8D8C32F4 /* BloopyIntroView.swift */; };
 		668154737AE2C84A099AAB25 /* KeepUpDifficultyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F19455DC671FFE6F2EB23E /* KeepUpDifficultyTests.swift */; };
+		66A7DF2CF03722BC50034003 /* TraceTestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE272351511EFD6C99CAD6C5 /* TraceTestSupport.swift */; };
 		66DF989557A99AB74915080C /* TrampboxGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04588D96EDD17F386830BE44 /* TrampboxGeometry.swift */; };
 		6707CC4F88E5541A7F1CE169 /* StatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5C7E5DC492FDDFB6C78057 /* StatisticsView.swift */; };
 		699F73176234B4B72D7264B8 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3359BB89B36FD20EE4A70D /* AppInfo.swift */; };
@@ -161,6 +162,7 @@
 		7A825BC327DF5103FB20F8A9 /* AttemptAvailability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3C8EAA7D7D23D05E503CD8 /* AttemptAvailability.swift */; };
 		7B20BEF0F7186A6D8AE5E5FF /* GridDifficultyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3A8D0B41BB2352CE265376 /* GridDifficultyModel.swift */; };
 		7E48A6C0E08F1F3B557424FA /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A62CCA6481D30603C4BF3231 /* HomeView.swift */; };
+		7E7FEB8963C29EFDBF332CFE /* TraceVisualQATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BA770F40F524CFF9FEC4CD5 /* TraceVisualQATests.swift */; };
 		7F8CD0574F99BEF23B38AB30 /* TrampboxDifficultyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E5A1015ACFF68AF2B99542 /* TrampboxDifficultyTests.swift */; };
 		7FE9BAAC96770A80AA944C66 /* TowerStackPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = E262C4DB2974F9E84F2ABE6F /* TowerStackPalette.swift */; };
 		81C70AB57237ACC94CF3268D /* DebugLaunchOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24BD87AE662A6346EEFB2E4 /* DebugLaunchOptions.swift */; };
@@ -401,6 +403,7 @@
 		290845F7849A558AFCE92A65 /* PianoTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoTile.swift; sourceTree = "<group>"; };
 		2A8DD71349689729AE3BB16C /* TargetSpeedSpawnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetSpeedSpawnerTests.swift; sourceTree = "<group>"; };
 		2AFD678F9FA2FD78FC10D5C1 /* MonetizationDebugControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonetizationDebugControls.swift; sourceTree = "<group>"; };
+		2BA770F40F524CFF9FEC4CD5 /* TraceVisualQATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceVisualQATests.swift; sourceTree = "<group>"; };
 		2C0089563AF9F216A32D1C04 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
 		2CC7F00E265449E5D38DB2E3 /* TapSevenGameLogicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapSevenGameLogicTests.swift; sourceTree = "<group>"; };
 		2D11F99C778F10BB943F1500 /* DirectionsGameConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsGameConfig.swift; sourceTree = "<group>"; };
@@ -660,6 +663,7 @@
 		EBE8B0F2561B777CD9A12838 /* FeedbackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackService.swift; sourceTree = "<group>"; };
 		EC7D0DE77517587C1EBD3459 /* ReactGameLogicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactGameLogicTests.swift; sourceTree = "<group>"; };
 		EDC46BEA1D6263BDF0003F38 /* MiniGameDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniGameDescriptor.swift; sourceTree = "<group>"; };
+		EE272351511EFD6C99CAD6C5 /* TraceTestSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceTestSupport.swift; sourceTree = "<group>"; };
 		EE63190F635D7F32F236EE76 /* TraceGameConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceGameConfig.swift; sourceTree = "<group>"; };
 		EEF527EF0446740C0BECFDD5 /* TimesUpDebugSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesUpDebugSettingsView.swift; sourceTree = "<group>"; };
 		EF6080A51F7C9E541459248E /* BloopyPlatformTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloopyPlatformTests.swift; sourceTree = "<group>"; };
@@ -1413,6 +1417,8 @@
 				FD594116FD4B988F70C1042A /* TracePatternTests.swift */,
 				0D370B36F110DC448ACC9B13 /* TracePersistenceTests.swift */,
 				88D42976396613805D490314 /* TraceScoringTests.swift */,
+				EE272351511EFD6C99CAD6C5 /* TraceTestSupport.swift */,
+				2BA770F40F524CFF9FEC4CD5 /* TraceVisualQATests.swift */,
 				853DA5A87A1975E63A72BD57 /* TrampboxCollisionTests.swift */,
 				C9E5A1015ACFF68AF2B99542 /* TrampboxDifficultyTests.swift */,
 				D1D37E9D3AE5C66F094C47F7 /* TrampboxGameLogicTests.swift */,
@@ -1652,6 +1658,8 @@
 				CFDF8693BEFA303A4E0C9B00 /* TracePatternTests.swift in Sources */,
 				619230A8E838F3C4A706DDE4 /* TracePersistenceTests.swift in Sources */,
 				23E60074D72641ECD87ED188 /* TraceScoringTests.swift in Sources */,
+				66A7DF2CF03722BC50034003 /* TraceTestSupport.swift in Sources */,
+				7E7FEB8963C29EFDBF332CFE /* TraceVisualQATests.swift in Sources */,
 				55E3F5AAFC9C225CAA9F6090 /* TrampboxCollisionTests.swift in Sources */,
 				7F8CD0574F99BEF23B38AB30 /* TrampboxDifficultyTests.swift in Sources */,
 				B67C807E8621F87F5E6EE07C /* TrampboxGameLogicTests.swift in Sources */,

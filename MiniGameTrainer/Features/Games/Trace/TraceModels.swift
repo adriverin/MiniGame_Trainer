@@ -1,32 +1,56 @@
 import Foundation
 
 struct TraceNode: Hashable, Codable, Comparable, CustomStringConvertible {
-    var row: Int
-    var column: Int
+    var q: Int
+    var r: Int
 
-    var description: String { "(\(row),\(column))" }
+    var s: Int { -q - r }
+
+    var description: String { "(\(q),\(r))" }
 
     static func < (lhs: TraceNode, rhs: TraceNode) -> Bool {
-        (lhs.row, lhs.column) < (rhs.row, rhs.column)
+        (lhs.r, lhs.q) < (rhs.r, rhs.q)
     }
 }
 
-struct TraceGridSize: Hashable, Codable {
-    var rows: Int
-    var columns: Int
+/// Centered hexagonal lattice of the given axial radius.
+struct TraceHexField: Hashable, Codable {
+    var radius: Int
 
-    var nodeCount: Int { max(0, rows) * max(0, columns) }
+    static let smallest = TraceHexField(radius: 1)
+
+    var nodeCount: Int {
+        let radius = max(0, self.radius)
+        return 1 + 3 * radius * (radius + 1)
+    }
+
+    /// Pointy-top rows from r = -radius (top) to r = +radius (bottom).
+    var rowCounts: [Int] {
+        let radius = max(0, self.radius)
+        return (-radius...radius).map { r in
+            let qMin = max(-radius, -radius - r)
+            let qMax = min(radius, radius - r)
+            return qMax - qMin + 1
+        }
+    }
 
     var allNodes: [TraceNode] {
-        guard rows > 0, columns > 0 else { return [] }
-        return (0..<rows).flatMap { row in (0..<columns).map { TraceNode(row: row, column: $0) } }
+        let radius = max(0, self.radius)
+        var nodes: [TraceNode] = []
+        nodes.reserveCapacity(nodeCount)
+        for r in -radius...radius {
+            let qMin = max(-radius, -radius - r)
+            let qMax = min(radius, radius - r)
+            for q in qMin...qMax {
+                nodes.append(TraceNode(q: q, r: r))
+            }
+        }
+        return nodes
     }
 
     func contains(_ node: TraceNode) -> Bool {
-        node.row >= 0 && node.row < rows && node.column >= 0 && node.column < columns
+        max(abs(node.q), abs(node.r), abs(node.s)) <= radius
     }
-
-    static let smallest = TraceGridSize(rows: 3, columns: 2)
 }
 
 enum TracePhase: String, Equatable {
@@ -55,7 +79,7 @@ enum TraceAcceptResult: Equatable {
 }
 
 enum TraceEvent: Equatable {
-    case patternStarted(sequence: [TraceNode], grid: TraceGridSize)
+    case patternStarted(sequence: [TraceNode], field: TraceHexField)
     case revealAdvanced(visibleCount: Int)
     case patternHidden
     case nodeAccepted(TraceNode, scoreDelta: Int)
@@ -67,7 +91,7 @@ enum TraceEvent: Equatable {
 struct TraceRoundRecord: Equatable {
     var scoreBefore: Int
     var scoreAfter: Int
-    var grid: TraceGridSize
+    var field: TraceHexField
     var targetCount: Int
     var completed: Bool
     var failure: TraceFailureReason?
