@@ -8,7 +8,7 @@ enum TraceGameModule: MiniGameModule {
         instructions: "Memorize the path. When it disappears, drag through the dots to recreate it. Patterns become harder as you progress. Higher score is better.",
         iconName: "scribble.variable",
         difficulty: .hard,
-        skills: ["Memory", "Sequencing", "Motor control"]
+        skills: ["Memory", "Sequencing", "Motor Control"]
     )
 
     static func makeIntroView() -> AnyView { AnyView(TraceIntroView()) }

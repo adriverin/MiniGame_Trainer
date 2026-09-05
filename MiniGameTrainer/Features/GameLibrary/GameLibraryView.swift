@@ -7,7 +7,7 @@ struct GameLibraryView: View {
 
     var body: some View {
         LazyVStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
-            Text("\(GameRegistry.descriptors.count) games to make your own")
+            Text("\(GameRegistry.descriptors.count) games to master")
                 .font(AppTheme.Fonts.caption)
                 .foregroundStyle(AppTheme.Colors.textSecondary)
                 .accessibilityAddTraits(.isHeader)

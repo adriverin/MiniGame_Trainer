@@ -8,7 +8,7 @@ enum CenterHitGameModule: MiniGameModule {
         instructions: "A line moves back and forth across the bar. Tap when it reaches the exact center. It gets faster after every attempt. Your average precision is your score. 5 attempts.",
         iconName: "scope",
         difficulty: .medium,
-        skills: ["Visual timing", "Prediction", "Precision"],
+        skills: ["Visual Timing", "Prediction", "Precision"],
         scorePresentation: .precisionPercent
     )
 

@@ -8,7 +8,7 @@ enum TimesUpGameModule: MiniGameModule {
         instructions: "Watch the progress bar drain. Halfway through, it disappears. Tap when you think the full time has elapsed. Your average timing error is your score. Lower is better. 3 rounds.",
         iconName: "hourglass",
         difficulty: .medium,
-        skills: ["Time estimation", "Internal clock"],
+        skills: ["Time Estimation", "Internal Clock"],
         scorePresentation: .timingErrorSeconds
     )
 

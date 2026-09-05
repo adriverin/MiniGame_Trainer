@@ -8,7 +8,7 @@ enum ReactGameModule: MiniGameModule {
         instructions: "Tap the circle as soon as it lights up. Each target appears after a random delay. Your average reaction time is your score. Lower is better.",
         iconName: "circle.grid.3x3.fill",
         difficulty: .easy,
-        skills: ["Visual reaction", "Accuracy"],
+        skills: ["Visual Reaction", "Accuracy"],
         scorePresentation: .reactionMilliseconds
     )
 

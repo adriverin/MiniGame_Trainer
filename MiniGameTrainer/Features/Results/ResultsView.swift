@@ -61,21 +61,26 @@ struct ResultsView: View {
                             }
                         }
                     }
-
-                    VStack(spacing: 12) {
-                        PrimaryButton(title: "Try Again", systemImage: "arrow.counterclockwise") {
-                            router.retry(gameID: result.gameID)
-                        }
-                        PrimaryButton(title: "Library", systemImage: "square.grid.2x2", style: .outlined) {
-                            router.goHome()
-                        }
-                    }
-                    .padding(.top, 8)
                 }
                 .padding(AppTheme.Metrics.screenPadding)
                 .frame(maxWidth: AppTheme.Metrics.contentWidth)
                 .frame(maxWidth: .infinity)
             }
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            VStack(spacing: 12) {
+                PrimaryButton(title: "Try Again", systemImage: "arrow.counterclockwise") {
+                    router.retry(gameID: result.gameID)
+                }
+                PrimaryButton(title: "Library", systemImage: "square.grid.2x2", style: .outlined) {
+                    router.goHome()
+                }
+            }
+            .padding(.horizontal, AppTheme.Metrics.screenPadding)
+            .padding(.vertical, AppTheme.Spacing.md)
+            .frame(maxWidth: AppTheme.Metrics.contentWidth)
+            .frame(maxWidth: .infinity)
+            .background(AppTheme.Colors.background)
         }
         .navigationTitle("Results")
         .navigationBarTitleDisplayMode(.inline)

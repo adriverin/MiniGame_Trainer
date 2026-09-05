@@ -52,7 +52,7 @@ struct PaywallView: View {
                     } else {
                         productSection
                         if let product = selectedProduct {
-                            PrimaryButton(title: "Subscribe · \(product.displayPrice) / \(product.isYearly ? "year" : "month")") {
+                            PrimaryButton(title: "Continue with \(product.isYearly ? "Annual" : "Monthly")") {
                                 Task { await purchases.purchase(product) }
                             }
                             .disabled(purchases.isBusy)
@@ -92,9 +92,17 @@ struct PaywallView: View {
         .toolbarBackground(.hidden, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                Button("Close") {
+                Button {
                     router.dismissPaywall()
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(AppTheme.Colors.textPrimary)
+                        .frame(width: 30, height: 30)
+                        .background(AppTheme.Colors.surfaceElevated, in: Circle())
+                        .frame(minWidth: 44, minHeight: 44)
                 }
+                .accessibilityLabel("Close")
             }
         }
         .onAppear {

@@ -44,6 +44,7 @@
 		1CFF4228ED1CC69906FF09A4 /* ColorReflexGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9072EA9A468C43DF51AE73 /* ColorReflexGeometry.swift */; };
 		1E73B62B3BC6EE9040D40A23 /* GameLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501564BC8B6BE82B4D2AB304 /* GameLibraryView.swift */; };
 		1EAFAF3FE187FC8CF14288C2 /* StatisticsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAC0F71CEB98443FB15CE78D /* StatisticsStore.swift */; };
+		1F499EA5980A8318164D9B7E /* LibraryPresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6933E4AFB9661DA271119D /* LibraryPresentationTests.swift */; };
 		1F4F568363DA51B79FB66C34 /* TowerStackDebugSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9461FA6DBAD9D935C7C456DC /* TowerStackDebugSettingsView.swift */; };
 		2061EF8EBAC2398D0E31939D /* TapSevenGameConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6699C6404C5D31EB9268528C /* TapSevenGameConfig.swift */; };
 		2066CF952BF403CB476C8EFF /* TrampboxPlatformNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B47A025A4816D6835421FB /* TrampboxPlatformNode.swift */; };
@@ -141,6 +142,7 @@
 		665F2743F0EEB9571472A92B /* BloopyIntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1202D89AC458200D8D8C32F4 /* BloopyIntroView.swift */; };
 		668154737AE2C84A099AAB25 /* KeepUpDifficultyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F19455DC671FFE6F2EB23E /* KeepUpDifficultyTests.swift */; };
 		66DF989557A99AB74915080C /* TrampboxGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04588D96EDD17F386830BE44 /* TrampboxGeometry.swift */; };
+		6707CC4F88E5541A7F1CE169 /* StatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5C7E5DC492FDDFB6C78057 /* StatisticsView.swift */; };
 		699F73176234B4B72D7264B8 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3359BB89B36FD20EE4A70D /* AppInfo.swift */; };
 		69D46A609D06BF3E31F4451A /* TraceDifficultyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C6229E72041F80191F2F92 /* TraceDifficultyModel.swift */; };
 		6E1C8CA22B1CBAFC755A9153 /* TimesUpGameLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A295E7BE5F167348C2A691 /* TimesUpGameLogicTests.swift */; };
@@ -361,6 +363,7 @@
 		0B558A54BC73C9CDB4900A9D /* CenterHitPerformanceTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterHitPerformanceTracker.swift; sourceTree = "<group>"; };
 		0BBD7D8357B7F214AC84800D /* KeepUpCeilingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepUpCeilingTests.swift; sourceTree = "<group>"; };
 		0D370B36F110DC448ACC9B13 /* TracePersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracePersistenceTests.swift; sourceTree = "<group>"; };
+		0E6933E4AFB9661DA271119D /* LibraryPresentationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPresentationTests.swift; sourceTree = "<group>"; };
 		1044943033B0A9E55F8AA9EC /* KeepUpGameConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepUpGameConfig.swift; sourceTree = "<group>"; };
 		10BA519867A67CAE01594B99 /* MiniGameTrainer.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MiniGameTrainer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		112B33E4578BFA97491715FD /* TapSevenTuningStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapSevenTuningStore.swift; sourceTree = "<group>"; };
@@ -587,6 +590,7 @@
 		BCE29EE15244393A27C22DCB /* SwipeFastTuningStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeFastTuningStore.swift; sourceTree = "<group>"; };
 		BD753E7CA8429547EF72C3FD /* SwipeFastGameConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeFastGameConfig.swift; sourceTree = "<group>"; };
 		BE98DBC57745FA7C0C6AA316 /* KeepUpGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepUpGameScene.swift; sourceTree = "<group>"; };
+		BF5C7E5DC492FDDFB6C78057 /* StatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsView.swift; sourceTree = "<group>"; };
 		C08A75306826E815D46420B7 /* KeepUpDebugSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepUpDebugSettingsView.swift; sourceTree = "<group>"; };
 		C0A23319E68A743F1ACCFB06 /* KeepUpDifficultyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepUpDifficultyModel.swift; sourceTree = "<group>"; };
 		C0B47A025A4816D6835421FB /* TrampboxPlatformNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrampboxPlatformNode.swift; sourceTree = "<group>"; };
@@ -714,6 +718,7 @@
 			isa = PBXGroup;
 			children = (
 				5FB9867787EE3BBC7B930ED9 /* SettingsView.swift */,
+				BF5C7E5DC492FDDFB6C78057 /* StatisticsView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -1371,6 +1376,7 @@
 				64D8213E98E32919CEF89F95 /* KeepUpGameLogicTests.swift */,
 				694A77B888CABB5C1F36FF33 /* KeepUpPersistenceTests.swift */,
 				D57556D8F73902EB4A022471 /* KeepUpPhysicsTests.swift */,
+				0E6933E4AFB9661DA271119D /* LibraryPresentationTests.swift */,
 				BB8D8DE514FEBB1EFDCD3F1F /* MonetizationConfigurationTests.swift */,
 				48ACA52027579E3662639715 /* PianoDifficultyTests.swift */,
 				F5D3E88DCAEFB5CDE6B51ACA /* PianoGameLogicTests.swift */,
@@ -1609,6 +1615,7 @@
 				421744908638C5617F7268CD /* KeepUpGameLogicTests.swift in Sources */,
 				198B023B1608B7CE8F97BF88 /* KeepUpPersistenceTests.swift in Sources */,
 				554549570087688988C674BA /* KeepUpPhysicsTests.swift in Sources */,
+				1F499EA5980A8318164D9B7E /* LibraryPresentationTests.swift in Sources */,
 				FFEC13A7C01832661DB3D083 /* MonetizationConfigurationTests.swift in Sources */,
 				A6DBC430A661AA6FDE8B1C8F /* PianoDifficultyTests.swift in Sources */,
 				28BDE3258FC7B0EDAD4C2C98 /* PianoGameLogicTests.swift in Sources */,
@@ -1806,6 +1813,7 @@
 				3ADB5B10EE7167FD8E08B3B4 /* SettingsView.swift in Sources */,
 				DC4CD1E27CE1FCFFB205A191 /* StatRow.swift in Sources */,
 				1EAFAF3FE187FC8CF14288C2 /* StatisticsStore.swift in Sources */,
+				6707CC4F88E5541A7F1CE169 /* StatisticsView.swift in Sources */,
 				EC3CC5448952F99133BEC27B /* StoreKitClient.swift in Sources */,
 				27A305669EDD9681E35966D7 /* SwipeFastDebugOptions.swift in Sources */,
 				B8A2DFC059A9A7484555B2C1 /* SwipeFastDebugSettingsView.swift in Sources */,

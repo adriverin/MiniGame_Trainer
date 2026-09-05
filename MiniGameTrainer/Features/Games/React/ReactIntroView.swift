@@ -18,9 +18,6 @@ struct ReactIntroView: View {
         ) {
             ReactPreviewIllustration()
         }
-        .navigationTitle(descriptor.name)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(.hidden, for: .navigationBar)
         #if DEBUG
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {

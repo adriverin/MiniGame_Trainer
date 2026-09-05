@@ -49,6 +49,20 @@ final class AppRouterAttemptTests: XCTestCase {
         XCTAssertEqual(attempts.availability(for: "piano"), .exhausted)
     }
 
+    func testShowStatisticsPushesDedicatedRouteFromSettings() {
+        let (router, _, _) = makeRouter()
+        router.showSettings()
+        router.showStatistics()
+        XCTAssertEqual(router.path, [.settings, .statistics])
+    }
+
+    func testShowStatisticsDoesNotDuplicateTopRoute() {
+        let (router, _, _) = makeRouter()
+        router.showStatistics()
+        router.showStatistics()
+        XCTAssertEqual(router.path, [.statistics])
+    }
+
     func testProStartsWithoutConsuming() {
         let (router, attempts, _) = makeRouter(isPro: true)
         router.startGame("bloopy")

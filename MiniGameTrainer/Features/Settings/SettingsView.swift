@@ -45,24 +45,14 @@ struct SettingsView: View {
                 }
             }
 
-            Section("Feedback") {
+            Section("Preferences") {
                 Toggle("Sound", isOn: $preferences.soundEnabled)
                 Toggle("Haptics", isOn: $preferences.hapticsEnabled)
             }
 
             Section("Statistics") {
-                ForEach(GameRegistry.descriptors) { descriptor in
-                    let stats = statistics.statistics(for: descriptor.id)
-                    LabeledContent(descriptor.name) {
-                        Text(stats.gamesPlayed > 0
-                             ? "\(descriptor.scorePresentation.formatted(stats.bestScore)) · \(stats.gamesPlayed) played"
-                             : "No score yet")
-                            .monospacedDigit()
-                            .fixedSize(horizontal: false, vertical: true)
-                            .foregroundStyle(AppTheme.Colors.textSecondary)
-                    }
-                }
-                Button("Reset all statistics", role: .destructive) {
+                NavigationLink("View Statistics", value: AppRoute.statistics)
+                Button("Reset All Statistics", role: .destructive) {
                     confirmReset = true
                 }
             }
@@ -100,6 +90,8 @@ struct SettingsView: View {
         .confirmationDialog("Reset all statistics?", isPresented: $confirmReset, titleVisibility: .visible) {
             Button("Reset", role: .destructive) { statistics.resetAll() }
             Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This cannot be undone.")
         }
     }
 }

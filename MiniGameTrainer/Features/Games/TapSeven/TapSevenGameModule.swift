@@ -8,7 +8,7 @@ enum TapSevenGameModule: MiniGameModule {
         instructions: "Watch the timer. Tap as close as possible to exactly 7 seconds. Your timing error is your score. Lower is better.",
         iconName: "timer",
         difficulty: .medium,
-        skills: ["Timing", "Precision", "Visual tracking"],
+        skills: ["Timing", "Precision", "Visual Tracking"],
         scorePresentation: TapSevenGameConfig.scorePresentation
     )
 

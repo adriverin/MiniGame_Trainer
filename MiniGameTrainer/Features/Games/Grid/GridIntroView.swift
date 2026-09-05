@@ -18,9 +18,6 @@ struct GridIntroView: View {
         ) {
             GridPreviewIllustration(config: tuning.config)
         }
-        .navigationTitle(descriptor.name)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(.hidden, for: .navigationBar)
         #if DEBUG
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {

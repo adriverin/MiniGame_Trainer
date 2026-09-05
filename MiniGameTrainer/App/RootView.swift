@@ -39,6 +39,8 @@ struct RootView: View {
                 .navigationBarBackButtonHidden(true)
         case .settings:
             SettingsView()
+        case .statistics:
+            StatisticsView()
         case .attemptGate(let gameID):
             AttemptGateView(gameID: gameID)
         case .paywall:

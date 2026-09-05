@@ -58,5 +58,8 @@ struct GameIntroLayout<Preview: View>: View {
                 .frame(maxWidth: .infinity)
                 .background(AppTheme.Colors.background)
         }
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(.hidden, for: .navigationBar)
     }
 }

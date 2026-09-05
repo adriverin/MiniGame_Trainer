@@ -8,6 +8,7 @@ enum AppRoute: Hashable {
     case game(gameID: String)
     case results(GameResult)
     case settings
+    case statistics
     case attemptGate(gameID: String)
     case paywall
 }
@@ -59,6 +60,11 @@ final class AppRouter: ObservableObject {
 
     func showSettings() {
         path.append(.settings)
+    }
+
+    func showStatistics() {
+        if case .statistics = path.last { return }
+        path.append(.statistics)
     }
 
     func showPaywall() {
