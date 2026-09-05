@@ -6,6 +6,7 @@ struct JumpyGameConfig: Equatable {
     var columnCount = 7
     var gestureThreshold: CGFloat = 24
     var hopDuration: TimeInterval = 0.18
+    var pendingMoveCapacity = 4
     var resultHoldDuration: TimeInterval = 0.38
     var maximumFrameDelta: TimeInterval = 0.10
     var maximumSimulationStep: TimeInterval = 1.0 / 240.0

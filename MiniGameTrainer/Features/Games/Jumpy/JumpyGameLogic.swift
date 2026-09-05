@@ -9,6 +9,7 @@ final class JumpyGameLogic {
     private(set) var playerPosition: JumpyGridPosition
     private(set) var facing: JumpyFacing = .up
     private(set) var hop: JumpyHop?
+    private(set) var pendingMoves: [JumpyMove] = []
     private(set) var score: Int
     private(set) var cameraProgress: CGFloat = 0
     private(set) var elapsedTime: TimeInterval = 0
@@ -34,7 +35,7 @@ final class JumpyGameLogic {
     }
 
     var isFinished: Bool { state == .gameOver }
-    var acceptsInput: Bool { state == .running && hop == nil }
+    var acceptsInput: Bool { state == .running }
     var minimumRetreatRow: Int {
         let projection = JumpyWorldProjection(size: CGSize(width: 1, height: 1), config: config, cameraProgress: cameraProgress)
         return max(0, Int(ceil(projection.minimumVisibleWorldRow)))
@@ -51,6 +52,7 @@ final class JumpyGameLogic {
         playerPosition = JumpyGridPosition(row: startingRow, column: config.columnCount / 2)
         facing = .up
         hop = nil
+        pendingMoves.removeAll(keepingCapacity: true)
         score = max(0, config.startingScore)
         cameraProgress = CGFloat(startingRow)
         elapsedTime = 0
@@ -68,30 +70,10 @@ final class JumpyGameLogic {
 
     @discardableResult
     func requestMove(_ move: JumpyMove) -> Bool {
-        guard acceptsInput else { return false }
-        var destination = playerPosition
-        switch move {
-        case .up: destination.row += 1
-        case .down: destination.row -= 1
-        case .left: destination.column -= 1
-        case .right: destination.column += 1
-        }
-        guard destination.column >= 0, destination.column < config.columnCount,
-              destination.row >= minimumRetreatRow else { return false }
-
-        facing = switch move {
-        case .up: .up
-        case .down: .down
-        case .left: .left
-        case .right: .right
-        }
-        hop = JumpyHop(from: playerPosition, to: destination, move: move, elapsed: 0)
-        totalJumps += 1
-        switch move {
-        case .up: forwardJumps += 1
-        case .down: backwardJumps += 1
-        case .left, .right: sidewaysJumps += 1
-        }
+        guard state == .running else { return false }
+        if hop == nil { return beginHop(move) }
+        guard pendingMoves.count < config.pendingMoveCapacity else { return false }
+        pendingMoves.append(move)
         return true
     }
 
@@ -148,6 +130,7 @@ final class JumpyGameLogic {
     func setPlayerForTesting(_ position: JumpyGridPosition, score: Int? = nil, camera: CGFloat? = nil) {
         playerPosition = position
         hop = nil
+        pendingMoves.removeAll(keepingCapacity: true)
         if let score { self.score = score }
         if let camera { cameraProgress = camera }
     }
@@ -176,6 +159,7 @@ final class JumpyGameLogic {
             impactPosition = playerAfter
             state = .gameOver
             hop = nil
+            pendingMoves.removeAll(keepingCapacity: true)
             events.append(.collided)
             return
         }
@@ -187,6 +171,41 @@ final class JumpyGameLogic {
             cameraProgress = max(cameraProgress, CGFloat(playerPosition.row))
             maintainWorld()
             events.append(.hopped)
+            startNextQueuedHopIfNeeded()
+        }
+    }
+
+    @discardableResult
+    private func beginHop(_ move: JumpyMove) -> Bool {
+        var destination = playerPosition
+        switch move {
+        case .up: destination.row += 1
+        case .down: destination.row -= 1
+        case .left: destination.column -= 1
+        case .right: destination.column += 1
+        }
+        guard destination.column >= 0, destination.column < config.columnCount,
+              destination.row >= minimumRetreatRow else { return false }
+
+        facing = switch move {
+        case .up: .up
+        case .down: .down
+        case .left: .left
+        case .right: .right
+        }
+        hop = JumpyHop(from: playerPosition, to: destination, move: move, elapsed: 0)
+        totalJumps += 1
+        switch move {
+        case .up: forwardJumps += 1
+        case .down: backwardJumps += 1
+        case .left, .right: sidewaysJumps += 1
+        }
+        return true
+    }
+
+    private func startNextQueuedHopIfNeeded() {
+        while hop == nil, state == .running, !pendingMoves.isEmpty {
+            if beginHop(pendingMoves.removeFirst()) { return }
         }
     }
 

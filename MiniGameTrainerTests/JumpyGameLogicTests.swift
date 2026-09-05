@@ -43,14 +43,165 @@ final class JumpyGameLogicTests: XCTestCase {
         }
     }
 
-    func testInputIsLockedDuringHop() {
+    func testRapidDoubleTapChainsTwoForwardHops() {
         let logic = makeSafeLogic()
         XCTAssertTrue(logic.requestMove(.up))
-        XCTAssertFalse(logic.requestMove(.up))
-        XCTAssertFalse(logic.requestMove(.left))
-        finishHop(logic)
+        XCTAssertTrue(logic.acceptsInput)
+        XCTAssertTrue(logic.requestMove(.up))
+        XCTAssertEqual(logic.pendingMoves, [.up])
+        XCTAssertEqual(logic.score, 0)
+        XCTAssertEqual(logic.playerPosition.row, 0)
+        advance(logic, by: logic.config.hopDuration * 2)
+        XCTAssertEqual(logic.playerPosition.row, 2)
+        XCTAssertEqual(logic.score, 2)
+        XCTAssertNil(logic.hop)
+        XCTAssertTrue(logic.pendingMoves.isEmpty)
+    }
+
+    func testRapidTripleTapIsThreeSequentialHopsNotTeleport() {
+        let logic = makeSafeLogic()
+        XCTAssertTrue(logic.requestMove(.up))
+        XCTAssertTrue(logic.requestMove(.up))
+        XCTAssertTrue(logic.requestMove(.up))
+        XCTAssertEqual(logic.playerPosition.row, 0)
+        XCTAssertEqual(logic.score, 0)
+        XCTAssertEqual(logic.pendingMoves, [.up, .up])
+
+        advance(logic, by: logic.config.hopDuration)
         XCTAssertEqual(logic.playerPosition.row, 1)
-        XCTAssertEqual(logic.totalJumps, 1)
+        XCTAssertEqual(logic.score, 1)
+        XCTAssertEqual(logic.hop?.move, .up)
+        XCTAssertEqual(logic.pendingMoves, [.up])
+
+        advance(logic, by: logic.config.hopDuration)
+        XCTAssertEqual(logic.playerPosition.row, 2)
+        XCTAssertEqual(logic.score, 2)
+        XCTAssertEqual(logic.hop?.move, .up)
+
+        advance(logic, by: logic.config.hopDuration)
+        XCTAssertEqual(logic.playerPosition.row, 3)
+        XCTAssertEqual(logic.score, 3)
+        XCTAssertNil(logic.hop)
+        XCTAssertTrue(logic.pendingMoves.isEmpty)
+    }
+
+    func testMixedRapidQueuePreservesFIFOOrder() {
+        let logic = makeSafeLogic()
+        XCTAssertTrue(logic.requestMove(.up))
+        XCTAssertTrue(logic.requestMove(.left))
+        XCTAssertTrue(logic.requestMove(.up))
+        XCTAssertTrue(logic.requestMove(.right))
+        XCTAssertTrue(logic.requestMove(.up))
+        XCTAssertEqual(logic.pendingMoves, [.left, .up, .right, .up])
+        advanceUntilIdle(logic)
+        XCTAssertEqual(logic.playerPosition, JumpyGridPosition(row: 3, column: 3))
+        XCTAssertEqual(logic.score, 3)
+        XCTAssertEqual(logic.facing, .up)
+        XCTAssertEqual(logic.forwardJumps, 3)
+        XCTAssertEqual(logic.sidewaysJumps, 2)
+    }
+
+    func testQueuedTapAfterLeftHopIsForwardNotLeft() {
+        let logic = makeSafeLogic(position: JumpyGridPosition(row: 2, column: 3), score: 2)
+        XCTAssertTrue(logic.requestMove(.left))
+        XCTAssertEqual(logic.facing, .left)
+        XCTAssertTrue(logic.requestMove(.up))
+        XCTAssertEqual(logic.pendingMoves, [.up])
+        advance(logic, by: logic.config.hopDuration)
+        XCTAssertEqual(logic.playerPosition, JumpyGridPosition(row: 2, column: 2))
+        XCTAssertEqual(logic.hop?.move, .up)
+        XCTAssertEqual(logic.facing, .up)
+        advance(logic, by: logic.config.hopDuration)
+        XCTAssertEqual(logic.playerPosition, JumpyGridPosition(row: 3, column: 2))
+        XCTAssertEqual(logic.score, 3)
+    }
+
+    func testQueuedTapAfterDownHopIsForward() {
+        let logic = makeSafeLogic(position: JumpyGridPosition(row: 2, column: 3), score: 2)
+        XCTAssertTrue(logic.requestMove(.down))
+        XCTAssertTrue(logic.requestMove(.up))
+        advanceUntilIdle(logic)
+        XCTAssertEqual(logic.playerPosition, JumpyGridPosition(row: 2, column: 3))
+        XCTAssertEqual(logic.facing, .up)
+        XCTAssertEqual(logic.score, 2)
+    }
+
+    func testInvalidQueuedBoundaryMoveIsSkippedWithoutPausing() {
+        let logic = makeSafeLogic(position: JumpyGridPosition(row: 2, column: 0), score: 2)
+        XCTAssertTrue(logic.requestMove(.up))
+        XCTAssertTrue(logic.requestMove(.left))
+        XCTAssertTrue(logic.requestMove(.up))
+        advance(logic, by: logic.config.hopDuration)
+        XCTAssertEqual(logic.playerPosition, JumpyGridPosition(row: 3, column: 0))
+        XCTAssertEqual(logic.hop?.move, .up)
+        XCTAssertTrue(logic.pendingMoves.isEmpty)
+        XCTAssertEqual(logic.totalJumps, 2)
+        advance(logic, by: logic.config.hopDuration)
+        XCTAssertEqual(logic.playerPosition, JumpyGridPosition(row: 4, column: 0))
+        XCTAssertEqual(logic.score, 4)
+    }
+
+    func testInvalidQueuedDownDoesNotStallFollowingCommand() {
+        let logic = makeSafeLogic()
+        XCTAssertTrue(logic.requestMove(.right))
+        XCTAssertTrue(logic.requestMove(.down))
+        XCTAssertTrue(logic.requestMove(.up))
+        advance(logic, by: logic.config.hopDuration)
+        XCTAssertEqual(logic.playerPosition, JumpyGridPosition(row: 0, column: 4))
+        XCTAssertEqual(logic.hop?.move, .up)
+        advance(logic, by: logic.config.hopDuration)
+        XCTAssertEqual(logic.playerPosition, JumpyGridPosition(row: 1, column: 4))
+        XCTAssertEqual(logic.score, 1)
+    }
+
+    func testPendingQueueNeverExceedsCapacityAndKeepsEarliestCommands() {
+        let logic = makeSafeLogic()
+        XCTAssertTrue(logic.requestMove(.up))
+        XCTAssertTrue(logic.requestMove(.left))
+        XCTAssertTrue(logic.requestMove(.right))
+        XCTAssertTrue(logic.requestMove(.up))
+        XCTAssertTrue(logic.requestMove(.down))
+        XCTAssertFalse(logic.requestMove(.left))
+        XCTAssertFalse(logic.requestMove(.right))
+        XCTAssertEqual(logic.pendingMoves.count, logic.config.pendingMoveCapacity)
+        XCTAssertEqual(logic.pendingMoves, [.left, .right, .up, .down])
+        XCTAssertEqual(logic.hop?.move, .up)
+        XCTAssertEqual(logic.playerPosition.row, 0)
+    }
+
+    func testPauseKeepsQueuedMovesAndDoesNotConsumeThem() {
+        let logic = makeSafeLogic()
+        XCTAssertTrue(logic.requestMove(.up))
+        XCTAssertTrue(logic.requestMove(.left))
+        XCTAssertTrue(logic.requestMove(.up))
+        logic.update(deltaTime: 0.05)
+        let hopElapsed = logic.hop?.elapsed
+        logic.pause()
+        XCTAssertFalse(logic.acceptsInput)
+        XCTAssertFalse(logic.requestMove(.right))
+        logic.update(deltaTime: 1)
+        XCTAssertEqual(logic.pendingMoves, [.left, .up])
+        XCTAssertEqual(logic.hop?.elapsed, hopElapsed)
+        XCTAssertEqual(logic.playerPosition.row, 0)
+        logic.resume()
+        XCTAssertTrue(logic.acceptsInput)
+        advanceUntilIdle(logic)
+        XCTAssertEqual(logic.playerPosition, JumpyGridPosition(row: 2, column: 2))
+        XCTAssertEqual(logic.score, 2)
+    }
+
+    func testResetClearsPendingQueueFromPreviousRun() {
+        let logic = makeSafeLogic()
+        XCTAssertTrue(logic.requestMove(.up))
+        XCTAssertTrue(logic.requestMove(.up))
+        XCTAssertTrue(logic.requestMove(.left))
+        logic.reset()
+        XCTAssertTrue(logic.pendingMoves.isEmpty)
+        XCTAssertNil(logic.hop)
+        XCTAssertEqual(logic.playerPosition, JumpyGridPosition(row: 0, column: 3))
+        XCTAssertEqual(logic.score, 0)
+        XCTAssertTrue(logic.requestMove(.up))
+        XCTAssertTrue(logic.pendingMoves.isEmpty)
     }
 
     func testHorizontalEdgesRejectOutwardMovementWithoutWrapping() {
@@ -169,8 +320,23 @@ final class JumpyGameLogicTests: XCTestCase {
     }
 
     private func finishHop(_ logic: JumpyGameLogic, file: StaticString = #filePath, line: UInt = #line) {
-        for _ in 0..<30 where logic.hop != nil { logic.update(deltaTime: 1.0 / 60.0) }
+        advanceUntilIdle(logic)
         XCTAssertNil(logic.hop, file: file, line: line)
+    }
+
+    private func advance(_ logic: JumpyGameLogic, by duration: TimeInterval) {
+        var remaining = duration
+        while remaining > 1e-9 {
+            let step = min(remaining, 1.0 / 60.0)
+            logic.update(deltaTime: step)
+            remaining -= step
+        }
+    }
+
+    private func advanceUntilIdle(_ logic: JumpyGameLogic) {
+        for _ in 0..<120 where logic.hop != nil || !logic.pendingMoves.isEmpty {
+            logic.update(deltaTime: 1.0 / 60.0)
+        }
     }
 
     func testDebugStartingScoreStagesPlayerAndCameraAtThatProgress() {

@@ -85,7 +85,7 @@ final class JumpyGameScene: SKScene {
                 finishDelayRemaining = max(0, remaining - delta)
             }
             #if DEBUG
-            if logic.acceptsInput, autoAdvanceCooldown == 0,
+            if logic.acceptsInput, logic.hop == nil, autoAdvanceCooldown == 0,
                debugOptions.autoAdvance || (debugOptions.controlQAScript && controlQAIndex < Self.controlQAMoves.count) {
                 let move = debugOptions.controlQAScript ? Self.controlQAMoves[controlQAIndex] : .up
                 if debugOptions.controlQAScript { controlQAIndex += 1 }

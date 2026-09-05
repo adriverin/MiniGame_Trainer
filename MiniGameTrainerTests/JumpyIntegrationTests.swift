@@ -60,6 +60,30 @@ final class JumpyIntegrationTests: XCTestCase {
         defaults.removePersistentDomain(forName: suite)
     }
 
+    func testSceneQueuesGestureDuringHopAndChainsImmediately() {
+        var config = JumpyGameConfig.reference
+        config.randomSeed = 1
+        let scene = JumpyGameScene(size: CGSize(width: 393, height: 852), config: config, debugOptions: .init())
+        scene.startSession()
+        scene.logic.replaceRowsForTesting((-5...60).map { JumpyWorldRow(worldRow: $0, kind: .safe) })
+        scene.logic.setPlayerForTesting(JumpyGridPosition(row: 0, column: 3), score: 0, camera: 0)
+        scene.update(1)
+        XCTAssertTrue(scene.logic.requestMove(.up))
+        XCTAssertTrue(scene.logic.acceptsInput)
+        XCTAssertTrue(scene.logic.requestMove(.up))
+        XCTAssertEqual(scene.logic.pendingMoves, [.up])
+
+        var time: TimeInterval = 1
+        while time < 1 + config.hopDuration * 2 + 0.02 {
+            time += 1.0 / 60.0
+            scene.update(time)
+        }
+        XCTAssertEqual(scene.logic.playerPosition.row, 2)
+        XCTAssertEqual(scene.logic.score, 2)
+        XCTAssertNil(scene.logic.hop)
+        XCTAssertTrue(scene.logic.pendingMoves.isEmpty)
+    }
+
     func testPauseFreezesVisualFollowDuringHop() {
         let config = JumpyGameConfig(randomSeed: 7)
         let scene = JumpyGameScene(size: CGSize(width: 393, height: 852), config: config, debugOptions: .init())

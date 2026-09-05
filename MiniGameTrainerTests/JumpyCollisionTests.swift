@@ -50,6 +50,26 @@ final class JumpyCollisionTests: XCTestCase {
         XCTAssertFalse(logic.isFinished)
     }
 
+    func testCollisionDuringHopClearsPendingQueueAndBlocksLaterCommands() {
+        let logic = collisionLogic(laneRow: 1, centerX: 0.5)
+        XCTAssertTrue(logic.requestMove(.up))
+        XCTAssertTrue(logic.requestMove(.up))
+        XCTAssertTrue(logic.requestMove(.left))
+        XCTAssertEqual(logic.pendingMoves, [.up, .left])
+        logic.update(deltaTime: 0.1)
+        logic.update(deltaTime: 0.03)
+        XCTAssertTrue(logic.isFinished)
+        XCTAssertTrue(logic.pendingMoves.isEmpty)
+        XCTAssertNil(logic.hop)
+        XCTAssertEqual(logic.score, 0)
+        XCTAssertEqual(logic.playerPosition.row, 0)
+        XCTAssertFalse(logic.acceptsInput)
+        XCTAssertFalse(logic.requestMove(.up))
+        XCTAssertEqual(logic.drainEvents(), [.collided])
+        logic.update(deltaTime: 1)
+        XCTAssertTrue(logic.drainEvents().isEmpty)
+    }
+
     func testPlayerCanCollideDuringHopBeforeLanding() {
         let logic = collisionLogic(laneRow: 1, centerX: 0.5)
         XCTAssertTrue(logic.requestMove(.up))
