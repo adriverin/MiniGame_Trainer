@@ -17,6 +17,7 @@ final class JumpyGameLogic {
     private(set) var forwardJumps = 0
     private(set) var sidewaysJumps = 0
     private(set) var backwardJumps = 0
+    private(set) var impactPosition: CGPoint?
 
     var difficultyScoreOverride: Int?
     var collisionDetectionEnabled = true
@@ -26,7 +27,7 @@ final class JumpyGameLogic {
 
     init(config: JumpyGameConfig = .reference) {
         self.config = config
-        playerPosition = JumpyGridPosition(row: 0, column: config.columnCount / 2)
+        playerPosition = JumpyGridPosition(row: max(0, config.startingScore), column: config.columnCount / 2)
         score = max(0, config.startingScore)
         generator = JumpyLaneGenerator(config: config)
         reset()
@@ -35,8 +36,8 @@ final class JumpyGameLogic {
     var isFinished: Bool { state == .gameOver }
     var acceptsInput: Bool { state == .running && hop == nil }
     var minimumRetreatRow: Int {
-        let anchorRows = config.cameraAnchorYRatio / config.rowHeightRatio
-        return max(0, Int(ceil(cameraProgress - anchorRows)))
+        let projection = JumpyWorldProjection(size: CGSize(width: 1, height: 1), config: config, cameraProgress: cameraProgress)
+        return max(0, Int(ceil(projection.minimumVisibleWorldRow)))
     }
     var playerWorldPoint: CGPoint { interpolatedPlayerPoint(for: hop) }
     var hopProgress: CGFloat {
@@ -46,16 +47,18 @@ final class JumpyGameLogic {
 
     func reset() {
         state = .running
-        playerPosition = JumpyGridPosition(row: 0, column: config.columnCount / 2)
+        let startingRow = max(0, config.startingScore)
+        playerPosition = JumpyGridPosition(row: startingRow, column: config.columnCount / 2)
         facing = .up
         hop = nil
         score = max(0, config.startingScore)
-        cameraProgress = 0
+        cameraProgress = CGFloat(startingRow)
         elapsedTime = 0
         totalJumps = 0
         forwardJumps = 0
         sidewaysJumps = 0
         backwardJumps = 0
+        impactPosition = nil
         rows.removeAll(keepingCapacity: true)
         events.removeAll(keepingCapacity: true)
         generator = JumpyLaneGenerator(config: config)
@@ -170,6 +173,7 @@ final class JumpyGameLogic {
 
         if collisionDetectionEnabled,
            collides(playerFrom: playerBefore, playerTo: playerAfter, oldCenters: oldCenters) {
+            impactPosition = playerAfter
             state = .gameOver
             hop = nil
             events.append(.collided)
@@ -195,9 +199,9 @@ final class JumpyGameLogic {
             width: config.playerWidthRatio * config.playerHitboxScale,
             height: config.playerHeightInRows * config.playerHitboxScale
         )
-        let trackLength = 1 + config.trafficMargin * 2
         for row in rows.values {
             guard case .road(let lane) = row.kind else { continue }
+            let trackLength = lane.cycleLength
             let before = oldCenters[lane.id] ?? lane.vehicleCenters(margin: config.trafficMargin)
             let after = lane.vehicleCenters(margin: config.trafficMargin)
             for index in 0..<min(before.count, after.count) {

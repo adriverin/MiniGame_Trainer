@@ -98,6 +98,7 @@ enum DebugLaunchOptions {
            CommandLine.arguments.indices.contains(index + 1),
            let value = Int(CommandLine.arguments[index + 1]) {
             jumpy.config.startingScore = max(0, value)
+            jumpy.debugOptions.disableCollisions = true
         }
         if let index = CommandLine.arguments.firstIndex(of: "-jumpyDifficulty"),
            CommandLine.arguments.indices.contains(index + 1),

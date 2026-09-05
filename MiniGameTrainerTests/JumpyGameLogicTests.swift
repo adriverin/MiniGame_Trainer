@@ -154,7 +154,9 @@ final class JumpyGameLogicTests: XCTestCase {
         XCTAssertEqual(revisited.id, original.id)
         XCTAssertEqual(revisited.direction, original.direction)
         XCTAssertEqual(revisited.speed, original.speed)
-        XCTAssertEqual(revisited.spacing, original.spacing)
+        XCTAssertEqual(revisited.vehicleOffsets, original.vehicleOffsets)
+        XCTAssertEqual(revisited.groupStartIndices, original.groupStartIndices)
+        XCTAssertEqual(revisited.cycleLength, original.cycleLength)
     }
 
     private func makeSafeLogic(position: JumpyGridPosition = .init(row: 0, column: 3), score: Int = 0) -> JumpyGameLogic {
@@ -169,5 +171,18 @@ final class JumpyGameLogicTests: XCTestCase {
     private func finishHop(_ logic: JumpyGameLogic, file: StaticString = #filePath, line: UInt = #line) {
         for _ in 0..<30 where logic.hop != nil { logic.update(deltaTime: 1.0 / 60.0) }
         XCTAssertNil(logic.hop, file: file, line: line)
+    }
+
+    func testDebugStartingScoreStagesPlayerAndCameraAtThatProgress() {
+        var config = JumpyGameConfig.reference
+        config.randomSeed = 4
+        config.startingScore = 80
+        let logic = JumpyGameLogic(config: config)
+
+        XCTAssertEqual(logic.score, 80)
+        XCTAssertEqual(logic.playerPosition, JumpyGridPosition(row: 80, column: 3))
+        XCTAssertEqual(logic.cameraProgress, 80)
+        XCTAssertNotNil(logic.row(at: 80))
+        XCTAssertGreaterThanOrEqual(logic.rows.keys.max() ?? 80, 96)
     }
 }

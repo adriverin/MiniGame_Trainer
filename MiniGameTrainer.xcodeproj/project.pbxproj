@@ -48,6 +48,7 @@
 		1EAFAF3FE187FC8CF14288C2 /* StatisticsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAC0F71CEB98443FB15CE78D /* StatisticsStore.swift */; };
 		1F499EA5980A8318164D9B7E /* LibraryPresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6933E4AFB9661DA271119D /* LibraryPresentationTests.swift */; };
 		1F4F568363DA51B79FB66C34 /* TowerStackDebugSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9461FA6DBAD9D935C7C456DC /* TowerStackDebugSettingsView.swift */; };
+		203BF028AC426BC7C654B2C4 /* JumpyWorldProjectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AF495F8DEF339F1078680A /* JumpyWorldProjectionTests.swift */; };
 		2061EF8EBAC2398D0E31939D /* TapSevenGameConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6699C6404C5D31EB9268528C /* TapSevenGameConfig.swift */; };
 		2066CF952BF403CB476C8EFF /* TrampboxPlatformNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B47A025A4816D6835421FB /* TrampboxPlatformNode.swift */; };
 		21511D6EB3D799E794169B7D /* TapSevenGameModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FD8FDF1F67C60A84DB4C36 /* TapSevenGameModule.swift */; };
@@ -62,6 +63,7 @@
 		28BDE3258FC7B0EDAD4C2C98 /* PianoGameLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D3E88DCAEFB5CDE6B51ACA /* PianoGameLogicTests.swift */; };
 		2907668023BCB7CDE6E7F1A6 /* TargetSpeedPersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D520F6838603C7D9816C2DB7 /* TargetSpeedPersistenceTests.swift */; };
 		298F7C1B06597AF0A77FF082 /* DirectionsDebugSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A56F3B53B9F78FD229D6D78 /* DirectionsDebugSettingsView.swift */; };
+		2A8607BE5B8C54D44ED138EC /* JumpyWorldProjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABBD6D030BEBFA28A66B12E9 /* JumpyWorldProjection.swift */; };
 		2AC69EAE8236D6B88AB60A9D /* GridDebugOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D46DACAE58FAC7080EEED6 /* GridDebugOptions.swift */; };
 		2B27A8AD310A6504F0238206 /* TimesUpPersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51BC5F8AE0B30B1E44680443 /* TimesUpPersistenceTests.swift */; };
 		2BC30CDF3DCA898E0A1F0B9C /* TapSevenGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2252D0193A9AC4541B54600B /* TapSevenGameScene.swift */; };
@@ -170,6 +172,7 @@
 		7A78C1DBDADBA091E79468D0 /* DirectionsGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2382539D2032DBFFF894BBB6 /* DirectionsGameScene.swift */; };
 		7A825BC327DF5103FB20F8A9 /* AttemptAvailability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3C8EAA7D7D23D05E503CD8 /* AttemptAvailability.swift */; };
 		7B20BEF0F7186A6D8AE5E5FF /* GridDifficultyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3A8D0B41BB2352CE265376 /* GridDifficultyModel.swift */; };
+		7C334736E57C5C3891DA5330 /* JumpyGameSceneFidelity.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFFA398B319EB8E8E2AFCB7 /* JumpyGameSceneFidelity.swift */; };
 		7E48A6C0E08F1F3B557424FA /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A62CCA6481D30603C4BF3231 /* HomeView.swift */; };
 		7E7FEB8963C29EFDBF332CFE /* TraceVisualQATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BA770F40F524CFF9FEC4CD5 /* TraceVisualQATests.swift */; };
 		7F8CD0574F99BEF23B38AB30 /* TrampboxDifficultyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E5A1015ACFF68AF2B99542 /* TrampboxDifficultyTests.swift */; };
@@ -223,7 +226,6 @@
 		A1116FDED14D5A8016861C6D /* TrampboxDifficultyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C56F77C4AFB555D003C981 /* TrampboxDifficultyModel.swift */; };
 		A17B4BF8C8F576994FB2C4E9 /* KeepUpDebugOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA70BDDFD263D6CFFDD66248 /* KeepUpDebugOptions.swift */; };
 		A1832E7933D77B91DA4191A3 /* GameDifficulty.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB4E7A4A5472BA0BB2EFC58 /* GameDifficulty.swift */; };
-		A1BC1E4D483E7ADF71DF79DA /* JumpyGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDC4E0BC94E9E6D8F7256A2A /* JumpyGameScene.swift */; };
 		A214C28AD37562883BB8F85B /* ReactGameConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AE684A4228D511D902CDC /* ReactGameConfig.swift */; };
 		A2862526C0C82BB122040950 /* JumpyGameLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 642D9E054C9FF22509A2AD55 /* JumpyGameLogicTests.swift */; };
 		A335FD2B460EE4B724AE5F8C /* GridDebugSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA702D632A101C816BFD7BF /* GridDebugSettingsView.swift */; };
@@ -502,6 +504,7 @@
 		6909EE2272CCA74F069485AC /* PurchaseManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManagerTests.swift; sourceTree = "<group>"; };
 		694A77B888CABB5C1F36FF33 /* KeepUpPersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepUpPersistenceTests.swift; sourceTree = "<group>"; };
 		695A8C07846A70188AD39B1E /* ReactGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactGameView.swift; sourceTree = "<group>"; };
+		69AF495F8DEF339F1078680A /* JumpyWorldProjectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpyWorldProjectionTests.swift; sourceTree = "<group>"; };
 		69CED4AC82C0D5E20FA3F5EA /* TrampboxGameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrampboxGameViewModel.swift; sourceTree = "<group>"; };
 		6A650E2C871990731FDDEDA7 /* PianoGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoGeometry.swift; sourceTree = "<group>"; };
 		6AB928C8DCEC9C3CDE67C764 /* JumpyGameLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpyGameLogic.swift; sourceTree = "<group>"; };
@@ -600,9 +603,11 @@
 		A8700C223B4CDBD75A90A953 /* DirectionsSequenceGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsSequenceGenerator.swift; sourceTree = "<group>"; };
 		A9B55167029A1242F05EFB8D /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		AB8DA7B0E8F044171CB5C256 /* PianoDifficultyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoDifficultyModel.swift; sourceTree = "<group>"; };
+		ABBD6D030BEBFA28A66B12E9 /* JumpyWorldProjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpyWorldProjection.swift; sourceTree = "<group>"; };
 		AC050490E5AA74BF85ECD582 /* ConsentDebugGeographyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsentDebugGeographyTests.swift; sourceTree = "<group>"; };
 		AC7CC216F675C56E82D3B52F /* SwipeFastDebugOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeFastDebugOptions.swift; sourceTree = "<group>"; };
 		AC815635AFD14D97D758144E /* TowerStackGameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowerStackGameViewModel.swift; sourceTree = "<group>"; };
+		ACFFA398B319EB8E8E2AFCB7 /* JumpyGameSceneFidelity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpyGameSceneFidelity.swift; sourceTree = "<group>"; };
 		AE682E78CA40381B70E6152E /* CenterHitGameLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterHitGameLogic.swift; sourceTree = "<group>"; };
 		AEBF99B0E8DF227467735F02 /* GridGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridGameScene.swift; sourceTree = "<group>"; };
 		AED36F7A5505E61BA45E2BC9 /* DayClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayClock.swift; sourceTree = "<group>"; };
@@ -719,7 +724,6 @@
 		FD43B5F146F3BCD7EE485C51 /* ReactGameLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactGameLogic.swift; sourceTree = "<group>"; };
 		FD594116FD4B988F70C1042A /* TracePatternTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracePatternTests.swift; sourceTree = "<group>"; };
 		FD59BC8C3553E8A25D7FCBB6 /* CenterHitPersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterHitPersistenceTests.swift; sourceTree = "<group>"; };
-		FDC4E0BC94E9E6D8F7256A2A /* JumpyGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpyGameScene.swift; sourceTree = "<group>"; };
 		FE0C9A00E5B258E455276BA2 /* TapSevenDebugOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapSevenDebugOptions.swift; sourceTree = "<group>"; };
 		FF8B307C626E86BD2AFA0146 /* GridGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridGameView.swift; sourceTree = "<group>"; };
 		FFACE44F6A7B6C60C4F02704 /* TrampboxGameModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrampboxGameModule.swift; sourceTree = "<group>"; };
@@ -813,13 +817,14 @@
 				106DB484930DC63124D4480C /* JumpyGameConfig.swift */,
 				6AB928C8DCEC9C3CDE67C764 /* JumpyGameLogic.swift */,
 				1E8CA4D983E977F7802613B7 /* JumpyGameModule.swift */,
-				FDC4E0BC94E9E6D8F7256A2A /* JumpyGameScene.swift */,
+				ACFFA398B319EB8E8E2AFCB7 /* JumpyGameSceneFidelity.swift */,
 				DF882C89D7F208FC84E74FE6 /* JumpyGameView.swift */,
 				A7C11D0149AC629F63668A8B /* JumpyGameViewModel.swift */,
 				C89410335142BD58FE3A7F1A /* JumpyIntroView.swift */,
 				92D56142C13C55E48BE61C66 /* JumpyLaneGenerator.swift */,
 				E7A81F500828332377C05407 /* JumpyModels.swift */,
 				CB4AC9B3F3566E23323A09A0 /* JumpyTuningStore.swift */,
+				ABBD6D030BEBFA28A66B12E9 /* JumpyWorldProjection.swift */,
 				16158FBB83185E971D275DE1 /* Debug */,
 			);
 			path = Jumpy;
@@ -1447,6 +1452,7 @@
 				0E335AB979DFC680F56D2562 /* JumpyGestureTests.swift */,
 				59B02CACF5A8C9872B30671A /* JumpyIntegrationTests.swift */,
 				A72A39A69B48486DA7D4226C /* JumpyLaneGeneratorTests.swift */,
+				69AF495F8DEF339F1078680A /* JumpyWorldProjectionTests.swift */,
 				0BBD7D8357B7F214AC84800D /* KeepUpCeilingTests.swift */,
 				4AE9D0EC3C044EECD3FC20F0 /* KeepUpCollisionTests.swift */,
 				54F19455DC671FFE6F2EB23E /* KeepUpDifficultyTests.swift */,
@@ -1694,6 +1700,7 @@
 				9683C75F9BD1B5E6FD6F03F3 /* JumpyGestureTests.swift in Sources */,
 				A53502EFFC264787AD953381 /* JumpyIntegrationTests.swift in Sources */,
 				CD4B91094772BD54302706B4 /* JumpyLaneGeneratorTests.swift in Sources */,
+				203BF028AC426BC7C654B2C4 /* JumpyWorldProjectionTests.swift in Sources */,
 				50F129F4CD5BD7E9C3037DD1 /* KeepUpCeilingTests.swift in Sources */,
 				B638A05EF085298C604DEDFA /* KeepUpCollisionTests.swift in Sources */,
 				668154737AE2C84A099AAB25 /* KeepUpDifficultyTests.swift in Sources */,
@@ -1842,13 +1849,14 @@
 				354E35FE3DF9D90C64FC4A0B /* JumpyGameConfig.swift in Sources */,
 				5946E03302F70476B725602C /* JumpyGameLogic.swift in Sources */,
 				66DE85AC0AD73AB26638E009 /* JumpyGameModule.swift in Sources */,
-				A1BC1E4D483E7ADF71DF79DA /* JumpyGameScene.swift in Sources */,
+				7C334736E57C5C3891DA5330 /* JumpyGameSceneFidelity.swift in Sources */,
 				33670F62F8078B70EBF8233A /* JumpyGameView.swift in Sources */,
 				C8D77707CFE4F577DC48F900 /* JumpyGameViewModel.swift in Sources */,
 				5949CDE981C5AA1B30FE048C /* JumpyIntroView.swift in Sources */,
 				21A03FF62EEC7944D6C6CD14 /* JumpyLaneGenerator.swift in Sources */,
 				E45A58481AF505553F0E8F03 /* JumpyModels.swift in Sources */,
 				F0C3EB7BD2903C701D93E5D0 /* JumpyTuningStore.swift in Sources */,
+				2A8607BE5B8C54D44ED138EC /* JumpyWorldProjection.swift in Sources */,
 				A17B4BF8C8F576994FB2C4E9 /* KeepUpDebugOptions.swift in Sources */,
 				4672D1058CF177A7F9D06BD5 /* KeepUpDebugSettingsView.swift in Sources */,
 				BA63E839F83D7459F9D4BD33 /* KeepUpDifficultyModel.swift in Sources */,

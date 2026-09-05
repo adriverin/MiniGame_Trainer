@@ -29,7 +29,7 @@ final class JumpyGameViewModel: ObservableObject {
     }
 
     func pause() {
-        guard phase == .running, let scene, !scene.logic.isFinished else { return }
+        guard phase == .running, let scene else { return }
         scene.pauseGame()
         phase = .paused
     }

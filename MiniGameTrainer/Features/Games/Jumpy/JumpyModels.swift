@@ -35,24 +35,30 @@ struct JumpyLane: Equatable {
     let direction: JumpyLaneDirection
     let speed: CGFloat
     let vehicleWidth: CGFloat
-    let spacing: CGFloat
-    let phaseOffset: CGFloat
-    let vehicleCount: Int
+    let vehicleOffsets: [CGFloat]
+    let groupStartIndices: [Int]
+    let cycleLength: CGFloat
     var phase: CGFloat
 
-    var period: CGFloat { vehicleWidth + spacing }
+    var vehicleCount: Int { vehicleOffsets.count }
 
     func vehicleCenters(margin: CGFloat) -> [CGFloat] {
         let lower = -margin
-        let length = 1 + margin * 2
-        return (0..<vehicleCount).map { index in
-            lower + positiveModulo(phase + phaseOffset + CGFloat(index) * period - lower, length)
+        return vehicleOffsets.map { offset in
+            lower + positiveModulo(phase + offset, cycleLength)
         }
     }
 
     mutating func advance(by deltaTime: TimeInterval, margin: CGFloat) {
-        let length = 1 + margin * 2
-        phase = positiveModulo(phase + CGFloat(direction.rawValue) * speed * deltaTime, length)
+        phase = positiveModulo(phase + CGFloat(direction.rawValue) * speed * deltaTime, cycleLength)
+    }
+
+    func bumperGaps() -> [CGFloat] {
+        let sorted = vehicleOffsets.sorted()
+        guard let first = sorted.first, let last = sorted.last else { return [] }
+        var gaps = zip(sorted, sorted.dropFirst()).map { $1 - $0 - vehicleWidth }
+        gaps.append(cycleLength - last + first - vehicleWidth)
+        return gaps
     }
 }
 

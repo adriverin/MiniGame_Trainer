@@ -5,22 +5,27 @@ import UIKit
 struct JumpyGameConfig: Equatable {
     var columnCount = 7
     var gestureThreshold: CGFloat = 24
-    var hopDuration: TimeInterval = 0.21
+    var hopDuration: TimeInterval = 0.18
     var resultHoldDuration: TimeInterval = 0.38
     var maximumFrameDelta: TimeInterval = 0.10
     var maximumSimulationStep: TimeInterval = 1.0 / 240.0
 
-    var rowHeightRatio: CGFloat = 0.092
-    var cameraAnchorYRatio: CGFloat = 0.35
+    var rowHeightRatio: CGFloat = 0.060
+    var cameraAnchorYRatio: CGFloat = 0.49
+    var projectionDepthFalloff: CGFloat = 0.055
+    var minimumDepthScale: CGFloat = 0.58
+    var maximumDepthScale: CGFloat = 1.24
+    var horizontalDepthInfluence: CGFloat = 0.18
     var horizontalMarginRatio: CGFloat = 0.055
-    var playerWidthRatio: CGFloat = 0.092
-    var playerHeightInRows: CGFloat = 0.58
+    var playerWidthRatio: CGFloat = 0.100
+    var playerHeightInRows: CGFloat = 0.72
     var playerHitboxScale: CGFloat = 0.70
-    var vehicleWidthRange: ClosedRange<CGFloat> = 0.14...0.19
-    var vehicleHeightInRows: CGFloat = 0.52
+    var vehicleWidthRange: ClosedRange<CGFloat> = 0.13...0.16
+    var vehicleHeightInRows: CGFloat = 0.68
     var vehicleHitboxScale: CGFloat = 0.85
-    var trafficMargin: CGFloat = 0.24
+    var trafficMargin: CGFloat = 0.32
     var trafficSafetyGap: CGFloat = 0.055
+    var pairedSafeRowChanceDenominator = 8
 
     var lookaheadRows = 16
     var retainedRowsBehind = 2
@@ -30,18 +35,21 @@ struct JumpyGameConfig: Equatable {
 
     static let reference = JumpyGameConfig()
 
-    var roadColor: UIColor { UIColor(red: 0.055, green: 0.34, blue: 0.40, alpha: 1) }
-    var roadAlternateColor: UIColor { UIColor(red: 0.045, green: 0.30, blue: 0.36, alpha: 1) }
-    var safeColor: UIColor { UIColor(red: 0.08, green: 0.56, blue: 0.43, alpha: 1) }
-    var safeAlternateColor: UIColor { UIColor(red: 0.07, green: 0.50, blue: 0.39, alpha: 1) }
+    var roadColor: UIColor { UIColor(red: 0.125, green: 0.56, blue: 0.675, alpha: 1) }
+    var roadAlternateColor: UIColor { roadColor }
+    var safeColor: UIColor { UIColor(red: 0.208, green: 0.71, blue: 0.604, alpha: 1) }
+    var safeAlternateColor: UIColor { safeColor }
+    var safeDepthColor: UIColor { UIColor(red: 0.12, green: 0.51, blue: 0.45, alpha: 1) }
     var playerColor: UIColor { UIColor(red: 0.49, green: 0.95, blue: 0.18, alpha: 1) }
-    var backgroundColor: UIColor { UIColor(red: 0.025, green: 0.19, blue: 0.23, alpha: 1) }
+    var backgroundColor: UIColor { roadColor }
 }
 
 struct JumpyDifficulty: Equatable {
     let roadGroupLength: ClosedRange<Int>
     let speed: ClosedRange<CGFloat>
-    let gap: ClosedRange<CGFloat>
+    let carsPerGroup: ClosedRange<Int>
+    let groupOpening: ClosedRange<CGFloat>
+    let internalGap: ClosedRange<CGFloat>
 }
 
 struct JumpyDifficultyModel {
@@ -49,20 +57,33 @@ struct JumpyDifficultyModel {
 
     func values(at score: Int) -> JumpyDifficulty {
         let s = max(0, score)
-        let group: ClosedRange<Int> = s < 20 ? 2...3 : (s < 60 ? 3...4 : 3...5)
+        let group: ClosedRange<Int>
+        let cars: ClosedRange<Int>
+        let opening: ClosedRange<CGFloat>
+        switch s {
+        case ..<20:
+            group = 2...3; cars = 1...1; opening = 0.42...0.60
+        case ..<40:
+            group = 3...5; cars = 1...2; opening = 0.34...0.50
+        case ..<80:
+            group = 5...8; cars = 1...3; opening = 0.27...0.40
+        case ..<120:
+            group = 5...8; cars = 2...3; opening = 0.23...0.35
+        default:
+            group = 5...8; cars = 2...4; opening = 0.21...0.31
+        }
         let speed: ClosedRange<CGFloat>
         if s < 50 {
-            speed = interpolate(s, 0, 50, 0.20...0.30, 0.24...0.36)
-        } else if s < 100 {
-            speed = interpolate(s, 50, 100, 0.24...0.36, 0.28...0.42)
+            speed = interpolate(s, 0, 50, 0.18...0.30, 0.20...0.36)
         } else {
-            speed = interpolate(min(s, 150), 100, 150, 0.28...0.42, 0.32...0.48)
+            speed = interpolate(min(s, 100), 50, 100, 0.20...0.36, 0.24...0.42)
         }
-        let progress = CGFloat(min(s, 150)) / 150
         return JumpyDifficulty(
             roadGroupLength: group,
             speed: speed,
-            gap: (0.32 - progress * 0.11)...(0.46 - progress * 0.13)
+            carsPerGroup: cars,
+            groupOpening: opening,
+            internalGap: 0.025...0.055
         )
     }
 
