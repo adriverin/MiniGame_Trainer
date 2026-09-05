@@ -50,11 +50,21 @@ private struct JumpyPreviewIllustration: View {
                         .overlay(alignment: .top) { Rectangle().fill(.black.opacity(0.35)).frame(height: row * 0.13).padding(.horizontal, 8) }
                         .position(x: proxy.size.width * (0.14 + CGFloat(index % 3) * 0.35), y: proxy.size.height - row * (CGFloat(index % 3 + 1) + 0.5))
                 }
-                RoundedRectangle(cornerRadius: 5)
-                    .fill(Color(config.playerColor))
-                    .frame(width: proxy.size.width * 0.10, height: row * 0.62)
-                    .shadow(color: .black.opacity(0.35), radius: 2, y: 4)
-                    .position(x: proxy.size.width / 2, y: proxy.size.height - row * 0.5)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 3)
+                        .fill(Color(config.playerDarkColor))
+                        .frame(width: proxy.size.width * 0.088, height: row * 0.18)
+                        .offset(x: proxy.size.width * 0.006, y: row * 0.22)
+                    RoundedRectangle(cornerRadius: 5)
+                        .fill(Color(config.playerColor))
+                        .frame(width: proxy.size.width * 0.10, height: row * 0.45)
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(Color(config.playerLightColor))
+                        .frame(width: proxy.size.width * 0.078, height: row * 0.28)
+                        .offset(y: -row * 0.10)
+                }
+                .shadow(color: .black.opacity(0.35), radius: 2, y: 4)
+                .position(x: proxy.size.width / 2, y: proxy.size.height - row * 0.5)
             }
             .clipShape(RoundedRectangle(cornerRadius: 18))
         }

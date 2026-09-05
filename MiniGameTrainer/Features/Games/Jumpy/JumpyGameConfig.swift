@@ -41,8 +41,17 @@ struct JumpyGameConfig: Equatable {
     var safeColor: UIColor { UIColor(red: 0.208, green: 0.71, blue: 0.604, alpha: 1) }
     var safeAlternateColor: UIColor { safeColor }
     var safeDepthColor: UIColor { UIColor(red: 0.12, green: 0.51, blue: 0.45, alpha: 1) }
-    var playerColor: UIColor { UIColor(red: 0.49, green: 0.95, blue: 0.18, alpha: 1) }
+    var playerColor: UIColor { JumpyPalette.playerMain }
+    var playerLightColor: UIColor { JumpyPalette.playerLight }
+    var playerDarkColor: UIColor { JumpyPalette.playerDark }
     var backgroundColor: UIColor { roadColor }
+}
+
+enum JumpyPalette {
+    static let playerMain = UIColor(red: 197 / 255, green: 138 / 255, blue: 74 / 255, alpha: 1)
+    static let playerLight = UIColor(red: 226 / 255, green: 185 / 255, blue: 120 / 255, alpha: 1)
+    static let playerDark = UIColor(red: 138 / 255, green: 90 / 255, blue: 50 / 255, alpha: 1)
+    static let playerDetail = UIColor(red: 61 / 255, green: 42 / 255, blue: 29 / 255, alpha: 1)
 }
 
 struct JumpyDifficulty: Equatable {

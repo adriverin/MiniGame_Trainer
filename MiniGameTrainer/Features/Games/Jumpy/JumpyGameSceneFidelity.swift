@@ -150,7 +150,7 @@ final class JumpyGameScene: SKScene {
         collisionEffectNode.removeAllChildren()
         playerNode.removeAllActions()
         playerBody.fillColor = config.playerColor
-        playerTop.fillColor = config.playerColor
+        playerTop.fillColor = config.playerLightColor
         logic.difficultyScoreOverride = debugOptions.forcedDifficultyScore
         logic.collisionDetectionEnabled = !debugOptions.disableCollisions
         logic.reset()
@@ -195,7 +195,7 @@ final class JumpyGameScene: SKScene {
         addChild(playerShadow)
 
         let depth = SKShapeNode(rectOf: CGSize(width: width * 0.88, height: height * 0.25), cornerRadius: 3)
-        depth.fillColor = UIColor(red: 0.19, green: 0.62, blue: 0.12, alpha: 1)
+        depth.fillColor = config.playerDarkColor
         depth.strokeColor = .clear
         depth.position = CGPoint(x: width * 0.06, y: -height * 0.34)
         depth.zPosition = 0
@@ -208,8 +208,8 @@ final class JumpyGameScene: SKScene {
         playerNode.addChild(playerBody)
 
         playerTop.path = CGPath(roundedRect: CGRect(x: -width * 0.39, y: -height * 0.02, width: width * 0.78, height: height * 0.58), cornerWidth: 4, cornerHeight: 4, transform: nil)
-        playerTop.fillColor = config.playerColor
-        playerTop.strokeColor = UIColor.white.withAlphaComponent(0.16)
+        playerTop.fillColor = config.playerLightColor
+        playerTop.strokeColor = JumpyPalette.playerDetail.withAlphaComponent(0.18)
         playerTop.lineWidth = 1
         playerTop.zPosition = 2
         playerNode.addChild(playerTop)
