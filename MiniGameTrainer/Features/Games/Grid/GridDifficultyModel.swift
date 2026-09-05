@@ -63,22 +63,12 @@ enum GridDifficultyModel {
         generator: inout some RandomNumberGenerator,
         forced: Set<GridCell>? = nil
     ) -> Set<GridCell> {
-        let boundedRows = max(1, rows)
-        let boundedColumns = max(1, columns)
-        let cap = boundedRows * boundedColumns
-        if let forced {
-            let clipped = Set(forced.filter { (0..<boundedRows).contains($0.row) && (0..<boundedColumns).contains($0.column) })
-            if !clipped.isEmpty { return clipped }
-        }
-        let target = min(max(1, count), cap)
-        var pool: [GridCell] = []
-        pool.reserveCapacity(cap)
-        for row in 0..<boundedRows {
-            for column in 0..<boundedColumns {
-                pool.append(GridCell(row: row, column: column))
-            }
-        }
-        pool.shuffle(using: &generator)
-        return Set(pool.prefix(target))
+        GridPatternGenerator.sample(
+            rows: rows,
+            columns: columns,
+            count: count,
+            generator: &generator,
+            forced: forced
+        )
     }
 }

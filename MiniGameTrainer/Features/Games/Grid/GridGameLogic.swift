@@ -59,7 +59,7 @@ struct GridSessionSummary: Equatable {
 final class GridGameLogic {
     let config: GridGameConfig
     private(set) var stage: GridStage
-    private var generator: AnyRandomNumberGenerator
+    private var patternGenerator: GridPatternGenerator
     private let seed: UInt64?
 
     private(set) var state: GridGameState = .ready
@@ -90,9 +90,12 @@ final class GridGameLogic {
     init(config: GridGameConfig, seed: UInt64? = nil) {
         self.config = config
         self.seed = seed
-        generator = .seeded(seed)
+        patternGenerator = GridPatternGenerator(seed: seed)
         stage = GridDifficultyModel.stage(forLevel: 1, config: config)
     }
+
+    /// `true` only when a test or DEBUG override injected a seed. Production sessions stay unseeded.
+    var usesInjectedSeed: Bool { seed != nil }
 
     var isFinished: Bool { state == .gameOver }
     var canSelectCells: Bool { state == .recalling }
@@ -219,7 +222,7 @@ final class GridGameLogic {
     }
 
     func reset() {
-        generator = .seeded(seed)
+        patternGenerator.reset(using: seed)
         state = .ready
         level = forcedLevel ?? 1
         score = 0
@@ -286,11 +289,10 @@ final class GridGameLogic {
         }
         refreshStage()
         selectedCells.removeAll()
-        targetCells = GridDifficultyModel.generatePattern(
+        targetCells = patternGenerator.nextPattern(
             rows: stage.rows,
             columns: stage.columns,
             count: stage.targetCount,
-            generator: &generator,
             forced: forcedPattern
         )
         state = .presentingPattern

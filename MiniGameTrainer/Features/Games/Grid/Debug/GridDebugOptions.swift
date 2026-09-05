@@ -8,7 +8,8 @@ struct GridDebugOptions: Equatable {
     var forceTargetCount: Int?
     var presentationDurationOverride: TimeInterval?
     var recallTimeoutOverride: TimeInterval?
-    var seed: UInt64? = 42
+    /// DEBUG-only deterministic seed. Production must leave this `nil`.
+    var seed: UInt64?
     var autoCorrect = false
     var useQualityAssurancePattern = false
 

@@ -30,6 +30,7 @@
 		0AC890FEF6BCDAED4E55EE6E /* KeepUpGameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92F9831192EF3574C0641C2 /* KeepUpGameLogic.swift */; };
 		0ADAE5E9EE7D191B7804F2E2 /* TargetSpeedGameConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18C02C61101F8F224E6631F /* TargetSpeedGameConfig.swift */; };
 		0EE69CA5E210DA84E23DA5B6 /* CenterHitDebugSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B917DB7203A890B9504AEC /* CenterHitDebugSettingsView.swift */; };
+		103C7A8412372FEF20875BA9 /* GridPatternGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463499F92FE423A77A9D4090 /* GridPatternGenerator.swift */; };
 		10747E86593EF850236096A9 /* ReactRandomizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 562819F3127F65A4E1DD6480 /* ReactRandomizer.swift */; };
 		10E16F299BE76123422526B5 /* ReactGameLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7D0DE77517587C1EBD3459 /* ReactGameLogicTests.swift */; };
 		117026371E2CA4907DA89D75 /* TargetSpeedDifficultyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D2E2666040595C51015BCC /* TargetSpeedDifficultyModel.swift */; };
@@ -423,6 +424,7 @@
 		42A1208C5172894AC011E2B7 /* DirectionsTuningStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsTuningStore.swift; sourceTree = "<group>"; };
 		43DA27F479F0577D601A549E /* DirectionsGameLogicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsGameLogicTests.swift; sourceTree = "<group>"; };
 		4606F6D9ACB37AC5CEEAA3E7 /* GameIntroLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameIntroLayout.swift; sourceTree = "<group>"; };
+		463499F92FE423A77A9D4090 /* GridPatternGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridPatternGenerator.swift; sourceTree = "<group>"; };
 		471E3F68FC758B6AD01091DC /* PianoDebugOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoDebugOptions.swift; sourceTree = "<group>"; };
 		47C7B5493440CBC504688B49 /* MiniGameTrainerTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = MiniGameTrainerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		488395ED6DF74084923B7F4F /* BloopyPlatformGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloopyPlatformGenerator.swift; sourceTree = "<group>"; };
@@ -708,6 +710,7 @@
 				4F8625D2F3CC0C518F865CC9 /* GridGameViewModel.swift */,
 				94DA2876724B4EF1B75B0892 /* GridGeometry.swift */,
 				FBD523A69704091F3D694EC9 /* GridIntroView.swift */,
+				463499F92FE423A77A9D4090 /* GridPatternGenerator.swift */,
 				8AF03F7D0EF205EE9B4BFEAF /* GridTuningStore.swift */,
 				13A43E7D506CFECD160FA8B4 /* Debug */,
 			);
@@ -1747,6 +1750,7 @@
 				F2FB03EB0BDCB159D77CFB96 /* GridGameViewModel.swift in Sources */,
 				5D325C163C3AE52767AC55FC /* GridGeometry.swift in Sources */,
 				863BC9C925716E85351E1A3B /* GridIntroView.swift in Sources */,
+				103C7A8412372FEF20875BA9 /* GridPatternGenerator.swift in Sources */,
 				D46CE1D6879D63151D439C10 /* GridTuningStore.swift in Sources */,
 				7E48A6C0E08F1F3B557424FA /* HomeView.swift in Sources */,
 				A17B4BF8C8F576994FB2C4E9 /* KeepUpDebugOptions.swift in Sources */,
