@@ -30,7 +30,8 @@ struct BloopyPlatformGenerator {
             id: consumeID(),
             worldX: startX,
             worldY: geometry.height * config.startingPlatformYRatio,
-            width: width
+            width: width,
+            kind: .stable
         )
         var result = [start]
         while result.count < max(2, config.lookaheadPlatformCount) {
@@ -44,7 +45,13 @@ struct BloopyPlatformGenerator {
         let gap = jitteredGap(score: score, sceneHeight: geometry.height)
         let worldY = current.worldY + gap
         let center = reachableCenter(from: current, nextWidth: width, gap: gap, geometry: geometry)
-        return BloopyPlatform(id: consumeID(), worldX: center, worldY: worldY, width: width)
+        return BloopyPlatform(
+            id: consumeID(),
+            worldX: center,
+            worldY: worldY,
+            width: width,
+            kind: chooseKind(score: score)
+        )
     }
 
     func isReachable(
@@ -116,6 +123,12 @@ struct BloopyPlatformGenerator {
         let bounceHeight = difficulty.bounceHeight(sceneHeight: sceneHeight)
         let minimum = sceneHeight * 0.08
         return min(max(base + jitter, minimum), bounceHeight * 0.92)
+    }
+
+    private mutating func chooseKind(score: Int) -> BloopyPlatformKind {
+        let probability = difficulty.fragileProbability(forScore: score)
+        guard probability > 0 else { return .stable }
+        return difficulty.platformKind(forScore: score, roll: randomUnit())
     }
 
     private mutating func consumeID() -> Int {

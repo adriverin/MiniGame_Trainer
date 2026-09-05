@@ -31,6 +31,21 @@ struct BloopyDebugSettingsView: View {
                     Stepper("Lookahead: \(store.config.lookaheadPlatformCount)", value: $store.config.lookaheadPlatformCount, in: 3...16)
                 }
 
+                Section("Fragile platforms") {
+                    Stepper(
+                        "Start score: \(store.config.fragileStartScore)",
+                        value: $store.config.fragileStartScore,
+                        in: 0...400
+                    )
+                    slider("Probability at start", value: $store.config.fragileProbabilityAtStart, in: 0...1, format: "%.2f")
+                    slider("Probability at high score", value: $store.config.fragileProbabilityHighScore, in: 0...1, format: "%.2f")
+                    Stepper(
+                        "Ramp end score: \(store.config.fragileProbabilityRampEndScore)",
+                        value: $store.config.fragileProbabilityRampEndScore,
+                        in: 0...800
+                    )
+                }
+
                 Section("Trail") {
                     slider("Sample interval", value: $store.config.trailSampleInterval, in: 0.02...0.12, format: "%.3f s")
                     slider("Lifetime", value: $store.config.trailLifetime, in: 0.2...1.2, format: "%.2f s")

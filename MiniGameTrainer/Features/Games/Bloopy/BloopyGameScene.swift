@@ -306,7 +306,7 @@ final class BloopyGameScene: SKScene {
         g \(Int(logic.gravity))  impulse \(Int(logic.bounceImpulse))
         input \(logic.horizontalInput)  accel \(Int(logic.horizontalAcceleration))  maxVX \(Int(logic.maximumHorizontalSpeed))
         cameraY \(Int(logic.cameraY))
-        next \(next.map { "\($0.id) x=\(Int($0.worldX)) y=\(Int($0.worldY)) w=\(Int($0.width)) \($0.appearance.rawValue) n=\($0.landingCount)" } ?? "–")
+        next \(next.map { "\($0.id) \($0.kind.rawValue) x=\(Int($0.worldX)) y=\(Int($0.worldY)) w=\(Int($0.width)) \($0.appearance.rawValue) n=\($0.landingCount)" } ?? "–")
         reachable \(reachable)
         platforms \(logic.platforms.count)
         """

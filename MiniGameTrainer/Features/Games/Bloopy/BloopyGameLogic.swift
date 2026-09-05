@@ -94,6 +94,10 @@ final class BloopyGameLogic {
         maxWorldY = startY
         highestPlatformY = platforms.map(\.worldY).max() ?? start.worldY
         lastLandedPlatformID = start.id
+        #if DEBUG
+        assert(start.kind == .stable, "starting platform must be stable")
+        assert(start.landingCount == 0, "starting on a platform must not consume durability")
+        #endif
     }
 
     func setHorizontalInput(_ input: BloopyHorizontalInput) {
@@ -319,24 +323,30 @@ final class BloopyGameLogic {
         }
     }
 
+    /// Same physical contact may span several frames. A later genuine landing on the
+    /// same platform is allowed only after the ball has left the top face.
     private func stillOverlappingLastPlatform() -> Bool {
         guard let id = lastLandedPlatformID, let platform = platforms.first(where: { $0.id == id }) else {
             return false
         }
         guard platform.isCollidable else { return false }
         let top = geometry.platformTop(worldY: platform.worldY)
-        return ballPosition.y - geometry.ballRadius <= top + geometry.platformHeight
-            && BloopyPhysics.horizontallyOverlaps(
-                ballX: ballPosition.x,
-                platformX: platform.worldX,
-                platformWidth: platform.width,
-                ballRadius: geometry.ballRadius
-            )
+        let hasLeftTopFace = ballPosition.y - geometry.ballRadius > top + 1e-6
+        if hasLeftTopFace { return false }
+        return BloopyPhysics.horizontallyOverlaps(
+            ballX: ballPosition.x,
+            platformX: platform.worldX,
+            platformWidth: platform.width,
+            ballRadius: geometry.ballRadius
+        )
     }
 
     private func registerLanding(on platformID: Int) {
         guard let index = platforms.firstIndex(where: { $0.id == platformID }) else { return }
         platforms[index].landingCount += 1
+        if platforms[index].isConsumed {
+            platforms[index].isActive = false
+        }
     }
 
     private func updateScore() {
@@ -361,6 +371,7 @@ final class BloopyGameLogic {
         for index in platforms.indices {
             let top = geometry.platformTop(worldY: platforms[index].worldY)
             if top < cameraY - geometry.recycleDistance {
+                // Camera culling is independent of fragile consumption.
                 platforms[index].isActive = false
             }
         }

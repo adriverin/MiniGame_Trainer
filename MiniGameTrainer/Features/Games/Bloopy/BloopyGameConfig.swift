@@ -39,6 +39,15 @@ struct BloopyGameConfig: Equatable, Codable {
     var difficultyWidthRatios: [CGFloat] = [0.235, 0.220, 0.200, 0.165, 0.125, 0.100, 0.088, 0.080]
     var difficultySpacingRatios: [CGFloat] = [0.145, 0.165, 0.200, 0.250, 0.270, 0.280, 0.280, 0.280]
 
+    /// Score at which newly generated platforms may be fragile. Below this, every platform is stable.
+    var fragileStartScore: Int = 80
+    /// Probability of a newly generated platform being fragile just as the threshold opens.
+    var fragileProbabilityAtStart: CGFloat = 0.20
+    /// Probability of a newly generated platform being fragile at and after `fragileProbabilityRampEndScore`.
+    var fragileProbabilityHighScore: CGFloat = 0.24
+    /// Score at which fragile probability finishes its modest ramp.
+    var fragileProbabilityRampEndScore: Int = 400
+
     var trailSampleInterval: TimeInterval = 0.045
     var trailLifetime: TimeInterval = 0.70
     var trailMaximumCount = 14

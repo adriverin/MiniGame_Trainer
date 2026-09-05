@@ -14,19 +14,28 @@ enum BloopyHorizontalInput: Int, Equatable {
     case right = 1
 }
 
+enum BloopyPlatformKind: String, Equatable, Codable, CaseIterable {
+    case stable
+    case fragile
+}
+
 enum BloopyPlatformAppearance: String, Equatable, Codable, CaseIterable {
     case peach
     case red
 }
 
-struct BloopyPlatform: Equatable, Identifiable {
-    /// Source-observed durability: peach after the first landing, red from the second onward.
-    static let redLandingThreshold = 2
+enum BloopyFragilePhase: String, Equatable, Codable, CaseIterable {
+    case fresh
+    case damaged
+    case consumed
+}
 
+struct BloopyPlatform: Equatable, Identifiable {
     let id: Int
     var worldX: CGFloat
     var worldY: CGFloat
     var width: CGFloat
+    var kind: BloopyPlatformKind
     var landingCount: Int
     var isActive: Bool
 
@@ -35,6 +44,7 @@ struct BloopyPlatform: Equatable, Identifiable {
         worldX: CGFloat,
         worldY: CGFloat,
         width: CGFloat,
+        kind: BloopyPlatformKind = .stable,
         landingCount: Int = 0,
         isActive: Bool = true
     ) {
@@ -42,15 +52,31 @@ struct BloopyPlatform: Equatable, Identifiable {
         self.worldX = worldX
         self.worldY = worldY
         self.width = width
+        self.kind = kind
         self.landingCount = landingCount
         self.isActive = isActive
     }
 
+    /// Visual state is derived from kind + landings. Stable stays peach forever.
     var appearance: BloopyPlatformAppearance {
-        landingCount >= Self.redLandingThreshold ? .red : .peach
+        switch kind {
+        case .stable:
+            return .peach
+        case .fragile:
+            return landingCount >= 1 ? .red : .peach
+        }
     }
 
-    var isCollidable: Bool { isActive }
+    var fragilePhase: BloopyFragilePhase? {
+        guard kind == .fragile else { return nil }
+        if landingCount <= 0 { return .fresh }
+        if landingCount == 1 { return .damaged }
+        return .consumed
+    }
+
+    var isConsumed: Bool { kind == .fragile && landingCount >= 2 }
+
+    var isCollidable: Bool { isActive && !isConsumed }
 }
 
 struct BloopyTrailSample: Equatable {

@@ -43,6 +43,23 @@ struct BloopyDifficultyModel: Equatable {
         sceneWidth * config.maximumHorizontalSpeedWidthRatio
     }
 
+    /// Probability that a newly generated platform is fragile. Always clamped to `0...1`.
+    func fragileProbability(forScore score: Int) -> CGFloat {
+        let start = max(0, config.fragileStartScore)
+        if score < start { return 0 }
+        let low = clampedUnit(config.fragileProbabilityAtStart)
+        let high = clampedUnit(config.fragileProbabilityHighScore)
+        let end = max(start, config.fragileProbabilityRampEndScore)
+        if score >= end || end == start { return high }
+        let t = CGFloat(score - start) / CGFloat(end - start)
+        return clampedUnit(low + t * (high - low))
+    }
+
+    func platformKind(forScore score: Int, roll: CGFloat) -> BloopyPlatformKind {
+        let probability = fragileProbability(forScore: score)
+        return roll < probability ? .fragile : .stable
+    }
+
     private func interpolate(score: Int, values: [CGFloat], floor: CGFloat) -> CGFloat {
         let scores = config.difficultyAnchorScores
         guard !scores.isEmpty, scores.count == values.count else { return floor }
@@ -55,5 +72,9 @@ struct BloopyDifficultyModel: Equatable {
             return values[index] + t * (values[index + 1] - values[index])
         }
         return values[values.count - 1]
+    }
+
+    private func clampedUnit(_ value: CGFloat) -> CGFloat {
+        min(max(value, 0), 1)
     }
 }

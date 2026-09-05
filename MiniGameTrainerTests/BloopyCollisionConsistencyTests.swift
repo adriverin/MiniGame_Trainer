@@ -107,30 +107,39 @@ final class BloopyCollisionConsistencyTests: XCTestCase {
         let logic = BloopyGameLogic(config: .deterministic(), sceneSize: sceneSize)
         logic.start()
         var landings = 0
+        var snapshot: [Int: BloopyPlatform] = [:]
         for _ in 0..<2_400 {
             logic.applyAutoSteer()
+            snapshot = Dictionary(uniqueKeysWithValues: logic.platforms.map { ($0.id, $0) })
             let before = logic.landingCount
             logic.update(deltaTime: 1 / 60)
             if logic.landingCount > before, let contact = logic.lastLanding {
                 landings += 1
-                let platform = logic.platforms.first { $0.id == contact.platformID }
-                XCTAssertNotNil(platform, "bounce \(contact.platformID) had no live platform")
-                XCTAssertEqual(platform?.isActive, true)
-                XCTAssertEqual(platform?.isCollidable, true)
-                XCTAssertTrue(
-                    BloopyPhysics.horizontallyOverlaps(
-                        ballX: contact.ballPosition.x,
-                        platformX: platform!.worldX,
-                        platformWidth: platform!.width,
-                        ballRadius: logic.geometry.ballRadius
+                if let platform = logic.platforms.first(where: { $0.id == contact.platformID }) {
+                    XCTAssertEqual(platform.isActive, true)
+                    XCTAssertEqual(platform.isCollidable, true)
+                    XCTAssertFalse(platform.isConsumed)
+                    XCTAssertTrue(
+                        BloopyPhysics.horizontallyOverlaps(
+                            ballX: contact.ballPosition.x,
+                            platformX: platform.worldX,
+                            platformWidth: platform.width,
+                            ballRadius: logic.geometry.ballRadius
+                        )
                     )
-                )
-                let screenTop = logic.geometry.screenY(
-                    worldY: logic.geometry.platformTop(worldY: platform!.worldY),
-                    cameraY: logic.cameraY
-                )
-                XCTAssertGreaterThanOrEqual(screenTop, -1)
-                XCTAssertLessThan(screenTop, sceneSize.height + logic.geometry.platformHeight)
+                    let screenTop = logic.geometry.screenY(
+                        worldY: logic.geometry.platformTop(worldY: platform.worldY),
+                        cameraY: logic.cameraY
+                    )
+                    XCTAssertGreaterThanOrEqual(screenTop, -1)
+                    XCTAssertLessThan(screenTop, sceneSize.height + logic.geometry.platformHeight)
+                } else if let previous = snapshot[contact.platformID] {
+                    XCTAssertEqual(previous.kind, .fragile)
+                    XCTAssertEqual(previous.landingCount, 1)
+                    XCTAssertFalse(logic.platforms.contains { $0.id == contact.platformID })
+                } else {
+                    XCTFail("bounce \(contact.platformID) had no live or consumed platform")
+                }
             }
         }
         XCTAssertGreaterThan(landings, 4)
