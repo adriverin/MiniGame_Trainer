@@ -9,9 +9,9 @@ struct SwipeFastDebugSettingsView: View {
         NavigationStack {
             Form {
                 Section("Timers") {
-                    slider("Score 0 allowed time", value: durationBinding(0), in: 0.4...4, format: "%.2f s")
-                    slider("Score 70 allowed time", value: durationBinding(7), in: 0.4...3, format: "%.2f s")
-                    slider("Minimum allowed time", value: $store.config.minimumAllowedTime, in: 0.4...2, format: "%.2f s")
+                    slider("Score 0 allowed time", value: durationBinding(0), in: 1.0...8.0, format: "%.2f s")
+                    slider("Score 70 allowed time", value: durationBinding(7), in: 0.8...5.0, format: "%.2f s")
+                    slider("Minimum allowed time", value: $store.config.minimumAllowedTime, in: 0.5...4.0, format: "%.2f s")
                     LabeledContent("Preview at 35") {
                         Text(String(format: "%.2f s", SwipeFastDifficultyModel(config: store.config).allowedTime(forScore: 35)))
                             .monospacedDigit()

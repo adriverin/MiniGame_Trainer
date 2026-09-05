@@ -1,7 +1,7 @@
 import Foundation
 
-/// Piecewise-linear per-box allowed time measured from bar urgency in the 71-point recording.
-/// Capped at the last calibrated anchor so score 200 cannot drive time to zero.
+/// Piecewise-linear per-box allowed time from Playus bar-depletion segments.
+/// Score 70+ holds the last anchor so high scores cannot drive time to zero.
 struct SwipeFastDifficultyModel: Equatable {
     let config: SwipeFastGameConfig
 

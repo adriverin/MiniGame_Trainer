@@ -2,9 +2,9 @@ import CoreGraphics
 import Foundation
 import UIKit
 
-/// Reference-derived SWIPE FAST calibration. Allowed-time anchors come from bar urgency
-/// across the 71-point recording, not from the intro's "~13s" chip.
-/// See Documentation/SWIPE_FAST_GAME_ANALYSIS.md.
+/// Reference-derived SWIPE FAST calibration. Allowed-time anchors come from
+/// Playus bar-depletion segments, not the previous 2.0→1.0 s model.
+/// Score 70+ is floored at `minimumAllowedTime` (last anchor).
 struct SwipeFastGameConfig: Equatable, Codable {
     var boxSizeRatio: CGFloat = 0.38
     var boxGapRatio: CGFloat = 0.045
@@ -28,8 +28,8 @@ struct SwipeFastGameConfig: Equatable, Codable {
     var orangeRemainingThreshold: Double = 0.16
 
     var difficultyAnchorScores: [Int] = [0, 10, 20, 30, 40, 50, 60, 70]
-    var difficultyAnchorDurations: [TimeInterval] = [2.00, 1.80, 1.60, 1.42, 1.28, 1.16, 1.08, 1.00]
-    var minimumAllowedTime: TimeInterval = 1.00
+    var difficultyAnchorDurations: [TimeInterval] = [5.80, 5.30, 4.80, 4.25, 3.70, 3.20, 2.70, 2.20]
+    var minimumAllowedTime: TimeInterval = 2.20
 
     /// Inclusive: hypot(dx, dy) >= boxSide * ratio counts as a swipe.
     var minimumSwipeDistanceRatio: CGFloat = 0.16

@@ -257,7 +257,7 @@ final class SwipeFastGameLogicTests: XCTestCase {
         }
         XCTAssertEqual(logic.score, 120)
         XCTAssertEqual(logic.state, .playing)
-        XCTAssertEqual(logic.difficulty.allowedTime(forScore: 120), 1.00, accuracy: 1e-12)
+        XCTAssertEqual(logic.difficulty.allowedTime(forScore: 120), 2.20, accuracy: 1e-12)
         XCTAssertEqual(logic.allowedTime(forScore: 120), 8, accuracy: 1e-12)
     }
 
@@ -347,6 +347,62 @@ final class SwipeFastTimingTests: XCTestCase {
         for box in SwipeFastBoxIndex.allCases {
             XCTAssertEqual(logic.remainingFraction(of: box, at: 5), 1, accuracy: 1e-12)
             XCTAssertEqual(logic.box(box).spawnedAt, 5, accuracy: 1e-12)
+            XCTAssertEqual(logic.box(box).allowedTime, 5.80, accuracy: 1e-12)
         }
+    }
+
+    func testRunningBoxKeepsSpawnLifetimeWhenScoreRises() {
+        let logic = SwipeFastGameLogic(config: .reference, sceneSize: sceneSize, seed: 3)
+        logic.forcedDirections = [.up, .right, .down, .left]
+        logic.start(at: 0)
+        let originalLifetime = logic.box(.topLeft).allowedTime
+        XCTAssertEqual(originalLifetime, 5.80, accuracy: 1e-12)
+
+        var time: TimeInterval = 0.05
+        var score = 0
+        while score < 20 {
+            let box: SwipeFastBoxIndex = score % 3 == 0 ? .topRight : score % 3 == 1 ? .bottomLeft : .bottomRight
+            let outcome = logic.applySwipe(logic.box(box).direction, on: box, at: time)
+            guard case .correct(_, let newScore, _) = outcome else {
+                return XCTFail("Failed raising score at \(time): \(outcome)")
+            }
+            score = newScore
+            time += 0.04
+        }
+
+        XCTAssertEqual(logic.score, 20)
+        XCTAssertEqual(logic.allowedTime(forScore: 20), 4.80, accuracy: 1e-12)
+        XCTAssertEqual(logic.box(.topLeft).allowedTime, originalLifetime, accuracy: 1e-12)
+        XCTAssertEqual(logic.box(.topLeft).spawnedAt, 0, accuracy: 1e-12)
+        XCTAssertEqual(logic.box(.topLeft).deadline, originalLifetime, accuracy: 1e-12)
+        XCTAssertEqual(
+            logic.remainingFraction(of: .topLeft, at: time),
+            1 - time / originalLifetime,
+            accuracy: 1e-12
+        )
+        XCTAssertNotEqual(
+            logic.remainingFraction(of: .topLeft, at: time),
+            1 - time / logic.allowedTime(forScore: 20),
+            accuracy: 1e-9
+        )
+
+        let refillTime = time + 0.02
+        let refill = logic.applySwipe(.up, on: .topLeft, at: refillTime)
+        guard case .correct(_, let refilledScore, _) = refill else {
+            return XCTFail("Expected top-left refill, got \(refill)")
+        }
+        XCTAssertEqual(refilledScore, 21)
+        XCTAssertEqual(logic.box(.topLeft).allowedTime, logic.allowedTime(forScore: 21), accuracy: 1e-12)
+        XCTAssertEqual(logic.box(.topLeft).allowedTime, 4.745, accuracy: 1e-12)
+        XCTAssertEqual(logic.box(.topLeft).spawnedAt, refillTime, accuracy: 1e-12)
+        XCTAssertEqual(logic.remainingFraction(of: .topLeft, at: refillTime), 1, accuracy: 1e-12)
+    }
+
+    func testEarlyDrainUsesScoreZeroLifetime() {
+        let logic = SwipeFastGameLogic(config: .reference, sceneSize: sceneSize, seed: 1)
+        logic.start(at: 0)
+        XCTAssertEqual(logic.remainingFraction(of: .topLeft, at: 0.40), 1 - 0.40 / 5.80, accuracy: 1e-12)
+        XCTAssertGreaterThan(logic.remainingFraction(of: .topLeft, at: 0.40), 0.90)
+        XCTAssertEqual(logic.barStage(of: .topLeft, at: 0.40), .cyan)
     }
 }

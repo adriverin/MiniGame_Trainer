@@ -5,26 +5,31 @@ import XCTest
 final class SwipeFastDifficultyTests: XCTestCase {
     func testReferenceAnchors() {
         let model = SwipeFastDifficultyModel(config: .reference)
-        XCTAssertEqual(model.allowedTime(forScore: 0), 2.00, accuracy: 1e-12)
-        XCTAssertEqual(model.allowedTime(forScore: 10), 1.80, accuracy: 1e-12)
-        XCTAssertEqual(model.allowedTime(forScore: 20), 1.60, accuracy: 1e-12)
-        XCTAssertEqual(model.allowedTime(forScore: 30), 1.42, accuracy: 1e-12)
-        XCTAssertEqual(model.allowedTime(forScore: 40), 1.28, accuracy: 1e-12)
-        XCTAssertEqual(model.allowedTime(forScore: 50), 1.16, accuracy: 1e-12)
-        XCTAssertEqual(model.allowedTime(forScore: 60), 1.08, accuracy: 1e-12)
-        XCTAssertEqual(model.allowedTime(forScore: 70), 1.00, accuracy: 1e-12)
+        XCTAssertEqual(model.allowedTime(forScore: 0), 5.80, accuracy: 1e-12)
+        XCTAssertEqual(model.allowedTime(forScore: 10), 5.30, accuracy: 1e-12)
+        XCTAssertEqual(model.allowedTime(forScore: 20), 4.80, accuracy: 1e-12)
+        XCTAssertEqual(model.allowedTime(forScore: 30), 4.25, accuracy: 1e-12)
+        XCTAssertEqual(model.allowedTime(forScore: 40), 3.70, accuracy: 1e-12)
+        XCTAssertEqual(model.allowedTime(forScore: 50), 3.20, accuracy: 1e-12)
+        XCTAssertEqual(model.allowedTime(forScore: 60), 2.70, accuracy: 1e-12)
+        XCTAssertEqual(model.allowedTime(forScore: 70), 2.20, accuracy: 1e-12)
     }
 
     func testLinearInterpolationBetweenAnchors() {
         let model = SwipeFastDifficultyModel(config: .reference)
-        XCTAssertEqual(model.allowedTime(forScore: 5), 1.90, accuracy: 1e-12)
-        XCTAssertEqual(model.allowedTime(forScore: 35), 1.35, accuracy: 1e-12)
+        XCTAssertEqual(model.allowedTime(forScore: 5), 5.55, accuracy: 1e-12)
+        XCTAssertEqual(model.allowedTime(forScore: 15), 5.05, accuracy: 1e-12)
+        XCTAssertEqual(model.allowedTime(forScore: 25), 4.525, accuracy: 1e-12)
+        XCTAssertEqual(model.allowedTime(forScore: 35), 3.975, accuracy: 1e-12)
+        XCTAssertEqual(model.allowedTime(forScore: 45), 3.45, accuracy: 1e-12)
+        XCTAssertEqual(model.allowedTime(forScore: 55), 2.95, accuracy: 1e-12)
+        XCTAssertEqual(model.allowedTime(forScore: 65), 2.45, accuracy: 1e-12)
     }
 
     func testMonotonicDifficulty() {
         let model = SwipeFastDifficultyModel(config: .reference)
         var previous = model.allowedTime(forScore: 0)
-        for score in 1...80 {
+        for score in 1...200 {
             let current = model.allowedTime(forScore: score)
             XCTAssertLessThanOrEqual(current, previous + 1e-12, "Score \(score)")
             previous = current
@@ -33,15 +38,16 @@ final class SwipeFastDifficultyTests: XCTestCase {
 
     func testCapDoesNotGoNegativeAtScore200() {
         let model = SwipeFastDifficultyModel(config: .reference)
-        XCTAssertEqual(model.allowedTime(forScore: 200), 1.00, accuracy: 1e-12)
+        XCTAssertEqual(model.allowedTime(forScore: 200), 2.20, accuracy: 1e-12)
         XCTAssertGreaterThan(model.allowedTime(forScore: 10_000), 0)
+        XCTAssertGreaterThan(model.allowedTime(forScore: 10_000), 2.0)
     }
 
     func testCustomMinimumFloor() {
         var config = SwipeFastGameConfig.reference
-        config.minimumAllowedTime = 1.25
+        config.minimumAllowedTime = 2.50
         let model = SwipeFastDifficultyModel(config: config)
-        XCTAssertEqual(model.allowedTime(forScore: 70), 1.25, accuracy: 1e-12)
+        XCTAssertEqual(model.allowedTime(forScore: 70), 2.50, accuracy: 1e-12)
     }
 }
 
