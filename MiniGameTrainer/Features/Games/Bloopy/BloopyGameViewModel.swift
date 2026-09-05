@@ -74,7 +74,6 @@ enum BloopyResultBuilder {
             duration: summary.duration,
             metrics: [
                 GameMetric(key: "landings", label: "Landings", value: "\(summary.landings)"),
-                GameMetric(key: "wraps", label: "Wraps", value: "\(summary.wrapCount)"),
                 GameMetric(key: "height", label: "Max height", value: String(format: "%.0f", summary.maxWorldY)),
                 GameMetric(key: "duration", label: "Duration", value: MetricFormatter.seconds(summary.duration)),
             ]

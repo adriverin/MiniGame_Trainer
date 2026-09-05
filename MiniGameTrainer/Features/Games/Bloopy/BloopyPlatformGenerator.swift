@@ -21,12 +21,16 @@ struct BloopyPlatformGenerator {
     mutating func initialPlatforms(geometry: BloopyGeometry) -> [BloopyPlatform] {
         reset()
         let width = difficulty.platformWidth(forScore: 0, sceneWidth: geometry.width)
+        let startX = clampedCenter(
+            geometry.width * config.startingPlatformXRatio,
+            platformWidth: width,
+            geometry: geometry
+        )
         let start = BloopyPlatform(
             id: consumeID(),
-            worldX: geometry.width * config.startingPlatformXRatio,
+            worldX: startX,
             worldY: geometry.height * config.startingPlatformYRatio,
-            width: width,
-            kind: .fresh
+            width: width
         )
         var result = [start]
         while result.count < max(2, config.lookaheadPlatformCount) {
@@ -40,7 +44,7 @@ struct BloopyPlatformGenerator {
         let gap = jitteredGap(score: score, sceneHeight: geometry.height)
         let worldY = current.worldY + gap
         let center = reachableCenter(from: current, nextWidth: width, gap: gap, geometry: geometry)
-        return BloopyPlatform(id: consumeID(), worldX: center, worldY: worldY, width: width, kind: .fresh)
+        return BloopyPlatform(id: consumeID(), worldX: center, worldY: worldY, width: width)
     }
 
     func isReachable(
@@ -62,9 +66,15 @@ struct BloopyPlatformGenerator {
             maximumSpeed: difficulty.maximumHorizontalSpeed(sceneWidth: geometry.width),
             flightTime: flight
         ) * config.reachabilityMultiplier
-        let needed = BloopyPhysics.toroidalDistance(current.worldX, candidate.worldX, width: geometry.width)
-            - current.width / 2 - candidate.width / 2
+        let needed = abs(current.worldX - candidate.worldX) - current.width / 2 - candidate.width / 2
         return needed <= travel + 1e-6
+    }
+
+    func clampedCenter(_ proposedX: CGFloat, platformWidth: CGFloat, geometry: BloopyGeometry) -> CGFloat {
+        let minimum = geometry.playablePlatformMinX(width: platformWidth)
+        let maximum = geometry.playablePlatformMaxX(width: platformWidth)
+        if maximum < minimum { return geometry.width / 2 }
+        return min(max(proposedX, minimum), maximum)
     }
 
     private mutating func reachableCenter(
@@ -84,8 +94,14 @@ struct BloopyPlatformGenerator {
             flightTime: flight
         ) * config.reachabilityMultiplier
         let allowed = max(0, travel + current.width / 2 + nextWidth / 2)
-        let signed = (randomUnit() * 2 - 1) * allowed
-        return BloopyPhysics.wrap(current.worldX + signed, width: geometry.width)
+        let minBound = geometry.playablePlatformMinX(width: nextWidth)
+        let maxBound = geometry.playablePlatformMaxX(width: nextWidth)
+        let low = max(current.worldX - allowed, minBound)
+        let high = min(current.worldX + allowed, maxBound)
+        if low <= high {
+            return low + randomUnit() * (high - low)
+        }
+        return clampedCenter(current.worldX, platformWidth: nextWidth, geometry: geometry)
     }
 
     private mutating func jitteredWidth(score: Int, sceneWidth: CGFloat) -> CGFloat {

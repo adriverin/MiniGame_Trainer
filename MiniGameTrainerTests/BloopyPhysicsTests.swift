@@ -19,7 +19,8 @@ final class BloopyPhysicsTests: XCTestCase {
             damping: 2,
             maximumSpeed: 200,
             deltaTime: 0.5,
-            worldWidth: 400
+            worldWidth: 400,
+            ballRadius: 8
         )
         XCTAssertEqual(hold.velocity, 50, accuracy: 1e-9)
 
@@ -31,7 +32,8 @@ final class BloopyPhysicsTests: XCTestCase {
             damping: 2,
             maximumSpeed: 200,
             deltaTime: 0.5,
-            worldWidth: 400
+            worldWidth: 400,
+            ballRadius: 8
         )
         XCTAssertLessThan(abs(coast.velocity), abs(hold.velocity))
         XCTAssertGreaterThan(abs(coast.velocity), 0)
@@ -46,20 +48,20 @@ final class BloopyPhysicsTests: XCTestCase {
             damping: 0,
             maximumSpeed: 200,
             deltaTime: 1,
-            worldWidth: 400
+            worldWidth: 400,
+            ballRadius: 8
         )
         XCTAssertEqual(result.velocity, 200, accuracy: 1e-9)
     }
 
     func testDescendingCrossingLandsOnce() {
-        let platform = BloopyPlatform(id: 1, worldX: 50, worldY: 20, width: 40, kind: .fresh)
+        let platform = BloopyPlatform(id: 1, worldX: 50, worldY: 20, width: 40)
         let contact = BloopyPhysics.sweptTopLanding(
             previous: CGPoint(x: 50, y: 40),
             current: CGPoint(x: 50, y: 24),
             platform: platform,
             ballRadius: 8,
             platformHeight: 8,
-            worldWidth: 100,
             deltaTime: 1 / 60
         )
         XCTAssertNotNil(contact)
@@ -68,32 +70,86 @@ final class BloopyPhysicsTests: XCTestCase {
     }
 
     func testRisingThroughPlatformDoesNotLand() {
-        let platform = BloopyPlatform(id: 1, worldX: 50, worldY: 20, width: 40, kind: .fresh)
+        let platform = BloopyPlatform(id: 1, worldX: 50, worldY: 20, width: 40)
         let contact = BloopyPhysics.sweptTopLanding(
             previous: CGPoint(x: 50, y: 10),
             current: CGPoint(x: 50, y: 40),
             platform: platform,
             ballRadius: 8,
             platformHeight: 8,
-            worldWidth: 100,
             deltaTime: 1 / 60
         )
         XCTAssertNil(contact)
     }
 
-    func testWrappedLandingUsesToroidalOverlap() {
-        let platform = BloopyPlatform(id: 7, worldX: 8, worldY: 20, width: 20, kind: .fresh)
+    func testBallNearLeftEdgeDoesNotCollideWithRightPlatform() {
+        let platform = BloopyPlatform(id: 7, worldX: 380, worldY: 20, width: 20)
         let contact = BloopyPhysics.sweptTopLanding(
-            previous: CGPoint(x: 96, y: 40),
-            current: CGPoint(x: 98, y: 24),
+            previous: CGPoint(x: 12, y: 40),
+            current: CGPoint(x: 10, y: 24),
             platform: platform,
             ballRadius: 8,
             platformHeight: 8,
-            worldWidth: 100,
             deltaTime: 1 / 60
         )
-        XCTAssertNotNil(contact)
-        XCTAssertEqual(contact?.platformID, 7)
+        XCTAssertNil(contact)
+    }
+
+    func testBallNearRightEdgeDoesNotCollideWithLeftPlatform() {
+        let platform = BloopyPlatform(id: 1, worldX: 10, worldY: 50, width: 30)
+        let contact = BloopyPhysics.sweptTopLanding(
+            previous: CGPoint(x: 385, y: 70),
+            current: CGPoint(x: 395, y: 54),
+            platform: platform,
+            ballRadius: 10,
+            platformHeight: 8,
+            deltaTime: 1 / 60
+        )
+        XCTAssertNil(contact)
+    }
+
+    func testLogicLeftEdgeDoesNotLandOnRightPlatform() {
+        let logic = BloopyGameLogic(config: .deterministic(), sceneSize: sceneSize)
+        logic.start()
+        let farRight = BloopyPlatform(
+            id: 9_001,
+            worldX: sceneSize.width - 20,
+            worldY: logic.ballPosition.y - 40,
+            width: 28
+        )
+        logic.replacePlatformsForTesting([farRight])
+        let top = logic.geometry.platformTop(worldY: farRight.worldY)
+        logic.placeBallForTesting(
+            position: CGPoint(x: logic.geometry.ballMinX + 2, y: top + logic.geometry.ballRadius + 16),
+            velocity: CGVector(dx: 0, dy: -220),
+            previous: CGPoint(x: logic.geometry.ballMinX + 2, y: top + logic.geometry.ballRadius + 16)
+        )
+        let before = logic.landingCount
+        logic.update(deltaTime: 1 / 60)
+        XCTAssertEqual(logic.landingCount, before)
+        XCTAssertNil(logic.lastLanding)
+    }
+
+    func testLogicRightEdgeDoesNotLandOnLeftPlatform() {
+        let logic = BloopyGameLogic(config: .deterministic(), sceneSize: sceneSize)
+        logic.start()
+        let farLeft = BloopyPlatform(
+            id: 9_002,
+            worldX: 20,
+            worldY: logic.ballPosition.y - 40,
+            width: 28
+        )
+        logic.replacePlatformsForTesting([farLeft])
+        let top = logic.geometry.platformTop(worldY: farLeft.worldY)
+        logic.placeBallForTesting(
+            position: CGPoint(x: logic.geometry.ballMaxX - 2, y: top + logic.geometry.ballRadius + 16),
+            velocity: CGVector(dx: 0, dy: -220),
+            previous: CGPoint(x: logic.geometry.ballMaxX - 2, y: top + logic.geometry.ballRadius + 16)
+        )
+        let before = logic.landingCount
+        logic.update(deltaTime: 1 / 60)
+        XCTAssertEqual(logic.landingCount, before)
+        XCTAssertNil(logic.lastLanding)
     }
 
     func testSixtyAndOneTwentyHertzTrajectoriesMatch() {
@@ -130,17 +186,14 @@ final class BloopyPhysicsTests: XCTestCase {
         }
         let cameraBefore = logic.cameraY
         logic.setHorizontalInput(.none)
-        let falling = logic.ballVelocity.dy
-        if falling > 0 {
-            // wait until descent if still rising
+        if logic.ballVelocity.dy > 0 {
             var guardFrames = 0
             while logic.ballVelocity.dy > 0, guardFrames < 120, logic.state == .playing {
                 logic.update(deltaTime: 1 / 60)
                 guardFrames += 1
             }
         }
-        let cameraDuringFall = logic.cameraY
-        XCTAssertGreaterThanOrEqual(cameraDuringFall, cameraBefore - 1e-6)
+        XCTAssertGreaterThanOrEqual(logic.cameraY, cameraBefore - 1e-6)
     }
 
     func testLandingDoesNotBounceTwiceAcrossAdjacentFrames() {
@@ -156,29 +209,5 @@ final class BloopyPhysicsTests: XCTestCase {
         }
         XCTAssertEqual(doubleHits, 0)
         XCTAssertGreaterThan(logic.landingCount, 2)
-    }
-
-    func testSameStepWrapCanStillLand() {
-        // Test that the wrap function itself correctly handles positions near the boundary
-        let w: CGFloat = 390
-        let x: CGFloat = w * 0.97  // 378.3
-        let moved = x + 20         // 398.3 > 390
-        let wrapped = BloopyPhysics.wrap(moved, width: w)
-        XCTAssertEqual(wrapped, 8.3, accuracy: 0.1)
-        XCTAssertFalse(wrapped.isNaN)
-        
-        // Verify collision detection works with wrap: ball near right edge,
-        // platform near left edge
-        let platform = BloopyPlatform(id: 1, worldX: 10, worldY: 50, width: 30, kind: .fresh)
-        let contact = BloopyPhysics.sweptTopLanding(
-            previous: CGPoint(x: 385, y: 70),
-            current: CGPoint(x: 395, y: 54),   // unwrapped x past boundary
-            platform: platform,
-            ballRadius: 10,
-            platformHeight: 8,
-            worldWidth: w,
-            deltaTime: 1 / 60
-        )
-        XCTAssertNotNil(contact, "Wrapped landing should detect collision with platform near left edge")
     }
 }

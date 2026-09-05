@@ -31,8 +31,9 @@ struct BloopyGameConfig: Equatable, Codable {
     var widthJitterRatio: CGFloat = 0.012
     var spacingJitterRatio: CGFloat = 0.018
     var reachabilityMultiplier: CGFloat = 0.88
+    var platformHorizontalMarginRatio: CGFloat = 0.01
     var lookaheadPlatformCount: Int = 8
-    var recycleBelowHeightRatio: CGFloat = 0.55
+    var recycleBelowHeightRatio: CGFloat = 0
 
     var difficultyAnchorScores: [Int] = [0, 50, 100, 200, 300, 400, 500, 600]
     var difficultyWidthRatios: [CGFloat] = [0.235, 0.220, 0.200, 0.165, 0.125, 0.100, 0.088, 0.080]
@@ -43,8 +44,8 @@ struct BloopyGameConfig: Equatable, Codable {
     var trailMaximumCount = 14
     var trailMinimumScale: CGFloat = 0.18
     var trailMaximumScale: CGFloat = 0.55
-    var trailMinimumOpacity: CGFloat = 0.18
-    var trailMaximumOpacity: CGFloat = 0.55
+    var trailMinimumOpacity: CGFloat = 0.12
+    var trailMaximumOpacity: CGFloat = 0.95
 
     var resultHoldDuration: TimeInterval = 0.42
     var maximumFrameDelta: TimeInterval = 0.100
@@ -63,5 +64,5 @@ struct BloopyGameConfig: Equatable, Codable {
     var platformColor: UIColor { UIColor(red: 245 / 255, green: 197 / 255, blue: 160 / 255, alpha: 1) }
     var usedPlatformColor: UIColor { UIColor(red: 214 / 255, green: 72 / 255, blue: 64 / 255, alpha: 1) }
     var ballColor: UIColor { .white }
-    var trailColor: UIColor { UIColor(white: 0.92, alpha: 1) }
+    var trailColor: UIColor { .white }
 }

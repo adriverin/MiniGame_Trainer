@@ -23,18 +23,48 @@ final class BloopyDifficultyTests: XCTestCase {
         XCTAssertGreaterThan(bounce, model.verticalSpacing(forScore: 500, sceneHeight: 844))
     }
 
-    func testGeneratedPlatformsRemainReachableAtReferenceStages() {
-        let config = BloopyGameConfig.deterministic()
-        let geometry = BloopyGeometry(sceneSize: CGSize(width: 390, height: 844), config: config)
-        var generator = BloopyPlatformGenerator(config: config)
-        var current = generator.initialPlatforms(geometry: geometry)[0]
-        for score in [0, 50, 100, 200, 300, 400, 500, 600] {
-            for _ in 0..<8 {
-                let next = generator.next(after: current, score: score, geometry: geometry)
-                XCTAssertTrue(generator.isReachable(from: current, to: next, geometry: geometry), "unreachable at score \(score)")
-                XCTAssertLessThan(next.worldY - current.worldY, BloopyDifficultyModel(config: config).bounceHeight(sceneHeight: 844))
-                current = next
+    func testGeneratedPlatformsRemainReachableWithoutWrapping() {
+        let seeds: [UInt64] = [17_602, 1, 42, 99, 7, 4_096]
+        let sceneSize = CGSize(width: 390, height: 844)
+        for seed in seeds {
+            let config = BloopyGameConfig.deterministic(seed: seed)
+            let geometry = BloopyGeometry(sceneSize: sceneSize, config: config)
+            var generator = BloopyPlatformGenerator(config: config)
+            var current = generator.initialPlatforms(geometry: geometry)[0]
+            for score in [0, 50, 100, 200, 300, 400, 500, 600] {
+                for _ in 0..<12 {
+                    let next = generator.next(after: current, score: score, geometry: geometry)
+                    XCTAssertTrue(
+                        generator.isReachable(from: current, to: next, geometry: geometry),
+                        "unreachable at score \(score) seed \(seed)"
+                    )
+                    XCTAssertLessThan(
+                        next.worldY - current.worldY,
+                        BloopyDifficultyModel(config: config).bounceHeight(sceneHeight: 844)
+                    )
+                    let linearGap = abs(current.worldX - next.worldX) - current.width / 2 - next.width / 2
+                    let wrapGap = min(
+                        abs(current.worldX - next.worldX),
+                        geometry.width - abs(current.worldX - next.worldX)
+                    ) - current.width / 2 - next.width / 2
+                    if wrapGap + 1 < linearGap {
+                        XCTAssertTrue(
+                            generator.isReachable(from: current, to: next, geometry: geometry),
+                            "reachability must use the real on-screen path, not the wrap shortcut"
+                        )
+                    }
+                    current = next
+                }
             }
         }
+    }
+
+    func testReachabilityDoesNotTreatOppositeEdgesAsNeighbors() {
+        let config = BloopyGameConfig.deterministic()
+        let geometry = BloopyGeometry(sceneSize: CGSize(width: 390, height: 844), config: config)
+        let generator = BloopyPlatformGenerator(config: config)
+        let left = BloopyPlatform(id: 1, worldX: 30, worldY: 40, width: 40)
+        let right = BloopyPlatform(id: 2, worldX: 360, worldY: 160, width: 40)
+        XCTAssertFalse(generator.isReachable(from: left, to: right, geometry: geometry))
     }
 }

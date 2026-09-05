@@ -5,30 +5,18 @@ struct BloopyLandingContact: Equatable {
     let platformID: Int
     let worldPosition: CGPoint
     let remainingTime: TimeInterval
-    let wrappedOffset: CGFloat
 }
 
 enum BloopyPhysics {
-    /// Positive-modulo wrap that preserves overshoot. `98 + 5` on width 100 becomes `3`, not `0`.
-    static func wrap(_ value: CGFloat, width: CGFloat) -> CGFloat {
-        guard width > 0 else { return value }
-        let wrapped = value.truncatingRemainder(dividingBy: width)
-        return wrapped >= 0 ? wrapped : wrapped + width
-    }
-
-    static func wrapPoint(_ point: CGPoint, width: CGFloat) -> CGPoint {
-        CGPoint(x: wrap(point.x, width: width), y: point.y)
-    }
-
-    static func toroidalDelta(from origin: CGFloat, to destination: CGFloat, width: CGFloat) -> CGFloat {
-        guard width > 0 else { return destination - origin }
-        var delta = wrap(destination - origin, width: width)
-        if delta > width / 2 { delta -= width }
-        return delta
-    }
-
-    static func toroidalDistance(_ a: CGFloat, _ b: CGFloat, width: CGFloat) -> CGFloat {
-        abs(toroidalDelta(from: a, to: b, width: width))
+    static func clampBallCenter(
+        _ value: CGFloat,
+        worldWidth: CGFloat,
+        ballRadius: CGFloat
+    ) -> CGFloat {
+        let minimum = ballRadius
+        let maximum = worldWidth - ballRadius
+        if maximum < minimum { return worldWidth / 2 }
+        return min(max(value, minimum), maximum)
     }
 
     static func horizontalStep(
@@ -39,7 +27,8 @@ enum BloopyPhysics {
         damping: CGFloat,
         maximumSpeed: CGFloat,
         deltaTime: TimeInterval,
-        worldWidth: CGFloat
+        worldWidth: CGFloat,
+        ballRadius: CGFloat
     ) -> (position: CGFloat, velocity: CGFloat) {
         let dt = CGFloat(max(0, deltaTime))
         var vx = velocity
@@ -52,7 +41,20 @@ enum BloopyPhysics {
         }
         let cap = abs(maximumSpeed)
         vx = min(max(vx, -cap), cap)
-        let x = wrap(position + vx * dt, width: worldWidth)
+
+        let minimum = ballRadius
+        let maximum = worldWidth - ballRadius
+        var x = position + vx * dt
+        if maximum < minimum {
+            x = worldWidth / 2
+            vx = 0
+        } else if x < minimum {
+            x = minimum
+            if vx < 0 { vx = 0 }
+        } else if x > maximum {
+            x = maximum
+            if vx > 0 { vx = 0 }
+        }
         return (x, vx)
     }
 
@@ -76,9 +78,9 @@ enum BloopyPhysics {
         platform: BloopyPlatform,
         ballRadius: CGFloat,
         platformHeight: CGFloat,
-        worldWidth: CGFloat,
         deltaTime: TimeInterval
     ) -> BloopyLandingContact? {
+        guard platform.isCollidable else { return nil }
         let top = platform.worldY + platformHeight / 2
         let previousBottom = previous.y - ballRadius
         let currentBottom = current.y - ballRadius
@@ -89,38 +91,30 @@ enum BloopyPhysics {
         let fraction = min(max((top + ballRadius - previous.y) / travel, 0), 1)
         let contactX = previous.x + (current.x - previous.x) * fraction
         let contactY = top + ballRadius
-        guard let offset = overlappingWrapOffset(
+        guard horizontallyOverlaps(
             ballX: contactX,
             platformX: platform.worldX,
             platformWidth: platform.width,
-            ballRadius: ballRadius,
-            worldWidth: worldWidth
+            ballRadius: ballRadius
         ) else { return nil }
 
         let remaining = max(0, deltaTime) * TimeInterval(1 - fraction)
         return BloopyLandingContact(
             platformID: platform.id,
-            worldPosition: CGPoint(x: wrap(contactX, width: worldWidth), y: contactY),
-            remainingTime: remaining,
-            wrappedOffset: offset
+            worldPosition: CGPoint(x: contactX, y: contactY),
+            remainingTime: remaining
         )
     }
 
-    static func overlappingWrapOffset(
+    static func horizontallyOverlaps(
         ballX: CGFloat,
         platformX: CGFloat,
         platformWidth: CGFloat,
-        ballRadius: CGFloat,
-        worldWidth: CGFloat
-    ) -> CGFloat? {
+        ballRadius: CGFloat
+    ) -> Bool {
         let half = platformWidth / 2
-        for offset: CGFloat in [0, -worldWidth, worldWidth] {
-            let x = ballX + offset
-            if x + ballRadius >= platformX - half - 1e-9, x - ballRadius <= platformX + half + 1e-9 {
-                return offset
-            }
-        }
-        return nil
+        return ballX + ballRadius >= platformX - half - 1e-9
+            && ballX - ballRadius <= platformX + half + 1e-9
     }
 
     static func timeToDescend(

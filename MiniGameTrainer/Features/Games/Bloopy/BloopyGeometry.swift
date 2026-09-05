@@ -9,6 +9,7 @@ struct BloopyGeometry: Equatable {
     let failureMargin: CGFloat
     let scoreUnit: CGFloat
     let recycleDistance: CGFloat
+    let platformHorizontalMargin: CGFloat
 
     init(sceneSize: CGSize, config: BloopyGameConfig) {
         self.sceneSize = sceneSize
@@ -18,6 +19,7 @@ struct BloopyGeometry: Equatable {
         failureMargin = sceneSize.height * config.failureMarginHeightRatio
         scoreUnit = max(1, sceneSize.height * config.scoreUnitHeightRatio)
         recycleDistance = sceneSize.height * config.recycleBelowHeightRatio
+        platformHorizontalMargin = sceneSize.width * config.platformHorizontalMarginRatio
     }
 
     var width: CGFloat { sceneSize.width }
@@ -37,5 +39,16 @@ struct BloopyGeometry: Equatable {
 
     func platformBottom(worldY: CGFloat) -> CGFloat {
         worldY - platformHeight / 2
+    }
+
+    var ballMinX: CGFloat { ballRadius }
+    var ballMaxX: CGFloat { width - ballRadius }
+
+    func playablePlatformMinX(width platformWidth: CGFloat) -> CGFloat {
+        platformWidth / 2 + platformHorizontalMargin
+    }
+
+    func playablePlatformMaxX(width platformWidth: CGFloat) -> CGFloat {
+        width - platformWidth / 2 - platformHorizontalMargin
     }
 }

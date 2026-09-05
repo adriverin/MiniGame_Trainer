@@ -17,7 +17,6 @@ final class BloopyGameLogic {
     private(set) var platforms: [BloopyPlatform] = []
     private(set) var trailSamples: [BloopyTrailSample] = []
     private(set) var horizontalInput: BloopyHorizontalInput = .none
-    private(set) var wrapCount = 0
     private(set) var landingCount = 0
     private(set) var maxWorldY: CGFloat
     private(set) var lastLanding: BloopyLanding?
@@ -78,7 +77,6 @@ final class BloopyGameLogic {
         score = 0
         elapsedTime = 0
         cameraY = 0
-        wrapCount = 0
         landingCount = 0
         horizontalInput = .none
         trailSamples = []
@@ -96,7 +94,6 @@ final class BloopyGameLogic {
         maxWorldY = startY
         highestPlatformY = platforms.map(\.worldY).max() ?? start.worldY
         lastLandedPlatformID = start.id
-        markUsed(platformID: start.id)
     }
 
     func setHorizontalInput(_ input: BloopyHorizontalInput) {
@@ -137,8 +134,7 @@ final class BloopyGameLogic {
             duration: elapsedTime,
             landings: landingCount,
             maxWorldY: maxWorldY,
-            wrapCount: wrapCount,
-            usedPlatformCount: platforms.filter { $0.kind == .used }.count
+            redPlatformCount: platforms.filter { $0.appearance == .red }.count
         )
     }
 
@@ -159,15 +155,18 @@ final class BloopyGameLogic {
     func autoSteerTarget() -> BloopyPlatform? {
         if ballVelocity.dy >= 0 {
             return platforms
+                .filter { $0.isCollidable }
                 .filter { $0.worldY > ballPosition.y + 1 }
                 .min { $0.worldY < $1.worldY }
         } else {
             let below = platforms
+                .filter { $0.isCollidable }
                 .filter { $0.id != lastLandedPlatformID }
                 .filter { $0.worldY + geometry.platformHeight < ballPosition.y }
                 .filter { $0.worldY > cameraY - geometry.failureMargin }
                 .max { $0.worldY < $1.worldY }
             return below ?? platforms
+                .filter { $0.isCollidable }
                 .filter { $0.worldY > ballPosition.y + 1 }
                 .min { $0.worldY < $1.worldY }
         }
@@ -175,7 +174,7 @@ final class BloopyGameLogic {
 
     func autoSteerInput() -> BloopyHorizontalInput {
         guard let next = autoSteerTarget() else { return .none }
-        let delta = BloopyPhysics.toroidalDelta(from: ballPosition.x, to: next.worldX, width: geometry.width)
+        let delta = next.worldX - ballPosition.x
         let tolerance = next.width * 0.3
         if abs(delta) <= tolerance {
             return .none
@@ -187,6 +186,29 @@ final class BloopyGameLogic {
         setHorizontalInput(autoSteerInput())
     }
 
+    func landingContact(
+        from previous: CGPoint,
+        to current: CGPoint,
+        deltaTime: TimeInterval
+    ) -> BloopyLandingContact? {
+        firstLanding(from: previous, to: current, deltaTime: deltaTime)
+    }
+
+    func replacePlatformsForTesting(_ value: [BloopyPlatform]) {
+        platforms = value
+        highestPlatformY = value.map(\.worldY).max() ?? highestPlatformY
+    }
+
+    func placeBallForTesting(position: CGPoint, velocity: CGVector, previous: CGPoint? = nil) {
+        ballPosition = CGPoint(
+            x: BloopyPhysics.clampBallCenter(position.x, worldWidth: geometry.width, ballRadius: geometry.ballRadius),
+            y: position.y
+        )
+        previousBallPosition = previous ?? ballPosition
+        ballVelocity = velocity
+        lastLandedPlatformID = nil
+    }
+
     private func input(for position: CGPoint) -> BloopyHorizontalInput {
         position.x < geometry.width * 0.5 ? .left : .right
     }
@@ -196,7 +218,6 @@ final class BloopyGameLogic {
         ageTrail(by: deltaTime)
         previousBallPosition = ballPosition
 
-        let previousX = ballPosition.x
         let horizontal = BloopyPhysics.horizontalStep(
             position: ballPosition.x,
             velocity: ballVelocity.dx,
@@ -205,12 +226,9 @@ final class BloopyGameLogic {
             damping: config.horizontalDampingPerSecond,
             maximumSpeed: maximumHorizontalSpeed,
             deltaTime: deltaTime,
-            worldWidth: geometry.width
+            worldWidth: geometry.width,
+            ballRadius: geometry.ballRadius
         )
-        if BloopyPhysics.toroidalDistance(previousX, horizontal.position, width: geometry.width)
-            > geometry.width * 0.5 {
-            wrapCount += 1
-        }
 
         let vertical = BloopyPhysics.verticalStep(
             position: ballPosition.y,
@@ -218,12 +236,11 @@ final class BloopyGameLogic {
             gravity: gravity,
             deltaTime: deltaTime
         )
-        let unwrappedX = previousX + horizontal.velocity * CGFloat(deltaTime)
-        let candidate = CGPoint(x: unwrappedX, y: vertical.position)
+        let candidate = CGPoint(x: horizontal.position, y: vertical.position)
         if let contact = firstLanding(from: previousBallPosition, to: candidate, deltaTime: deltaTime) {
             applyLanding(contact, horizontalVelocity: horizontal.velocity)
         } else {
-            ballPosition = CGPoint(x: horizontal.position, y: vertical.position)
+            ballPosition = candidate
             ballVelocity = CGVector(dx: horizontal.velocity, dy: vertical.velocity)
             if lastLandedPlatformID != nil, !stillOverlappingLastPlatform() {
                 lastLandedPlatformID = nil
@@ -246,6 +263,10 @@ final class BloopyGameLogic {
     private func firstLanding(from previous: CGPoint, to current: CGPoint, deltaTime: TimeInterval) -> BloopyLandingContact? {
         var best: BloopyLandingContact?
         for platform in platforms {
+            guard platform.isCollidable else { continue }
+            if geometry.platformTop(worldY: platform.worldY) < cameraY - geometry.recycleDistance - 1e-6 {
+                continue
+            }
             if platform.id == lastLandedPlatformID { continue }
             guard let contact = BloopyPhysics.sweptTopLanding(
                 previous: previous,
@@ -253,7 +274,6 @@ final class BloopyGameLogic {
                 platform: platform,
                 ballRadius: geometry.ballRadius,
                 platformHeight: geometry.platformHeight,
-                worldWidth: geometry.width,
                 deltaTime: deltaTime
             ) else { continue }
             if best == nil || contact.remainingTime > best!.remainingTime {
@@ -274,7 +294,7 @@ final class BloopyGameLogic {
             ballPosition: contact.worldPosition,
             remainingTime: contact.remainingTime
         )
-        markUsed(platformID: contact.platformID)
+        registerLanding(on: contact.platformID)
         events.append(.bounced(platformID: contact.platformID, score: score))
         if contact.remainingTime > 1e-12 {
             let leftover = BloopyPhysics.verticalStep(
@@ -291,7 +311,8 @@ final class BloopyGameLogic {
                 damping: config.horizontalDampingPerSecond,
                 maximumSpeed: maximumHorizontalSpeed,
                 deltaTime: contact.remainingTime,
-                worldWidth: geometry.width
+                worldWidth: geometry.width,
+                ballRadius: geometry.ballRadius
             )
             ballPosition = CGPoint(x: leftoverX.position, y: leftover.position)
             ballVelocity = CGVector(dx: leftoverX.velocity, dy: leftover.velocity)
@@ -302,20 +323,20 @@ final class BloopyGameLogic {
         guard let id = lastLandedPlatformID, let platform = platforms.first(where: { $0.id == id }) else {
             return false
         }
+        guard platform.isCollidable else { return false }
         let top = geometry.platformTop(worldY: platform.worldY)
         return ballPosition.y - geometry.ballRadius <= top + geometry.platformHeight
-            && BloopyPhysics.overlappingWrapOffset(
+            && BloopyPhysics.horizontallyOverlaps(
                 ballX: ballPosition.x,
                 platformX: platform.worldX,
                 platformWidth: platform.width,
-                ballRadius: geometry.ballRadius,
-                worldWidth: geometry.width
-            ) != nil
+                ballRadius: geometry.ballRadius
+            )
     }
 
-    private func markUsed(platformID: Int) {
+    private func registerLanding(on platformID: Int) {
         guard let index = platforms.firstIndex(where: { $0.id == platformID }) else { return }
-        platforms[index].kind = .used
+        platforms[index].landingCount += 1
     }
 
     private func updateScore() {
@@ -337,8 +358,18 @@ final class BloopyGameLogic {
     }
 
     private func maintainPlatforms() {
-        let floor = cameraY - geometry.recycleDistance
-        platforms.removeAll { $0.worldY < floor && $0.worldY < ballPosition.y - geometry.height * 0.4 }
+        for index in platforms.indices {
+            let top = geometry.platformTop(worldY: platforms[index].worldY)
+            if top < cameraY - geometry.recycleDistance {
+                platforms[index].isActive = false
+            }
+        }
+        #if DEBUG
+        assert(platforms.filter(\.isActive).allSatisfy(\.isCollidable), "inactive platforms must not stay collidable")
+        assert(platforms.filter(\.isCollidable).allSatisfy(\.isActive), "collidable platforms must remain active")
+        #endif
+        platforms.removeAll { !$0.isActive }
+
         while platforms.count < max(2, config.lookaheadPlatformCount),
               let last = platforms.max(by: { $0.worldY < $1.worldY }) {
             let spawned = generator.next(after: last, score: effectiveScore, geometry: geometry)

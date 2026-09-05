@@ -19,8 +19,7 @@ final class BloopyPersistenceTests: XCTestCase {
             duration: 72,
             landings: 99,
             maxWorldY: 18_000,
-            wrapCount: 3,
-            usedPlatformCount: 12
+            redPlatformCount: 12
         )
         let result = BloopyResultBuilder.makeResult(from: summary)
         XCTAssertEqual(result.gameID, "bloopy")

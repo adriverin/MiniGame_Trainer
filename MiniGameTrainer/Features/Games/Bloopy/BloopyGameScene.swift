@@ -21,13 +21,11 @@ final class BloopyGameScene: SKScene {
     }
 
     private let ballNode: SKShapeNode
-    private let wrapBallNode: SKShapeNode
     private let scoreLabel = SKLabelNode(fontNamed: "AvenirNext-Heavy")
     private var trailNodes: [SKShapeNode] = []
     private var platformNodes: [Int: SKShapeNode] = [:]
     private let debugLabel = SKLabelNode(fontNamed: "Menlo")
     private let debugBallNode = SKShapeNode()
-    private let debugWrapNode = SKShapeNode()
     private let debugFollowNode = SKShapeNode()
     private let debugFailureNode = SKShapeNode()
     private let debugBoundsNode = SKShapeNode()
@@ -44,7 +42,6 @@ final class BloopyGameScene: SKScene {
         geometry = BloopyGeometry(sceneSize: size, config: config)
         logic = BloopyGameLogic(config: config, sceneSize: size)
         ballNode = SKShapeNode(circleOfRadius: geometry.ballRadius)
-        wrapBallNode = SKShapeNode(circleOfRadius: geometry.ballRadius)
         super.init(size: size)
         scaleMode = .resizeFill
         anchorPoint = .zero
@@ -148,13 +145,10 @@ final class BloopyGameScene: SKScene {
             trailNodes.append(node)
         }
 
-        for node in [ballNode, wrapBallNode] {
-            node.fillColor = config.ballColor
-            node.strokeColor = .clear
-            node.zPosition = 6
-            addChild(node)
-        }
-        wrapBallNode.isHidden = true
+        ballNode.fillColor = config.ballColor
+        ballNode.strokeColor = .clear
+        ballNode.zPosition = 6
+        addChild(ballNode)
 
         setupDebugNodes()
         updateDebugVisibility()
@@ -170,32 +164,20 @@ final class BloopyGameScene: SKScene {
         debugLabel.zPosition = 100
         addChild(debugLabel)
 
-        for node in [debugBallNode, debugWrapNode, debugFollowNode, debugFailureNode, debugBoundsNode] {
+        for node in [debugBallNode, debugFollowNode, debugFailureNode, debugBoundsNode] {
             node.fillColor = .clear
             node.lineWidth = 1
             node.zPosition = 80
             addChild(node)
         }
         debugBallNode.strokeColor = .systemPurple
-        debugWrapNode.strokeColor = UIColor.systemCyan.withAlphaComponent(0.8)
         debugFollowNode.strokeColor = .systemYellow
         debugFailureNode.strokeColor = .systemRed
         debugBoundsNode.strokeColor = UIColor.white.withAlphaComponent(0.7)
     }
 
     private func syncPresentation() {
-        let screen = logic.ballScreenPosition
-        ballNode.position = screen
-        let radius = geometry.ballRadius
-        if screen.x < radius {
-            wrapBallNode.position = CGPoint(x: screen.x + size.width, y: screen.y)
-            wrapBallNode.isHidden = false
-        } else if screen.x > size.width - radius {
-            wrapBallNode.position = CGPoint(x: screen.x - size.width, y: screen.y)
-            wrapBallNode.isHidden = false
-        } else {
-            wrapBallNode.isHidden = true
-        }
+        ballNode.position = logic.ballScreenPosition
         scoreLabel.text = "\(logic.score)"
         syncPlatforms()
         syncTrail()
@@ -203,12 +185,12 @@ final class BloopyGameScene: SKScene {
     }
 
     private func syncPlatforms() {
-        let liveIDs = Set(logic.platforms.map(\.id))
+        let liveIDs = Set(logic.platforms.filter(\.isActive).map(\.id))
         for (id, node) in platformNodes where !liveIDs.contains(id) {
             node.removeFromParent()
             platformNodes.removeValue(forKey: id)
         }
-        for platform in logic.platforms {
+        for platform in logic.platforms where platform.isActive {
             let node = platformNodes[platform.id] ?? makePlatformNode(platform)
             let height = geometry.platformHeight
             let rect = CGRect(x: -platform.width / 2, y: -height / 2, width: platform.width, height: height)
@@ -218,7 +200,9 @@ final class BloopyGameScene: SKScene {
                 x: platform.worldX,
                 y: geometry.screenY(worldY: platform.worldY, cameraY: logic.cameraY)
             )
-            node.fillColor = platform.kind == .used ? config.usedPlatformColor : config.platformColor
+            node.fillColor = platform.appearance == .red ? config.usedPlatformColor : config.platformColor
+            node.isHidden = false
+            node.alpha = 1
             if platformNodes[platform.id] == nil {
                 addChild(node)
                 platformNodes[platform.id] = node
@@ -250,6 +234,7 @@ final class BloopyGameScene: SKScene {
             )
             node.setScale(scale)
             node.alpha = config.trailMaximumOpacity + (config.trailMinimumOpacity - config.trailMaximumOpacity) * progress
+            node.fillColor = config.trailColor
             node.isHidden = false
         }
     }
@@ -282,7 +267,7 @@ final class BloopyGameScene: SKScene {
 
     private func updateDebugVisibility() {
         debugLabel.isHidden = !debugOptions.showOverlay
-        for node in [debugBallNode, debugWrapNode, debugFollowNode, debugFailureNode, debugBoundsNode] {
+        for node in [debugBallNode, debugFollowNode, debugFailureNode, debugBoundsNode] {
             node.isHidden = !debugOptions.showGeometry
         }
         syncTrail()
@@ -293,14 +278,6 @@ final class BloopyGameScene: SKScene {
         let screen = logic.ballScreenPosition
         let r = geometry.ballRadius
         debugBallNode.path = CGPath(ellipseIn: CGRect(x: screen.x - r, y: screen.y - r, width: r * 2, height: r * 2), transform: nil)
-        if !wrapBallNode.isHidden {
-            debugWrapNode.path = CGPath(
-                ellipseIn: CGRect(x: wrapBallNode.position.x - r, y: wrapBallNode.position.y - r, width: r * 2, height: r * 2),
-                transform: nil
-            )
-        } else {
-            debugWrapNode.path = nil
-        }
         let follow = UIBezierPath()
         follow.move(to: CGPoint(x: 0, y: geometry.cameraFollowY))
         follow.addLine(to: CGPoint(x: size.width, y: geometry.cameraFollowY))
@@ -328,8 +305,8 @@ final class BloopyGameScene: SKScene {
         v \(Int(logic.ballVelocity.dx)),\(Int(logic.ballVelocity.dy))
         g \(Int(logic.gravity))  impulse \(Int(logic.bounceImpulse))
         input \(logic.horizontalInput)  accel \(Int(logic.horizontalAcceleration))  maxVX \(Int(logic.maximumHorizontalSpeed))
-        cameraY \(Int(logic.cameraY))  wraps \(logic.wrapCount)
-        next \(next.map { "\($0.id) x=\(Int($0.worldX)) y=\(Int($0.worldY)) w=\(Int($0.width)) \($0.kind.rawValue)" } ?? "–")
+        cameraY \(Int(logic.cameraY))
+        next \(next.map { "\($0.id) x=\(Int($0.worldX)) y=\(Int($0.worldY)) w=\(Int($0.width)) \($0.appearance.rawValue) n=\($0.landingCount)" } ?? "–")
         reachable \(reachable)
         platforms \(logic.platforms.count)
         """

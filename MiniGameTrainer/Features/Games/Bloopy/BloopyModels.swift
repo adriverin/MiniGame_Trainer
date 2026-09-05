@@ -14,17 +14,43 @@ enum BloopyHorizontalInput: Int, Equatable {
     case right = 1
 }
 
-enum BloopyPlatformKind: String, Equatable, Codable, CaseIterable {
-    case fresh
-    case used
+enum BloopyPlatformAppearance: String, Equatable, Codable, CaseIterable {
+    case peach
+    case red
 }
 
 struct BloopyPlatform: Equatable, Identifiable {
+    /// Source-observed durability: peach after the first landing, red from the second onward.
+    static let redLandingThreshold = 2
+
     let id: Int
     var worldX: CGFloat
     var worldY: CGFloat
     var width: CGFloat
-    var kind: BloopyPlatformKind
+    var landingCount: Int
+    var isActive: Bool
+
+    init(
+        id: Int,
+        worldX: CGFloat,
+        worldY: CGFloat,
+        width: CGFloat,
+        landingCount: Int = 0,
+        isActive: Bool = true
+    ) {
+        self.id = id
+        self.worldX = worldX
+        self.worldY = worldY
+        self.width = width
+        self.landingCount = landingCount
+        self.isActive = isActive
+    }
+
+    var appearance: BloopyPlatformAppearance {
+        landingCount >= Self.redLandingThreshold ? .red : .peach
+    }
+
+    var isCollidable: Bool { isActive }
 }
 
 struct BloopyTrailSample: Equatable {
@@ -43,8 +69,7 @@ struct BloopySessionSummary: Equatable {
     let duration: TimeInterval
     let landings: Int
     let maxWorldY: CGFloat
-    let wrapCount: Int
-    let usedPlatformCount: Int
+    let redPlatformCount: Int
 }
 
 struct BloopyLanding: Equatable {

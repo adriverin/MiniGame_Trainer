@@ -95,6 +95,7 @@
 		421744908638C5617F7268CD /* KeepUpGameLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D8213E98E32919CEF89F95 /* KeepUpGameLogicTests.swift */; };
 		432848AF86E6DF545E713CD2 /* ReactTuningStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7869BA4A0FD2E525D46C5307 /* ReactTuningStore.swift */; };
 		43DF02249DFAFF5B6F2819F0 /* ColorReflexDifficultyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A94E448596CF88D50ABF6F1 /* ColorReflexDifficultyModel.swift */; };
+		441D88999CD35A757F4B0180 /* BloopyCollisionConsistencyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A7FBEFEE06F1678BC6F5CA /* BloopyCollisionConsistencyTests.swift */; };
 		44BDC94C2C3EA50DBF8F3597 /* TraceGameModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D354C256FC67E92B58BACDA /* TraceGameModule.swift */; };
 		4503375683C3E13E306E9B65 /* TraceGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FECA0A5FDBC0E06B959479 /* TraceGeometryTests.swift */; };
 		456861A9D8EC9CC96D381A6D /* TargetSpeedScoringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8642B782E0AEBBB70271DAA /* TargetSpeedScoringTests.swift */; };
@@ -607,6 +608,7 @@
 		C42CE29396E9F559BD54C460 /* TowerStackModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowerStackModels.swift; sourceTree = "<group>"; };
 		C450AB22E86BA2144D7B928E /* TargetSpeedGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetSpeedGeometry.swift; sourceTree = "<group>"; };
 		C5993BCA1CCE7615368347FA /* DirectionsDifficultyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsDifficultyModel.swift; sourceTree = "<group>"; };
+		C5A7FBEFEE06F1678BC6F5CA /* BloopyCollisionConsistencyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloopyCollisionConsistencyTests.swift; sourceTree = "<group>"; };
 		C64876C9D6E17854591F37C1 /* KeepUpTuningStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepUpTuningStore.swift; sourceTree = "<group>"; };
 		C69F87E3CE7BF08CFABFC587 /* BloopyGameConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloopyGameConfig.swift; sourceTree = "<group>"; };
 		C8491CA070C71138F9C78732 /* TimesUpGameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesUpGameViewModel.swift; sourceTree = "<group>"; };
@@ -1353,6 +1355,7 @@
 				0685B6588A46498BA09B564F /* AppRouterAttemptTests.swift */,
 				D5B13F586E9E448F72C1E34F /* AttemptCalendarTests.swift */,
 				086DB9F30677AF540B6F33AF /* AttemptManagerTests.swift */,
+				C5A7FBEFEE06F1678BC6F5CA /* BloopyCollisionConsistencyTests.swift */,
 				278774BF78DD19EB8BC201D4 /* BloopyDifficultyTests.swift */,
 				72896CE937363C795D04C4E9 /* BloopyPersistenceTests.swift */,
 				A46FD533EFCBEC17E20E0C3F /* BloopyPhysicsTests.swift */,
@@ -1594,6 +1597,7 @@
 				C2EC3822C328D27A0AD19AA8 /* AppRouterAttemptTests.swift in Sources */,
 				05C1BB2B366AB34198DA84D4 /* AttemptCalendarTests.swift in Sources */,
 				9A00829EBA4D782A61EE9BB1 /* AttemptManagerTests.swift in Sources */,
+				441D88999CD35A757F4B0180 /* BloopyCollisionConsistencyTests.swift in Sources */,
 				075B96B21E7065B3BBB688B8 /* BloopyDifficultyTests.swift in Sources */,
 				1C84796435A24614C8A22A99 /* BloopyPersistenceTests.swift in Sources */,
 				B26A72EB6826CDFE3C782E85 /* BloopyPhysicsTests.swift in Sources */,
