@@ -22,7 +22,12 @@ struct AttemptGateView: View {
             ScreenBackground()
             ScrollView {
                 VStack(spacing: 24) {
-                    Spacer(minLength: 12)
+                    Image(systemName: "arrow.clockwise.circle")
+                        .font(.system(size: 44, weight: .medium))
+                        .foregroundStyle(AppTheme.Colors.accent)
+                        .padding(AppTheme.Spacing.xl)
+                        .background(AppTheme.Colors.surface, in: RoundedRectangle(cornerRadius: AppTheme.Radius.large))
+                        .accessibilityHidden(true)
                     Text(title)
                         .font(AppTheme.Fonts.title)
                         .foregroundStyle(AppTheme.Colors.textPrimary)
@@ -45,6 +50,8 @@ struct AttemptGateView: View {
                     .padding(.top, 8)
                 }
                 .padding(AppTheme.Metrics.screenPadding)
+                .frame(maxWidth: AppTheme.Metrics.contentWidth)
+                .frame(maxWidth: .infinity)
             }
         }
         .navigationTitle(gameName)
@@ -59,10 +66,10 @@ struct AttemptGateView: View {
     private var contentButtons: some View {
         switch attempts.availability(for: gameID) {
         case .proUnlimited, .free, .rewarded:
-            PrimaryButton(title: "PLAY", systemImage: "play.fill") {
+            PrimaryButton(title: "Play", systemImage: "play.fill") {
                 router.startGame(gameID)
             }
-            PrimaryButton(title: "Back", systemImage: "chevron.left", style: .outlined) {
+            PrimaryButton(title: "Back", systemImage: "chevron.left", style: .quiet) {
                 router.quitToIntro()
             }
         case .exhausted:
@@ -83,16 +90,16 @@ struct AttemptGateView: View {
                 Task { await ads.preload() }
             }
         } else {
-            PrimaryButton(title: "Watch ad · +3 attempts", systemImage: "play.rectangle.fill") {
+            PrimaryButton(title: "Watch Ad · +3 Attempts", systemImage: "play.rectangle.fill") {
                 Task { await watchAd() }
             }
             .disabled(isWatching || ads.readiness == .presenting)
         }
 
-        PrimaryButton(title: "Get Pro · Unlimited", systemImage: "star.fill", style: .outlined) {
+        PrimaryButton(title: "Get Pro · Unlimited Attempts", systemImage: "star.fill", style: .outlined) {
             router.showPaywall()
         }
-        PrimaryButton(title: "Back", systemImage: "chevron.left", style: .outlined) {
+        PrimaryButton(title: "Back", systemImage: "chevron.left", style: .quiet) {
             router.quitToIntro()
         }
     }
@@ -116,7 +123,7 @@ struct AttemptGateView: View {
             let noun = remaining == 1 ? "attempt" : "attempts"
             return "\(remaining) bonus \(noun) remaining for \(gameName)."
         case .exhausted:
-            return "You've used today's free attempts for \(gameName)."
+            return "You've used today's free attempts for \(gameName). Watch an optional ad for 3 more, or come back tomorrow."
         }
     }
 

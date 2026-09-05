@@ -4,6 +4,7 @@ struct PrimaryButton: View {
     enum Style {
         case filled
         case outlined
+        case quiet
     }
 
     let title: String
@@ -13,28 +14,45 @@ struct PrimaryButton: View {
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 10) {
+            HStack(spacing: AppTheme.Spacing.sm) {
                 if let systemImage {
-                    Image(systemName: systemImage)
+                    Image(systemName: systemImage).accessibilityHidden(true)
                 }
-                Text(title)
+                Text(title).fixedSize(horizontal: false, vertical: true)
             }
             .font(AppTheme.Fonts.button)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 16)
-            .foregroundStyle(style == .filled ? Color.black.opacity(0.85) : AppTheme.Colors.textPrimary)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, AppTheme.Spacing.lg)
+            .padding(.vertical, AppTheme.Spacing.md)
+            .frame(maxWidth: .infinity, minHeight: AppTheme.Metrics.controlHeight)
+            .foregroundStyle(style == .filled ? AppTheme.Colors.background : AppTheme.Colors.textPrimary)
             .background {
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .fill(style == .filled ? AppTheme.Colors.textPrimary : Color.clear)
+                RoundedRectangle(cornerRadius: AppTheme.Radius.medium, style: .continuous)
+                    .fill(style == .filled ? AppTheme.Colors.accent :
+                            style == .outlined ? AppTheme.Colors.surface : Color.clear)
             }
             .overlay {
                 if style == .outlined {
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .strokeBorder(Color.white.opacity(0.3), lineWidth: 1.5)
+                    RoundedRectangle(cornerRadius: AppTheme.Radius.medium, style: .continuous)
+                        .strokeBorder(AppTheme.Colors.divider, lineWidth: 1)
                 }
             }
+            .contentShape(RoundedRectangle(cornerRadius: AppTheme.Radius.medium))
         }
-        .buttonStyle(.plain)
+        .buttonStyle(ShellPressStyle())
         .accessibilityLabel(title)
+    }
+}
+
+/// Shared feedback without continuous animation, and with an explicit disabled state.
+struct ShellPressStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .opacity(isEnabled ? (configuration.isPressed ? 0.8 : 1) : 0.45)
+            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.985 : 1)
+            .animation(reduceMotion ? nil : .easeOut(duration: 0.15), value: configuration.isPressed)
     }
 }

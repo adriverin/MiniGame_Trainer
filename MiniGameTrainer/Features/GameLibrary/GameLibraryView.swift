@@ -6,8 +6,8 @@ struct GameLibraryView: View {
     @EnvironmentObject private var statistics: StatisticsStore
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            Text("GAMES")
+        LazyVStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
+            Text("\(GameRegistry.descriptors.count) games to make your own")
                 .font(AppTheme.Fonts.caption)
                 .foregroundStyle(AppTheme.Colors.textSecondary)
                 .accessibilityAddTraits(.isHeader)

@@ -8,6 +8,7 @@ struct ResultsView: View {
     @EnvironmentObject private var statistics: StatisticsStore
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var appeared = false
+    @ScaledMetric(relativeTo: .largeTitle) private var scoreSize: CGFloat = 76
 
     private var descriptor: MiniGameDescriptor? {
         GameRegistry.descriptor(for: result.gameID)
@@ -37,12 +38,12 @@ struct ResultsView: View {
 
                     CardContainer {
                         VStack(spacing: 2) {
-                            StatRow(label: "Best", value: result.scorePresentation.formatted(stats.bestScore), highlight: isNewBest)
+                            StatRow(label: "Personal Best", value: result.scorePresentation.formatted(stats.bestScore), highlight: isNewBest)
                             Divider().overlay(AppTheme.Colors.divider)
-                            StatRow(label: "Games played", value: "\(stats.gamesPlayed)")
-                            StatRow(label: "Average score", value: result.scorePresentation.formattedAverage(stats.averageScore))
+                            StatRow(label: "Games Played", value: "\(stats.gamesPlayed)")
+                            StatRow(label: "Average Score", value: result.scorePresentation.formattedAverage(stats.averageScore))
                             if let best = stats.bestReactionTime {
-                                StatRow(label: "Best reaction (all time)", value: MetricFormatter.milliseconds(best))
+                                StatRow(label: "Best Reaction", value: MetricFormatter.milliseconds(best))
                             }
                         }
                     }
@@ -50,7 +51,7 @@ struct ResultsView: View {
                     if !result.metrics.isEmpty {
                         CardContainer {
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("THIS SESSION")
+                                Text("This Session")
                                     .font(AppTheme.Fonts.caption)
                                     .foregroundStyle(AppTheme.Colors.textSecondary)
                                     .padding(.bottom, 6)
@@ -65,13 +66,15 @@ struct ResultsView: View {
                         PrimaryButton(title: "Try Again", systemImage: "arrow.counterclockwise") {
                             router.retry(gameID: result.gameID)
                         }
-                        PrimaryButton(title: "Home", systemImage: "house.fill", style: .outlined) {
+                        PrimaryButton(title: "Library", systemImage: "square.grid.2x2", style: .outlined) {
                             router.goHome()
                         }
                     }
                     .padding(.top, 8)
                 }
                 .padding(AppTheme.Metrics.screenPadding)
+                .frame(maxWidth: AppTheme.Metrics.contentWidth)
+                .frame(maxWidth: .infinity)
             }
         }
         .navigationTitle("Results")
@@ -81,7 +84,7 @@ struct ResultsView: View {
             if reduceMotion {
                 appeared = true
             } else {
-                withAnimation(.spring(duration: 0.5)) { appeared = true }
+                withAnimation(.easeOut(duration: 0.25)) { appeared = true }
             }
         }
     }
@@ -92,17 +95,15 @@ struct ResultsView: View {
                 .font(AppTheme.Fonts.caption)
                 .foregroundStyle(AppTheme.Colors.textSecondary)
             Text(result.scorePresentation.formatted(result.score))
-                .font(AppTheme.Fonts.display(84).monospacedDigit())
+                .font(AppTheme.Fonts.display(scoreSize).monospacedDigit())
+                .lineLimit(1)
+                .minimumScaleFactor(0.35)
+                .frame(maxWidth: .infinity)
                 .foregroundStyle(AppTheme.Colors.textPrimary)
-                .scaleEffect(appeared ? 1 : 0.7)
+                .scaleEffect(appeared ? 1 : 0.96)
                 .opacity(appeared ? 1 : 0)
             if isNewBest {
-                Label("New personal best", systemImage: "star.fill")
-                    .font(AppTheme.Fonts.caption)
-                    .foregroundStyle(AppTheme.Colors.success)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(Capsule().fill(AppTheme.Colors.success.opacity(0.15)))
+                StatusBadge(title: "New Personal Best", systemImage: "trophy.fill", color: AppTheme.Colors.success)
             }
         }
         .accessibilityElement(children: .combine)

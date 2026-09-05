@@ -11,10 +11,13 @@ struct SettingsView: View {
 
     var body: some View {
         Form {
-            Section("Subscription") {
-                LabeledContent("Status", value: purchases.isPro ? "Pro" : "Free")
+            Section("Pro") {
+                LabeledContent("\(AppInfo.name) Pro") {
+                    Text(purchases.isPro ? "Active" : "Free Plan")
+                        .foregroundStyle(purchases.isPro ? AppTheme.Colors.success : AppTheme.Colors.textSecondary)
+                }
                 if purchases.isPro {
-                    Text("Pro active")
+                    Label("Unlimited attempts", systemImage: "infinity")
                         .foregroundStyle(AppTheme.Colors.success)
                 } else {
                     Button("Get Pro") {
@@ -51,7 +54,11 @@ struct SettingsView: View {
                 ForEach(GameRegistry.descriptors) { descriptor in
                     let stats = statistics.statistics(for: descriptor.id)
                     LabeledContent(descriptor.name) {
-                        Text("Best \(descriptor.scorePresentation.formatted(stats.bestScore)) · \(stats.gamesPlayed) played")
+                        Text(stats.gamesPlayed > 0
+                             ? "\(descriptor.scorePresentation.formatted(stats.bestScore)) · \(stats.gamesPlayed) played"
+                             : "No score yet")
+                            .monospacedDigit()
+                            .fixedSize(horizontal: false, vertical: true)
                             .foregroundStyle(AppTheme.Colors.textSecondary)
                     }
                 }
@@ -60,12 +67,15 @@ struct SettingsView: View {
                 }
             }
 
-            Section("Legal") {
-                if consent.privacyOptionsRequired {
+            if consent.privacyOptionsRequired {
+                Section("Privacy") {
                     Button("Privacy Options") {
                         Task { await consent.presentPrivacyOptions() }
                     }
                 }
+            }
+
+            Section("Legal") {
                 Link("Terms of Use", destination: MonetizationConfiguration.termsOfUseURL)
                 Link("Privacy Policy", destination: MonetizationConfiguration.privacyPolicyURL)
             }
@@ -74,16 +84,19 @@ struct SettingsView: View {
             MonetizationDebugSection()
             #endif
 
-            Section {
+            Section("About") {
                 LabeledContent("Version", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "–")
                 Text(AppInfo.disclaimer)
                     .font(.footnote)
                     .foregroundStyle(AppTheme.Colors.textSecondary)
             }
         }
+        .font(AppTheme.Fonts.body)
+        .tint(AppTheme.Colors.accent)
         .scrollContentBackground(.hidden)
         .background(ScreenBackground())
         .navigationTitle("Settings")
+        .navigationBarTitleDisplayMode(.inline)
         .confirmationDialog("Reset all statistics?", isPresented: $confirmReset, titleVisibility: .visible) {
             Button("Reset", role: .destructive) { statistics.resetAll() }
             Button("Cancel", role: .cancel) {}

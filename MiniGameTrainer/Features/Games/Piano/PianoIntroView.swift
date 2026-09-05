@@ -10,47 +10,13 @@ struct PianoIntroView: View {
     private var stats: GameStatistics { statistics.statistics(for: descriptor.id) }
 
     var body: some View {
-        ZStack {
-            ScreenBackground()
-            VStack(spacing: 28) {
-                Spacer(minLength: 12)
-                PianoPreviewIllustration()
-                    .frame(height: 190)
-                    .accessibilityHidden(true)
-
-                VStack(spacing: 10) {
-                    Text(descriptor.name)
-                        .font(AppTheme.Fonts.title)
-                        .foregroundStyle(AppTheme.Colors.textPrimary)
-                    Text(descriptor.instructions)
-                        .font(AppTheme.Fonts.body)
-                        .foregroundStyle(AppTheme.Colors.textSecondary)
-                        .multilineTextAlignment(.center)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(.horizontal, 8)
-                }
-
-                CardContainer {
-                    VStack(spacing: 2) {
-                        StatRow(label: "Best Score", value: "\(stats.bestScore)")
-                        StatRow(label: "Games Played", value: "\(stats.gamesPlayed)")
-                        if stats.gamesPlayed > 0 {
-                            StatRow(label: "Average Score", value: String(format: "%.1f", stats.averageScore))
-                        }
-                        if let reaction = stats.bestReactionTime {
-                            StatRow(label: "Best Reaction", value: MetricFormatter.milliseconds(reaction))
-                        }
-                    }
-                }
-
-                Spacer()
-
-                PrimaryButton(title: "PLAY", systemImage: "play.fill") {
-                    router.startGame(descriptor.id)
-                }
-                .accessibilityHint("Starts a countdown, then the game")
-            }
-            .padding(AppTheme.Metrics.screenPadding)
+        GameIntroLayout(
+            descriptor: descriptor,
+            statistics: stats,
+            playHint: "Starts a countdown, then the game",
+            onPlay: { router.startGame(descriptor.id) }
+        ) {
+            PianoPreviewIllustration()
         }
         .navigationTitle(descriptor.name)
         .navigationBarTitleDisplayMode(.inline)

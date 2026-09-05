@@ -12,12 +12,17 @@ struct AttemptStatusBanner: View {
         if purchases.isPro {
             EmptyView()
         } else {
-            Text(label)
+            Label(label, systemImage: "circle.dotted")
                 .font(AppTheme.Fonts.caption)
                 .foregroundStyle(AppTheme.Colors.textSecondary)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
+                .monospacedDigit()
+                .padding(.horizontal, AppTheme.Spacing.md)
+                .padding(.vertical, AppTheme.Spacing.sm)
+                .background(AppTheme.Colors.surface, in: Capsule())
+                .padding(.horizontal, AppTheme.Metrics.screenPadding)
+                .padding(.vertical, AppTheme.Spacing.sm)
                 .frame(maxWidth: .infinity)
+                .background(AppTheme.Colors.background)
                 .accessibilityLabel(label)
         }
     }

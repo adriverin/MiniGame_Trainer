@@ -95,6 +95,20 @@ final class CenterHitScoringTests: XCTestCase {
         )
     }
 
+    @MainActor
+    func testLibraryDistinguishesUnplayedFromEarnedZeroScore() {
+        var stats = GameStatistics(gameID: "centerHit")
+        XCTAssertEqual(
+            GameCardView(descriptor: CenterHitGameModule.descriptor, statistics: stats, onPlay: {}).bestScoreLabel,
+            "No score yet"
+        )
+        stats.gamesPlayed = 1
+        XCTAssertEqual(
+            GameCardView(descriptor: CenterHitGameModule.descriptor, statistics: stats, onPlay: {}).bestScoreLabel,
+            "0.00%"
+        )
+    }
+
     func testLegacyScorePresentationJSONDecodesWithOriginalDefaults() throws {
         let data = #"{"label":"Average","unit":"ms","comparison":"lowerIsBetter"}"#.data(using: .utf8)!
         let decoded = try JSONDecoder().decode(ScorePresentation.self, from: data)

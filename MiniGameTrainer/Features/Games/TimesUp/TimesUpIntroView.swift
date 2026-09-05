@@ -10,48 +10,13 @@ struct TimesUpIntroView: View {
     private var stats: GameStatistics { statistics.statistics(for: descriptor.id) }
 
     var body: some View {
-        ZStack {
-            ScreenBackground()
-            VStack(spacing: 26) {
-                Spacer(minLength: 12)
-                TimesUpPreviewIllustration(config: tuning.config)
-                    .frame(height: 220)
-                    .accessibilityHidden(true)
-
-                VStack(spacing: 10) {
-                    Text(descriptor.name.uppercased())
-                        .font(AppTheme.Fonts.title)
-                        .foregroundStyle(AppTheme.Colors.textPrimary)
-                    Text(descriptor.instructions)
-                        .font(AppTheme.Fonts.body)
-                        .foregroundStyle(AppTheme.Colors.textSecondary)
-                        .multilineTextAlignment(.center)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-
-                CardContainer {
-                    VStack(spacing: 2) {
-                        StatRow(
-                            label: "Best Average",
-                            value: stats.gamesPlayed > 0 ? descriptor.scorePresentation.formatted(stats.bestScore) : "–"
-                        )
-                        StatRow(label: "Games Played", value: "\(stats.gamesPlayed)")
-                        if stats.gamesPlayed > 0 {
-                            StatRow(
-                                label: "Average Result",
-                                value: descriptor.scorePresentation.formattedAverage(stats.averageScore)
-                            )
-                        }
-                    }
-                }
-
-                Spacer()
-                PrimaryButton(title: "PLAY", systemImage: "play.fill") {
-                    router.startGame(descriptor.id)
-                }
-                .accessibilityHint("Starts TIME'S UP")
-            }
-            .padding(AppTheme.Metrics.screenPadding)
+        GameIntroLayout(
+            descriptor: descriptor,
+            statistics: stats,
+            playHint: "Starts TIME'S UP",
+            onPlay: { router.startGame(descriptor.id) }
+        ) {
+            TimesUpPreviewIllustration(config: tuning.config)
         }
         .navigationTitle(descriptor.name)
         .navigationBarTitleDisplayMode(.inline)

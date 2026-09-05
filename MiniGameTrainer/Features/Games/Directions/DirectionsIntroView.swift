@@ -10,42 +10,13 @@ struct DirectionsIntroView: View {
     private var stats: GameStatistics { statistics.statistics(for: descriptor.id) }
 
     var body: some View {
-        ZStack {
-            ScreenBackground()
-            VStack(spacing: 26) {
-                Spacer(minLength: 12)
-                DirectionsPreviewIllustration(config: tuning.config)
-                    .frame(height: 220)
-                    .accessibilityHidden(true)
-
-                VStack(spacing: 10) {
-                    Text(descriptor.name.uppercased())
-                        .font(AppTheme.Fonts.title)
-                        .foregroundStyle(AppTheme.Colors.textPrimary)
-                    Text(descriptor.instructions)
-                        .font(AppTheme.Fonts.body)
-                        .foregroundStyle(AppTheme.Colors.textSecondary)
-                        .multilineTextAlignment(.center)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-
-                CardContainer {
-                    VStack(spacing: 2) {
-                        StatRow(label: "Best Score", value: stats.gamesPlayed > 0 ? "\(stats.bestScore)" : "–")
-                        StatRow(label: "Games Played", value: "\(stats.gamesPlayed)")
-                        if stats.gamesPlayed > 0 {
-                            StatRow(label: "Average Score", value: String(format: "%.1f", stats.averageScore))
-                        }
-                    }
-                }
-
-                Spacer()
-                PrimaryButton(title: "PLAY", systemImage: "play.fill") {
-                    router.startGame(descriptor.id)
-                }
-                .accessibilityHint("Starts Directions immediately")
-            }
-            .padding(AppTheme.Metrics.screenPadding)
+        GameIntroLayout(
+            descriptor: descriptor,
+            statistics: stats,
+            playHint: "Starts Directions immediately",
+            onPlay: { router.startGame(descriptor.id) }
+        ) {
+            DirectionsPreviewIllustration(config: tuning.config)
         }
         .navigationTitle(descriptor.name)
         .navigationBarTitleDisplayMode(.inline)

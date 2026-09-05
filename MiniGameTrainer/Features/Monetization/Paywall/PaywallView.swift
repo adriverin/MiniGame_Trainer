@@ -3,6 +3,14 @@ import SwiftUI
 struct PaywallView: View {
     @EnvironmentObject private var router: AppRouter
     @EnvironmentObject private var purchases: PurchaseManager
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var selectedProductID: String?
+
+    private var selectedProduct: StoreProduct? {
+        guard let selectedProductID else { return nil }
+        return [purchases.yearlyProduct, purchases.monthlyProduct]
+            .compactMap { $0 }.first { $0.id == selectedProductID }
+    }
 
     var body: some View {
         ZStack {
@@ -10,10 +18,11 @@ struct PaywallView: View {
             ScrollView {
                 VStack(spacing: 24) {
                     VStack(spacing: 10) {
-                        Text("PRO")
+                        StatusBadge(title: purchases.isPro ? "Pro Active" : "Pro", systemImage: "sparkles")
+                        Text("\(AppInfo.name) Pro")
                             .font(AppTheme.Fonts.title)
                             .foregroundStyle(AppTheme.Colors.textPrimary)
-                        Text("Unlimited attempts. No ads.")
+                        Text(purchases.isPro ? "Your next personal best is waiting." : "Keep playing. Keep improving.")
                             .font(AppTheme.Fonts.body)
                             .foregroundStyle(AppTheme.Colors.textSecondary)
                             .multilineTextAlignment(.center)
@@ -27,13 +36,45 @@ struct PaywallView: View {
                         }
                     }
 
-                    productSection
+                    if purchases.isPro {
+                        CardContainer {
+                            VStack(spacing: AppTheme.Spacing.md) {
+                                StatusBadge(title: "Unlimited Attempts", systemImage: "infinity", color: AppTheme.Colors.success)
+                                Text("Pro is active in every game.")
+                                    .font(AppTheme.Fonts.body)
+                                    .foregroundStyle(AppTheme.Colors.textSecondary)
+                            }
+                            .frame(maxWidth: .infinity)
+                        }
+                        PrimaryButton(title: "Continue Playing", systemImage: "play.fill") {
+                            router.dismissPaywall()
+                        }
+                    } else {
+                        productSection
+                        if let product = selectedProduct {
+                            PrimaryButton(title: "Subscribe · \(product.displayPrice) / \(product.isYearly ? "year" : "month")") {
+                                Task { await purchases.purchase(product) }
+                            }
+                            .disabled(purchases.isBusy)
+                            .accessibilityIdentifier("subscribe")
+                        } else if purchases.yearlyProduct != nil || purchases.monthlyProduct != nil {
+                            PrimaryButton(title: "Choose a Plan") {}
+                                .disabled(true)
+                        }
+                        if purchases.yearlyProduct != nil || purchases.monthlyProduct != nil {
+                            Text("Auto-renews until cancelled. Manage or cancel in your App Store account settings.")
+                                .font(AppTheme.Fonts.caption)
+                                .foregroundStyle(AppTheme.Colors.textSecondary)
+                                .multilineTextAlignment(.center)
+                        }
+                    }
                     statusSection
 
                     Button("Restore Purchases") {
                         Task { await purchases.restore() }
                     }
                     .font(AppTheme.Fonts.button)
+                    .frame(minHeight: 44)
                     .foregroundStyle(AppTheme.Colors.accent)
                     .disabled(purchases.isBusy)
 
@@ -41,9 +82,12 @@ struct PaywallView: View {
                         .padding(.top, 4)
                 }
                 .padding(AppTheme.Metrics.screenPadding)
+                .frame(maxWidth: AppTheme.Metrics.contentWidth)
+                .frame(maxWidth: .infinity)
             }
         }
         .navigationTitle("Pro")
+        .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.hidden, for: .navigationBar)
         .toolbar {
@@ -72,7 +116,7 @@ struct PaywallView: View {
     private var productSection: some View {
         switch purchases.catalogState {
         case .idle, .loading:
-            ProgressView()
+            ProgressView("Loading plans…")
                 .tint(AppTheme.Colors.accent)
                 .padding(.vertical, 12)
         case .failed(let message):
@@ -87,11 +131,15 @@ struct PaywallView: View {
             }
         case .loaded:
             VStack(spacing: 12) {
+                Text("Choose your plan")
+                    .font(AppTheme.Fonts.cardTitle)
+                    .foregroundStyle(AppTheme.Colors.textPrimary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 if let yearly = purchases.yearlyProduct {
-                    productCard(yearly, highlight: true, subtitle: "Annual")
+                    productCard(yearly)
                 }
                 if let monthly = purchases.monthlyProduct {
-                    productCard(monthly, highlight: false, subtitle: "Monthly")
+                    productCard(monthly)
                 }
                 if purchases.yearlyProduct == nil && purchases.monthlyProduct == nil {
                     Text("Subscriptions are unavailable right now.")
@@ -137,38 +185,48 @@ struct PaywallView: View {
         }
     }
 
-    private func productCard(_ product: StoreProduct, highlight: Bool, subtitle: String) -> some View {
-        Button {
-            Task { await purchases.purchase(product) }
+    private func productCard(_ product: StoreProduct) -> some View {
+        let isSelected = selectedProductID == product.id
+        return Button {
+            withAnimation(reduceMotion ? nil : .easeOut(duration: 0.15)) {
+                selectedProductID = product.id
+            }
         } label: {
-            VStack(alignment: .leading, spacing: 6) {
-                HStack {
-                    Text(highlight ? "Annual Pro" : "Monthly Pro")
-                        .font(AppTheme.Fonts.heading)
+            HStack(alignment: .center, spacing: AppTheme.Spacing.md) {
+                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                    .font(.title2)
+                    .foregroundStyle(isSelected ? AppTheme.Colors.accent : AppTheme.Colors.textSecondary)
+                    .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
+                    Text(product.isYearly ? "Annual" : "Monthly")
+                        .font(AppTheme.Fonts.cardTitle)
                         .foregroundStyle(AppTheme.Colors.textPrimary)
-                    Spacer()
-                    Text(product.displayPrice)
-                        .font(AppTheme.Fonts.heading)
+                    Text("\(product.displayPrice) / \(product.isYearly ? "year" : "month")")
+                        .font(AppTheme.Fonts.body.weight(.semibold).monospacedDigit())
                         .foregroundStyle(AppTheme.Colors.textPrimary)
+                    Text(product.isYearly ? "Billed once a year" : "Billed every month")
+                        .font(AppTheme.Fonts.caption)
+                        .foregroundStyle(AppTheme.Colors.textSecondary)
                 }
-                Text(subtitle)
-                    .font(AppTheme.Fonts.caption)
-                    .foregroundStyle(highlight ? AppTheme.Colors.accent : AppTheme.Colors.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+                Spacer(minLength: 0)
             }
             .padding(AppTheme.Metrics.cardPadding)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background {
-                RoundedRectangle(cornerRadius: AppTheme.Metrics.cornerRadius, style: .continuous)
-                    .fill(highlight ? AppTheme.Colors.surfaceElevated : AppTheme.Colors.surface)
-            }
+            .background(isSelected ? AppTheme.Colors.surfaceElevated : AppTheme.Colors.surface,
+                        in: RoundedRectangle(cornerRadius: AppTheme.Radius.large))
             .overlay {
-                RoundedRectangle(cornerRadius: AppTheme.Metrics.cornerRadius, style: .continuous)
-                    .strokeBorder(highlight ? AppTheme.Colors.accent.opacity(0.7) : Color.clear, lineWidth: 1.5)
+                RoundedRectangle(cornerRadius: AppTheme.Radius.large)
+                    .strokeBorder(isSelected ? AppTheme.Colors.accent : AppTheme.Colors.divider,
+                                  lineWidth: isSelected ? 2 : 1)
             }
         }
-        .buttonStyle(.plain)
+        .buttonStyle(ShellPressStyle())
         .disabled(purchases.isBusy || purchases.isPro)
-        .accessibilityLabel("\(highlight ? "Annual Pro" : "Monthly Pro") \(product.displayPrice)")
+        .accessibilityLabel("\(product.isYearly ? "Annual" : "Monthly") Pro, \(product.displayPrice) per \(product.isYearly ? "year" : "month")")
+        .accessibilityHint("Selects this subscription plan")
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityIdentifier(product.isYearly ? "plan.annual" : "plan.monthly")
     }
 
     private func benefitRow(_ text: String) -> some View {

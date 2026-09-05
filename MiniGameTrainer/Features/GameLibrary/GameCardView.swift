@@ -9,70 +9,71 @@ struct GameCardView: View {
         descriptor.scorePresentation.formatted(statistics.bestScore)
     }
 
+    var bestScoreLabel: String {
+        statistics.gamesPlayed > 0 ? formattedBestScore : "No score yet"
+    }
+
     var body: some View {
         Button(action: onPlay) {
             CardContainer {
-                VStack(alignment: .leading, spacing: 14) {
-                    HStack(alignment: .top, spacing: 14) {
+                VStack(alignment: .leading, spacing: AppTheme.Spacing.lg) {
+                    HStack(alignment: .top, spacing: AppTheme.Spacing.md) {
                         Image(systemName: descriptor.iconName)
-                            .font(.system(size: 26, weight: .bold))
+                            .font(.system(size: 24, weight: .semibold))
                             .foregroundStyle(AppTheme.Colors.accent)
-                            .frame(width: 52, height: 52)
-                            .background {
-                                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                    .fill(AppTheme.Colors.surfaceElevated)
-                            }
-                        VStack(alignment: .leading, spacing: 4) {
+                            .frame(width: 48, height: 48)
+                            .background(AppTheme.Colors.accent.opacity(0.10), in: RoundedRectangle(cornerRadius: AppTheme.Radius.small))
+                            .accessibilityHidden(true)
+                        VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
                             Text(descriptor.name)
-                                .font(AppTheme.Fonts.heading)
+                                .font(AppTheme.Fonts.cardTitle)
                                 .foregroundStyle(AppTheme.Colors.textPrimary)
-                            Text(descriptor.skills.joined(separator: " + "))
+                            Text(descriptor.skills.joined(separator: " · "))
                                 .font(AppTheme.Fonts.caption)
                                 .foregroundStyle(AppTheme.Colors.textSecondary)
                         }
-                        Spacer()
-                    }
-
-                    Text(descriptor.subtitle)
-                        .font(AppTheme.Fonts.body)
-                        .foregroundStyle(AppTheme.Colors.textSecondary)
                         .fixedSize(horizontal: false, vertical: true)
-
-                    HStack(alignment: .lastTextBaseline) {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Best")
-                                .font(AppTheme.Fonts.caption)
-                                .foregroundStyle(AppTheme.Colors.textSecondary)
-                            Text(formattedBestScore)
-                                .font(AppTheme.Fonts.display(28).monospacedDigit())
-                                .foregroundStyle(AppTheme.Colors.textPrimary)
+                        Spacer(minLength: 0)
+                    }
+                    ViewThatFits(in: .horizontal) {
+                        HStack(alignment: .firstTextBaseline) {
+                            bestScore
+                            Spacer(minLength: AppTheme.Spacing.md)
+                            playLabel.fixedSize()
                         }
-                        if statistics.gamesPlayed > 0 {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Played")
-                                    .font(AppTheme.Fonts.caption)
-                                    .foregroundStyle(AppTheme.Colors.textSecondary)
-                                Text("\(statistics.gamesPlayed)")
-                                    .font(AppTheme.Fonts.display(28).monospacedDigit())
-                                    .foregroundStyle(AppTheme.Colors.textPrimary)
-                            }
-                            .padding(.leading, 24)
+                        VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
+                            bestScore
+                            playLabel
                         }
-                        Spacer()
-                        Text("PLAY")
-                            .font(AppTheme.Fonts.button)
-                            .foregroundStyle(Color.black.opacity(0.85))
-                            .padding(.horizontal, 22)
-                            .padding(.vertical, 10)
-                            .background(Capsule().fill(AppTheme.Colors.textPrimary))
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
-        .buttonStyle(.plain)
+        .buttonStyle(ShellPressStyle())
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(descriptor.name). \(descriptor.subtitle). Best score \(formattedBestScore).")
-        .accessibilityHint("Opens the game")
-        .accessibilityAddTraits(.isButton)
+        .accessibilityLabel("\(descriptor.name). \(descriptor.subtitle). \(statistics.gamesPlayed > 0 ? "Personal best " : "")\(bestScoreLabel).")
+        .accessibilityHint("Opens instructions and the Play button")
+        .accessibilityIdentifier("gameCard.\(descriptor.id)")
+    }
+
+    private var bestScore: some View {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
+            if statistics.gamesPlayed > 0 {
+                Text("Personal Best")
+                    .font(AppTheme.Fonts.caption)
+                    .foregroundStyle(AppTheme.Colors.textSecondary)
+            }
+            Text(bestScoreLabel)
+                .font(statistics.gamesPlayed > 0 ? AppTheme.Fonts.numeric : AppTheme.Fonts.secondary)
+                .foregroundStyle(statistics.gamesPlayed > 0 ? AppTheme.Colors.textPrimary : AppTheme.Colors.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private var playLabel: some View {
+        Label("Play", systemImage: "arrow.up.right")
+            .font(AppTheme.Fonts.button)
+            .foregroundStyle(AppTheme.Colors.accent)
     }
 }
