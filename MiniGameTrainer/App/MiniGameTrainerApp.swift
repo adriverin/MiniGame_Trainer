@@ -45,7 +45,8 @@ struct MiniGameTrainerApp: App {
         if LaneRushCheckpointLaunch.isEnabled {
             LaneRushStaticRoadView(
                 vehicleDepth: LaneRushVehicleDepth.launchValue(),
-                playerCheckpoint: LaneRushPlayerCheckpoint.launchValue()
+                playerCheckpoint: LaneRushPlayerCheckpoint.launchValue(),
+                dynamicCheckpoint: LaneRushDynamicCheckpoint.launchValue()
             )
         } else {
             RootView()

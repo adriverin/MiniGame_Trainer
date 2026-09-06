@@ -148,6 +148,28 @@
       CommandLine.arguments.contains("-laneRushStaticRoad")
         || LaneRushVehicleDepth.launchValue() != nil
         || LaneRushPlayerCheckpoint.launchValue() != nil
+        || LaneRushDynamicCheckpoint.launchValue() != nil
+    }
+  }
+
+  struct LaneRushDynamicCheckpoint: Equatable {
+    let forcedDistance: Double?
+
+    static func launchValue(arguments: [String] = CommandLine.arguments) -> Self? {
+      guard arguments.contains("-laneRushDynamicMotion") else { return nil }
+      guard let index = arguments.firstIndex(of: "-laneRushForceDistance"),
+        arguments.indices.contains(index + 1),
+        let distance = Double(arguments[index + 1]), distance.isFinite
+      else {
+        return Self(forcedDistance: nil)
+      }
+      return Self(forcedDistance: max(0, distance))
+    }
+
+    var simulation: LaneRushDynamicSimulation {
+      LaneRushDynamicSimulation(
+        distanceMeters: forcedDistance ?? 0,
+        startsPaused: forcedDistance != nil)
     }
   }
 
@@ -163,6 +185,28 @@
         frame: road.playerFrame(lateral: lateralPosition),
         leanDegrees: leanDegrees,
         logicalLateral: lateralPosition)
+    }
+  }
+
+  struct LaneRushRoadMarkingProjection {
+    let road: LaneRushStaticRoadGeometry
+
+    static let visibleDistance: Double = 100
+    static let dashLengthMeters: Double = 8
+
+    func depth(distanceAhead: Double) -> CGFloat {
+      let progress = min(1, max(0, 1 - distanceAhead / Self.visibleDistance))
+      let value = CGFloat(progress)
+      return value * value * value
+    }
+
+    func depthRange(distanceAhead: Double) -> ClosedRange<CGFloat>? {
+      guard distanceAhead > 0,
+        distanceAhead - Self.dashLengthMeters < Self.visibleDistance
+      else { return nil }
+      let far = depth(distanceAhead: distanceAhead)
+      let near = depth(distanceAhead: max(0, distanceAhead - Self.dashLengthMeters))
+      return far...near
     }
   }
 

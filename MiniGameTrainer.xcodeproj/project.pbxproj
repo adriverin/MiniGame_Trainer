@@ -318,6 +318,7 @@
 		D6BD83A354CD31564C25103C /* ColorReflexPersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EDC3A7ECFDE8FE78BEB75D /* ColorReflexPersistenceTests.swift */; };
 		D6EA8FE31B0589E8E5DC705D /* ColorReflexGameModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2065FB1D26E1E6E3C4BA0A06 /* ColorReflexGameModule.swift */; };
 		D775DF998E4FA3CE015D6E9D /* PianoGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A650E2C871990731FDDEDA7 /* PianoGeometry.swift */; };
+		D799B1586EDB0CFCC1A76504 /* LaneRushDynamicSimulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D212620A3059779ABE745F8 /* LaneRushDynamicSimulation.swift */; };
 		D7BE847159A1D6342FE16228 /* DirectionsGameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A0F61EDD12F312B904F6B6 /* DirectionsGameLogic.swift */; };
 		D7CF7C7A5701522E696F188F /* TapSevenGameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F9B6CD87FBE73F50FC40AD /* TapSevenGameLogic.swift */; };
 		D7EA68426790DD678A011FFD /* DirectionsSequenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B16E4FC78C5EEC785E5847E /* DirectionsSequenceTests.swift */; };
@@ -332,6 +333,7 @@
 		DBE80A89E8F0F48C4EEF904C /* DirectionsGameLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DA27F479F0577D601A549E /* DirectionsGameLogicTests.swift */; };
 		DC4CD1E27CE1FCFFB205A191 /* StatRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B53AC24E88CAF142901E843 /* StatRow.swift */; };
 		DC719DEBBBEE31808506228B /* ZigGameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0237A77853E93CECEBAB651D /* ZigGameViewModel.swift */; };
+		DC91DCB42C9F849799190C8F /* LaneRushDynamicSimulationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF8B06E766A37AE2835B4D0 /* LaneRushDynamicSimulationTests.swift */; };
 		DCAD07247D1E301A18E2AD2D /* TowerStackPerformanceTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CFFC2A933F20F98D84C69B /* TowerStackPerformanceTracker.swift */; };
 		DCFDC265401AD92A4841CEA7 /* GoogleUserMessagingPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = E9541669BAFC54A3F3E9E445 /* GoogleUserMessagingPlatform */; };
 		DDD8E7C3E0510C437C5D4ED4 /* DirectionsGameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5E887D0F5B76C4B105F25 /* DirectionsGameViewModel.swift */; };
@@ -405,6 +407,7 @@
 		0685B6588A46498BA09B564F /* AppRouterAttemptTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouterAttemptTests.swift; sourceTree = "<group>"; };
 		086DB9F30677AF540B6F33AF /* AttemptManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttemptManagerTests.swift; sourceTree = "<group>"; };
 		0ABF47DF73A2BE48FFBCC4DB /* CenterHitGameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterHitGameViewModel.swift; sourceTree = "<group>"; };
+		0AF8B06E766A37AE2835B4D0 /* LaneRushDynamicSimulationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaneRushDynamicSimulationTests.swift; sourceTree = "<group>"; };
 		0B558A54BC73C9CDB4900A9D /* CenterHitPerformanceTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterHitPerformanceTracker.swift; sourceTree = "<group>"; };
 		0BBD7D8357B7F214AC84800D /* KeepUpCeilingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepUpCeilingTests.swift; sourceTree = "<group>"; };
 		0D370B36F110DC448ACC9B13 /* TracePersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracePersistenceTests.swift; sourceTree = "<group>"; };
@@ -603,6 +606,7 @@
 		8C2634D386BB47699EB0D9E7 /* PianoTileNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoTileNode.swift; sourceTree = "<group>"; };
 		8C3359BB89B36FD20EE4A70D /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		8D10AFCDA776D89463EA4530 /* PianoGameModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoGameModule.swift; sourceTree = "<group>"; };
+		8D212620A3059779ABE745F8 /* LaneRushDynamicSimulation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaneRushDynamicSimulation.swift; sourceTree = "<group>"; };
 		8D354C256FC67E92B58BACDA /* TraceGameModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceGameModule.swift; sourceTree = "<group>"; };
 		8D998CA9410FE158DA25AA40 /* ColorReflexGameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorReflexGameViewModel.swift; sourceTree = "<group>"; };
 		8E13BBD15544245C30CF8D5E /* TargetSpeedGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetSpeedGameScene.swift; sourceTree = "<group>"; };
@@ -1455,6 +1459,7 @@
 		CAF954B81972C64DDAD504DD /* LaneRush */ = {
 			isa = PBXGroup;
 			children = (
+				8D212620A3059779ABE745F8 /* LaneRushDynamicSimulation.swift */,
 				1723F00FC778746D5AE8758E /* LaneRushPlayerControl.swift */,
 				3E28F74508CD7CBE1DB57CBA /* Debug */,
 			);
@@ -1540,6 +1545,7 @@
 				694A77B888CABB5C1F36FF33 /* KeepUpPersistenceTests.swift */,
 				D57556D8F73902EB4A022471 /* KeepUpPhysicsTests.swift */,
 				ECE944790BE2D0AA56D62D3F /* LaneRushActorLaneProjectionTests.swift */,
+				0AF8B06E766A37AE2835B4D0 /* LaneRushDynamicSimulationTests.swift */,
 				FFB79628985A157D0629D4E4 /* LaneRushPlayerControlTests.swift */,
 				54946BBE6EFFE0010150A0D3 /* LaneRushStaticRoadGeometryTests.swift */,
 				135DA0E8C1C328346C7E92EE /* LaneRushVehicleProjectionTests.swift */,
@@ -1795,6 +1801,7 @@
 				198B023B1608B7CE8F97BF88 /* KeepUpPersistenceTests.swift in Sources */,
 				554549570087688988C674BA /* KeepUpPhysicsTests.swift in Sources */,
 				ADA9F13FBD72F23686D1AC09 /* LaneRushActorLaneProjectionTests.swift in Sources */,
+				DC91DCB42C9F849799190C8F /* LaneRushDynamicSimulationTests.swift in Sources */,
 				A455628116EA75F468661248 /* LaneRushPlayerControlTests.swift in Sources */,
 				125198B934B8D6652CC08F30 /* LaneRushStaticRoadGeometryTests.swift in Sources */,
 				C2E37CD76ED34DA93F1FE4BC /* LaneRushVehicleProjectionTests.swift in Sources */,
@@ -1965,6 +1972,7 @@
 				5828C750466CE4F42203FECE /* KeepUpPerformanceTracker.swift in Sources */,
 				141292FD6EC57F0DA5DE3AD9 /* KeepUpPhysics.swift in Sources */,
 				25BC64E4C56C8A08207C2653 /* KeepUpTuningStore.swift in Sources */,
+				D799B1586EDB0CFCC1A76504 /* LaneRushDynamicSimulation.swift in Sources */,
 				0E577E87DC70CDB72B45B190 /* LaneRushPlayerControl.swift in Sources */,
 				538C3D6DAC0FA983748FAFE2 /* LaneRushStaticRoadGeometry.swift in Sources */,
 				9466D6AA9D9358B9E5530DF9 /* LaneRushStaticRoadView.swift in Sources */,

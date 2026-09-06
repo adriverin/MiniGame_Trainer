@@ -6,15 +6,21 @@
   struct LaneRushStaticRoadView: View {
     let vehicleDepth: LaneRushVehicleDepth?
     let playerCheckpoint: LaneRushPlayerCheckpoint?
+    let dynamicCheckpoint: LaneRushDynamicCheckpoint?
     @State private var player = LaneRushPlayerController()
+    @State private var dynamic: LaneRushDynamicSimulation
     @State private var lastUpdate: Date?
+    @Environment(\.scenePhase) private var scenePhase
 
     init(
       vehicleDepth: LaneRushVehicleDepth? = nil,
-      playerCheckpoint: LaneRushPlayerCheckpoint? = nil
+      playerCheckpoint: LaneRushPlayerCheckpoint? = nil,
+      dynamicCheckpoint: LaneRushDynamicCheckpoint? = nil
     ) {
       self.vehicleDepth = vehicleDepth
       self.playerCheckpoint = playerCheckpoint
+      self.dynamicCheckpoint = dynamicCheckpoint
+      _dynamic = State(initialValue: dynamicCheckpoint?.simulation ?? LaneRushDynamicSimulation())
     }
 
     var body: some View {
@@ -22,10 +28,18 @@
         TimelineView(.animation) { timeline in
           Canvas { context, size in
             let road = LaneRushStaticRoadGeometry(size: size)
-            let controller = playerCheckpoint?.controller ?? player
+            let controller: LaneRushPlayerController
+            if let playerCheckpoint {
+              controller = playerCheckpoint.controller
+            } else if dynamicCheckpoint != nil {
+              controller = dynamic.player
+            } else {
+              controller = player
+            }
             LaneRushStaticRoadRenderer(
               size: size,
               vehicleDepth: vehicleDepth,
+              dynamicSimulation: dynamicCheckpoint == nil ? nil : dynamic,
               playerPresentation: controller.presentation(on: road)
             ).draw(in: &context)
           }
@@ -39,24 +53,57 @@
                     end: value.location,
                     gameplayWidth: proxy.size.width)
                 else { return }
-                player.command(command)
+                if dynamicCheckpoint != nil {
+                  dynamic.command(command)
+                } else {
+                  player.command(command)
+                }
               }
           )
           .onChange(of: timeline.date) { _, date in
             guard playerCheckpoint == nil else { return }
-            if let lastUpdate {
+            if dynamicCheckpoint != nil {
+              dynamic.update(at: date.timeIntervalSinceReferenceDate)
+            } else if let lastUpdate {
               player.update(deltaTime: min(1.0 / 15.0, date.timeIntervalSince(lastUpdate)))
             }
             lastUpdate = date
+          }
+          .overlay(alignment: .topTrailing) {
+            if dynamicCheckpoint != nil {
+              Button {
+                if dynamic.isPaused {
+                  dynamic.resume(at: Date.timeIntervalSinceReferenceDate)
+                } else {
+                  dynamic.pause()
+                }
+              } label: {
+                Image(systemName: dynamic.isPaused ? "play.fill" : "pause.fill")
+                  .font(.system(size: 18, weight: .bold))
+                  .foregroundStyle(.white)
+                  .frame(width: 44, height: 44)
+                  .background(.black.opacity(0.42), in: Circle())
+              }
+              .buttonStyle(.plain)
+              .padding(.top, 58)
+              .padding(.trailing, 20)
+              .accessibilityLabel(dynamic.isPaused ? "Resume Lane Rush" : "Pause Lane Rush")
+            }
           }
         }
       }
       .ignoresSafeArea()
       .statusBarHidden()
       .accessibilityLabel(accessibilityDescription)
+      .onChange(of: scenePhase) { _, phase in
+        if dynamicCheckpoint != nil, phase != .active { dynamic.pause() }
+      }
     }
 
     private var accessibilityDescription: String {
+      if dynamicCheckpoint != nil {
+        return "LANE RUSH dynamic motion checkpoint. Score \(dynamic.displayedDistance) metres."
+      }
       guard let vehicleDepth else {
         return "LANE RUSH static road checkpoint. Score zero metres."
       }
@@ -67,15 +114,21 @@
   private struct LaneRushStaticRoadRenderer {
     let size: CGSize
     let vehicleDepth: LaneRushVehicleDepth?
+    let dynamicSimulation: LaneRushDynamicSimulation?
     let playerPresentation: LaneRushPlayerPresentation
     private var geometry: LaneRushStaticRoadGeometry { .init(size: size) }
 
     func draw(in context: inout GraphicsContext) {
       drawBackground(in: &context)
       drawRoad(in: &context)
-      if let vehicleDepth { drawTrafficCar(vehicleDepth, in: &context) }
+      if let dynamicSimulation {
+        drawTrafficCar(
+          distanceAhead: CGFloat(dynamicSimulation.trafficDistanceAhead), in: &context)
+      } else if let vehicleDepth {
+        drawTrafficCar(distanceAhead: vehicleDepth.distanceAhead, in: &context)
+      }
       drawPlayer(playerPresentation, in: &context)
-      drawScore(in: &context)
+      drawScore(dynamicSimulation?.displayedDistance ?? 0, in: &context)
     }
 
     private func drawBackground(in context: inout GraphicsContext) {
@@ -199,15 +252,27 @@
           in: &context, lateral: edge, halfWidth: 0.018,
           from: 0, to: 1, fill: color(0xF1EADD))
       }
-      let dashes: [(CGFloat, CGFloat)] = [
-        (0.005, 0.017), (0.051, 0.077),
-        (0.15, 0.207), (0.34, 0.45), (0.69, 0.96),
-      ]
-      for divider: CGFloat in [-0.5, 0.5] {
-        for (start, end) in dashes {
-          roadStrip(
-            in: &context, lateral: divider, halfWidth: 0.041,
-            from: start, to: end, fill: color(0xE9D991))
+      if let dynamicSimulation {
+        let projection = LaneRushRoadMarkingProjection(road: g)
+        for divider: CGFloat in [-0.5, 0.5] {
+          for distanceAhead in dynamicSimulation.roadMarkings.distancesAhead {
+            guard let range = projection.depthRange(distanceAhead: distanceAhead) else { continue }
+            roadStrip(
+              in: &context, lateral: divider, halfWidth: 0.041,
+              from: range.lowerBound, to: range.upperBound, fill: color(0xE9D991))
+          }
+        }
+      } else {
+        let dashes: [(CGFloat, CGFloat)] = [
+          (0.005, 0.017), (0.051, 0.077),
+          (0.15, 0.207), (0.34, 0.45), (0.69, 0.96),
+        ]
+        for divider: CGFloat in [-0.5, 0.5] {
+          for (start, end) in dashes {
+            roadStrip(
+              in: &context, lateral: divider, halfWidth: 0.041,
+              from: start, to: end, fill: color(0xE9D991))
+          }
         }
       }
     }
@@ -340,11 +405,11 @@
     }
 
     private func drawTrafficCar(
-      _ depthState: LaneRushVehicleDepth,
+      distanceAhead: CGFloat,
       in context: inout GraphicsContext
     ) {
       let projection = LaneRushVehicleProjection(road: geometry)
-      let frame = projection.vehicleFrame(lane: 0, distanceAhead: depthState.distanceAhead)
+      let frame = projection.vehicleFrame(lane: 0, distanceAhead: distanceAhead)
       var car = context
       car.translateBy(x: frame.minX, y: frame.minY)
       car.scaleBy(x: frame.width, y: frame.height)
@@ -442,9 +507,9 @@
         ], hex: 0xAEA58F)
     }
 
-    private func drawScore(in context: inout GraphicsContext) {
+    private func drawScore(_ score: Int, in context: inout GraphicsContext) {
       let digit = context.resolve(
-        Text("0").font(
+        Text(String(score)).font(
           .system(
             size: size.width * 0.134,
             weight: .heavy, design: .rounded)
