@@ -18,12 +18,18 @@ struct GameCardView: View {
             CardContainer {
                 VStack(alignment: .leading, spacing: AppTheme.Spacing.lg) {
                     HStack(alignment: .top, spacing: AppTheme.Spacing.md) {
-                        Image(systemName: descriptor.iconName)
-                            .font(.system(size: 24, weight: .semibold))
-                            .foregroundStyle(AppTheme.Colors.accent)
-                            .frame(width: 48, height: 48)
-                            .background(AppTheme.Colors.accent.opacity(0.10), in: RoundedRectangle(cornerRadius: AppTheme.Radius.small))
-                            .accessibilityHidden(true)
+                        Group {
+                            if descriptor.id == "zig" {
+                                ZigCardIcon()
+                            } else {
+                                Image(systemName: descriptor.iconName)
+                                    .font(.system(size: 24, weight: .semibold))
+                                    .foregroundStyle(AppTheme.Colors.accent)
+                                    .frame(width: 48, height: 48)
+                                    .background(AppTheme.Colors.accent.opacity(0.10), in: RoundedRectangle(cornerRadius: AppTheme.Radius.small))
+                            }
+                        }
+                        .accessibilityHidden(true)
                         VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
                             Text(descriptor.name)
                                 .font(AppTheme.Fonts.cardTitle)

@@ -27,6 +27,7 @@ import Foundation
 /// `-bloopyScore 400 -bloopySeed 17602 -bloopyNoTrail`.
 /// JUMPY: `-autoPlay jumpy -jumpyAutoAdvance -jumpyControlQA -jumpyOverlay -jumpyHitboxes`,
 /// `-jumpyScore 75 -jumpyDifficulty 120 -jumpySeed 42 -jumpyHoldCollision`.
+/// ZIG: `-autoPlay zig -zigAutoPlay -zigOverlay -zigSupport -zigScore 150 -zigSeed 42 -zigHoldFailure`.
 /// Monetization (DEBUG): `-forcePro` / `-simulatePro`, `-forceFree`, `-setAttempts0`,
 /// `-grantBonus`, `forceDayIdentifier`, `monetizationGameID`, `-showAttemptState`.
 enum DebugLaunchOptions {
@@ -109,6 +110,21 @@ enum DebugLaunchOptions {
            CommandLine.arguments.indices.contains(index + 1),
            let value = UInt64(CommandLine.arguments[index + 1]) {
             jumpy.config.randomSeed = value
+        }
+        let zig = ZigTuningStore.shared
+        if flag("zigAutoPlay") { zig.debugOptions.autoPlay = true }
+        if flag("zigOverlay") { zig.debugOptions.showOverlay = true }
+        if flag("zigSupport") { zig.debugOptions.showSupport = true }
+        if flag("zigHoldFailure") { zig.debugOptions.holdFailure = true }
+        if let index = CommandLine.arguments.firstIndex(of: "-zigScore"),
+           CommandLine.arguments.indices.contains(index + 1),
+           let value = Int(CommandLine.arguments[index + 1]) {
+            zig.config.startingScore = max(0, value)
+        }
+        if let index = CommandLine.arguments.firstIndex(of: "-zigSeed"),
+           CommandLine.arguments.indices.contains(index + 1),
+           let value = UInt64(CommandLine.arguments[index + 1]) {
+            zig.config.randomSeed = value
         }
         applyMonetizationDebug(environment: environment)
         if let gameID = autoPlayGameID, GameRegistry.module(for: gameID) != nil {

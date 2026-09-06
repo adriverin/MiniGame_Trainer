@@ -20,6 +20,7 @@ enum GameRegistry {
         BloopyGameModule.self,
         ColorReflexGameModule.self,
         JumpyGameModule.self,
+        ZigGameModule.self,
     ]
 
     static var descriptors: [MiniGameDescriptor] {

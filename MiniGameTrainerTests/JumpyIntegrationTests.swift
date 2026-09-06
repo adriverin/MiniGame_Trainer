@@ -3,9 +3,9 @@ import XCTest
 
 @MainActor
 final class JumpyIntegrationTests: XCTestCase {
-    func testRegistryAppendsJumpyAsSixteenthGame() {
-        XCTAssertEqual(GameRegistry.descriptors.count, 16)
-        XCTAssertEqual(GameRegistry.descriptors.last?.id, "jumpy")
+    func testJumpyRemainsSixteenthGame() {
+        XCTAssertEqual(GameRegistry.descriptors.count, 17)
+        XCTAssertEqual(GameRegistry.descriptors[15].id, "jumpy")
         XCTAssertEqual(GameRegistry.descriptor(for: "jumpy")?.name, "JUMPY")
     }
 
