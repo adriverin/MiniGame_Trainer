@@ -14,7 +14,7 @@ struct MiniGameTrainerApp: App {
 
     var body: some Scene {
         WindowGroup {
-            RootView()
+            launchContent
                 .environmentObject(router)
                 .environmentObject(environment)
                 .environmentObject(environment.statisticsStore)
@@ -30,9 +30,28 @@ struct MiniGameTrainerApp: App {
                     }
                 }
                 .task {
+                    #if DEBUG
+                    guard !LaneRushCheckpointLaunch.isEnabled else { return }
+                    #endif
                     await environment.startMonetization()
                     DebugLaunchOptions.apply(router: router, environment: environment)
                 }
         }
+    }
+
+    @ViewBuilder
+    private var launchContent: some View {
+        #if DEBUG
+        if LaneRushCheckpointLaunch.isEnabled {
+            LaneRushStaticRoadView(
+                vehicleDepth: LaneRushVehicleDepth.launchValue(),
+                playerCheckpoint: LaneRushPlayerCheckpoint.launchValue()
+            )
+        } else {
+            RootView()
+        }
+        #else
+        RootView()
+        #endif
     }
 }
