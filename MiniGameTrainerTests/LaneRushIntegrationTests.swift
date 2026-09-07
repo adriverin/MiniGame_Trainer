@@ -4,10 +4,10 @@ import XCTest
 
 @MainActor
 final class LaneRushIntegrationTests: XCTestCase {
-  func testRegistryAppendsLaneRushAsEighteenthGame() {
-    XCTAssertEqual(GameRegistry.descriptors.count, 18)
-    XCTAssertEqual(GameRegistry.descriptors.last?.id, "laneRush")
-    XCTAssertEqual(GameRegistry.descriptors.last?.name, "LANE RUSH")
+  func testRegistryKeepsLaneRushAsEighteenthGame() {
+    XCTAssertEqual(GameRegistry.descriptors.count, 19)
+    XCTAssertEqual(GameRegistry.descriptors[17].id, "laneRush")
+    XCTAssertEqual(GameRegistry.descriptors[17].name, "LANE RUSH")
   }
 
   func testDistancePresentationAndResultMetrics() {

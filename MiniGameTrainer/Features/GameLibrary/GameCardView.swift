@@ -23,6 +23,8 @@ struct GameCardView: View {
                                 ZigCardIcon()
                             } else if descriptor.id == "laneRush" {
                                 LaneRushCardIcon()
+                            } else if descriptor.id == "jellyCut" {
+                                JellyCutCardIcon()
                             } else {
                                 Image(systemName: descriptor.iconName)
                                     .font(.system(size: 24, weight: .semibold))

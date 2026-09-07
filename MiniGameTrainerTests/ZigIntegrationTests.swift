@@ -4,7 +4,7 @@ import XCTest
 @MainActor
 final class ZigIntegrationTests: XCTestCase {
     func testRegistryAppendsZigAsSeventeenthGame() {
-        XCTAssertEqual(GameRegistry.descriptors.count, 18)
+        XCTAssertEqual(GameRegistry.descriptors.count, 19)
         XCTAssertEqual(GameRegistry.descriptors[16].id, "zig")
         XCTAssertEqual(GameRegistry.descriptors[16].name, "ZIG")
     }
