@@ -28,6 +28,8 @@ import Foundation
 /// JUMPY: `-autoPlay jumpy -jumpyAutoAdvance -jumpyControlQA -jumpyOverlay -jumpyHitboxes`,
 /// `-jumpyScore 75 -jumpyDifficulty 120 -jumpySeed 42 -jumpyHoldCollision`.
 /// ZIG: `-autoPlay zig -zigAutoPlay -zigOverlay -zigSupport -zigScore 150 -zigSeed 42 -zigHoldFailure`.
+/// LANE RUSH: `-autoPlay laneRush -laneRushAutoDrive -laneRushOverlay -laneRushNoCollision`,
+/// `-laneRushForceDistance 500 -laneRushDifficulty 1000 -laneRushSeed 42 -laneRushHoldCollision`.
 /// Monetization (DEBUG): `-forcePro` / `-simulatePro`, `-forceFree`, `-setAttempts0`,
 /// `-grantBonus`, `forceDayIdentifier`, `monetizationGameID`, `-showAttemptState`.
 enum DebugLaunchOptions {
@@ -125,6 +127,31 @@ enum DebugLaunchOptions {
            CommandLine.arguments.indices.contains(index + 1),
            let value = UInt64(CommandLine.arguments[index + 1]) {
             zig.config.randomSeed = value
+        }
+        let laneRush = LaneRushTuningStore.shared
+        if flag("laneRushOverlay") { laneRush.debugOptions.showOverlay = true }
+        if flag("laneRushNoCollision") { laneRush.debugOptions.disableCollisions = true }
+        if flag("laneRushAutoDrive") { laneRush.debugOptions.autoDrive = true }
+        if flag("laneRushHoldCollision") { laneRush.debugOptions.holdCollision = true }
+        if flag("laneRushForceCollision") { laneRush.debugOptions.forceCenterCollision = true }
+        if let index = CommandLine.arguments.firstIndex(of: "-laneRushForceDistance"),
+           CommandLine.arguments.indices.contains(index + 1),
+           let value = Double(CommandLine.arguments[index + 1]), value.isFinite {
+            laneRush.config.startingDistance = max(0, value)
+            laneRush.debugOptions.forcedDifficultyDistance = max(0, value)
+            laneRush.debugOptions.disableCollisions = true
+            laneRush.debugOptions.freezeMotion = true
+            laneRush.debugOptions.trafficSnapshotOffset = value >= 700 ? 80 : 0
+        }
+        if let index = CommandLine.arguments.firstIndex(of: "-laneRushDifficulty"),
+           CommandLine.arguments.indices.contains(index + 1),
+           let value = Double(CommandLine.arguments[index + 1]), value.isFinite {
+            laneRush.debugOptions.forcedDifficultyDistance = max(0, value)
+        }
+        if let index = CommandLine.arguments.firstIndex(of: "-laneRushSeed"),
+           CommandLine.arguments.indices.contains(index + 1),
+           let value = UInt64(CommandLine.arguments[index + 1]) {
+            laneRush.config.randomSeed = value
         }
         applyMonetizationDebug(environment: environment)
         if let gameID = autoPlayGameID, GameRegistry.module(for: gameID) != nil {

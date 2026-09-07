@@ -21,6 +21,8 @@ struct GameCardView: View {
                         Group {
                             if descriptor.id == "zig" {
                                 ZigCardIcon()
+                            } else if descriptor.id == "laneRush" {
+                                LaneRushCardIcon()
                             } else {
                                 Image(systemName: descriptor.iconName)
                                     .font(.system(size: 24, weight: .semibold))

@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-enum LaneRushLane: Int, CaseIterable, Equatable {
+enum LaneRushLane: Int, CaseIterable, Hashable {
   case left = 0
   case center = 1
   case right = 2
@@ -122,6 +122,10 @@ struct LaneRushPlayerController: Equatable {
 
       if available <= 0 { break }
     }
+  }
+
+  mutating func clearPendingCommand() {
+    pendingCommand = nil
   }
 
   private mutating func begin(_ command: LaneRushLaneCommand) -> Bool {
