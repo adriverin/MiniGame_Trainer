@@ -54,6 +54,11 @@ struct ScorePresentation: Hashable, Codable {
         return appendingUnit(to: number)
     }
 
+    /// Formats a gap in the same user-facing scale and unit as the score itself.
+    func formattedDifference(_ difference: Int) -> String {
+        formatted(Swift.abs(difference))
+    }
+
     private func appendingUnit(to number: String) -> String {
         guard let unit else { return number }
         return separatesUnit ? "\(number) \(unit)" : "\(number)\(unit)"

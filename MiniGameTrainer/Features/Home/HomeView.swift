@@ -23,7 +23,7 @@ struct HomeView: View {
                 .frame(maxWidth: .infinity)
             }
         }
-        .navigationTitle("Library")
+        .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -38,23 +38,20 @@ struct HomeView: View {
     }
 
     private var header: some View {
-        VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
-            HStack(alignment: .firstTextBaseline) {
+        HStack(alignment: .top, spacing: AppTheme.Spacing.md) {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
                 Text(AppInfo.name)
-                    .font(AppTheme.Fonts.title)
+                    .font(AppTheme.Fonts.brand)
                     .foregroundStyle(AppTheme.Colors.textPrimary)
-                Spacer()
-                if purchases.isPro { StatusBadge(title: "Pro") }
+                    .accessibilityAddTraits(.isHeader)
+                Text("Beat your best.")
+                    .font(AppTheme.Fonts.secondary.weight(.semibold))
+                    .foregroundStyle(AppTheme.Colors.textSecondary)
             }
-            Text("Small games.\nPersonal bests.")
-                .font(AppTheme.Fonts.heading)
-                .foregroundStyle(AppTheme.Colors.textPrimary)
-                .fixedSize(horizontal: false, vertical: true)
-            Text(AppInfo.tagline)
-                .font(AppTheme.Fonts.secondary)
-                .foregroundStyle(AppTheme.Colors.textSecondary)
-                .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: AppTheme.Spacing.md)
+            if purchases.isPro { StatusBadge(title: "Pro") }
         }
+        .padding(.top, AppTheme.Spacing.xs)
         .accessibilityElement(children: .combine)
     }
 }

@@ -63,6 +63,23 @@ final class AppRouterAttemptTests: XCTestCase {
         XCTAssertEqual(router.path, [.statistics])
     }
 
+    func testBrowsingLibraryAndContinueOnlyOpenIntroWithoutConsumingAttempt() {
+        let (router, attempts, _) = makeRouter()
+        router.showIntro(for: "piano")
+        XCTAssertEqual(router.path, [.gameIntro(gameID: "piano")])
+        XCTAssertEqual(attempts.record(for: "piano").freeAttemptsUsed, 0)
+        XCTAssertEqual(attempts.availability(for: "piano"), .free(remaining: 7))
+    }
+
+    func testLibraryActionClearsResultsNavigation() {
+        let (router, _, _) = makeRouter()
+        router.showIntro(for: "piano")
+        router.startGame("piano")
+        router.finishGame(with: GameResult(gameID: "piano", score: 4, duration: 1))
+        router.goHome()
+        XCTAssertTrue(router.path.isEmpty)
+    }
+
     func testProStartsWithoutConsuming() {
         let (router, attempts, _) = makeRouter(isPro: true)
         router.startGame("bloopy")

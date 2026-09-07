@@ -20,9 +20,6 @@ struct RootView: View {
         case .gameIntro(let gameID):
             if let module = GameRegistry.module(for: gameID) {
                 module.makeIntroView()
-                    .safeAreaInset(edge: .top, spacing: 0) {
-                        AttemptStatusBanner(gameID: gameID)
-                    }
             } else {
                 MissingGameView(gameID: gameID)
             }

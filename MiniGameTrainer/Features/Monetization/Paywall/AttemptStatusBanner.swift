@@ -1,6 +1,17 @@
 import SwiftUI
 
-/// Unobtrusive remaining-attempt label shown above every game intro.
+enum AttemptStatusPresentation {
+    static func label(for availability: AttemptAvailability, freeLimit: Int) -> String {
+        switch availability {
+        case .proUnlimited: return "Unlimited"
+        case .free(let remaining): return "\(remaining) / \(freeLimit) attempts"
+        case .rewarded(let remaining): return "\(remaining) bonus \(remaining == 1 ? "attempt" : "attempts")"
+        case .exhausted: return "No free attempts"
+        }
+    }
+}
+
+/// Compact attempt context inside the shared intro hierarchy.
 struct AttemptStatusBanner: View {
     let gameID: String
 
@@ -9,35 +20,18 @@ struct AttemptStatusBanner: View {
 
     var body: some View {
         let _ = attempts.revision
-        if purchases.isPro {
-            EmptyView()
-        } else {
-            Label(label, systemImage: "circle.dotted")
-                .font(AppTheme.Fonts.caption)
-                .foregroundStyle(AppTheme.Colors.textSecondary)
-                .monospacedDigit()
-                .padding(.horizontal, AppTheme.Spacing.md)
-                .padding(.vertical, AppTheme.Spacing.sm)
-                .background(AppTheme.Colors.surface, in: Capsule())
-                .padding(.horizontal, AppTheme.Metrics.screenPadding)
-                .padding(.vertical, AppTheme.Spacing.sm)
-                .frame(maxWidth: .infinity)
-                .background(AppTheme.Colors.background)
-                .accessibilityLabel(label)
-        }
+        Label(label, systemImage: purchases.isPro ? "infinity" : "circle.dotted")
+            .font(AppTheme.Fonts.caption)
+            .foregroundStyle(AppTheme.Colors.textSecondary)
+            .monospacedDigit()
+            .padding(.horizontal, AppTheme.Spacing.md)
+            .frame(minHeight: 36)
+            .background(AppTheme.Colors.surface, in: Capsule())
+            .fixedSize()
+            .accessibilityLabel("Attempt status: \(label)")
     }
 
     private var label: String {
-        switch attempts.availability(for: gameID) {
-        case .proUnlimited:
-            return ""
-        case .free(let remaining):
-            return "\(remaining) / \(attempts.freeLimit) free attempts remaining"
-        case .rewarded(let remaining):
-            let noun = remaining == 1 ? "attempt" : "attempts"
-            return "\(remaining) bonus \(noun) remaining"
-        case .exhausted:
-            return "Free attempts used"
-        }
+        AttemptStatusPresentation.label(for: attempts.availability(for: gameID), freeLimit: attempts.freeLimit)
     }
 }

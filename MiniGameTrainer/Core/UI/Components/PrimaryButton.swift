@@ -10,6 +10,7 @@ struct PrimaryButton: View {
     let title: String
     var systemImage: String? = nil
     var style: Style = .filled
+    var tint: Color = AppTheme.Colors.accent
     let action: () -> Void
 
     var body: some View {
@@ -28,7 +29,7 @@ struct PrimaryButton: View {
             .foregroundStyle(style == .filled ? AppTheme.Colors.background : AppTheme.Colors.textPrimary)
             .background {
                 RoundedRectangle(cornerRadius: AppTheme.Radius.medium, style: .continuous)
-                    .fill(style == .filled ? AppTheme.Colors.accent :
+                    .fill(style == .filled ? tint :
                             style == .outlined ? AppTheme.Colors.surface : Color.clear)
             }
             .overlay {
@@ -38,6 +39,7 @@ struct PrimaryButton: View {
                 }
             }
             .contentShape(RoundedRectangle(cornerRadius: AppTheme.Radius.medium))
+            .shadow(color: style == .filled ? tint.opacity(0.20) : .clear, radius: 14, y: 6)
         }
         .buttonStyle(ShellPressStyle())
         .accessibilityLabel(title)
@@ -52,7 +54,7 @@ struct ShellPressStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .opacity(isEnabled ? (configuration.isPressed ? 0.8 : 1) : 0.45)
-            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.985 : 1)
-            .animation(reduceMotion ? nil : .easeOut(duration: 0.15), value: configuration.isPressed)
+            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.975 : 1)
+            .animation(reduceMotion ? nil : .easeOut(duration: AppTheme.Motion.quick), value: configuration.isPressed)
     }
 }

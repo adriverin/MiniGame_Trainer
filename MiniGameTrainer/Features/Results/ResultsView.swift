@@ -1,6 +1,42 @@
 import SwiftUI
 
-/// Shared results screen for every minigame.
+enum ResultProgressFeedback: Equatable {
+    case newPersonalBest
+    case matchedBest
+    case distanceFromBest(String)
+
+    static func evaluate(result: GameResult, statistics: GameStatistics) -> ResultProgressFeedback {
+        if statistics.gamesPlayed <= 1 {
+            return .newPersonalBest
+        }
+
+        let comparison = result.scorePresentation.comparison
+        if comparison.isBetter(result.score, than: statistics.previousBestScore) {
+            return .newPersonalBest
+        }
+
+        let difference = Swift.abs(result.score - statistics.bestScore)
+        if difference == 0 {
+            return .matchedBest
+        }
+        return .distanceFromBest(result.scorePresentation.formattedDifference(difference))
+    }
+
+    var title: String {
+        switch self {
+        case .newPersonalBest: "New Personal Best"
+        case .matchedBest: "Matched your best"
+        case .distanceFromBest(let difference): "\(difference) from your best"
+        }
+    }
+
+    var isNewPersonalBest: Bool {
+        if case .newPersonalBest = self { return true }
+        return false
+    }
+}
+
+/// Shared, progress-led results screen for every minigame.
 struct ResultsView: View {
     let result: GameResult
 
@@ -8,59 +44,28 @@ struct ResultsView: View {
     @EnvironmentObject private var statistics: StatisticsStore
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var appeared = false
-    @ScaledMetric(relativeTo: .largeTitle) private var scoreSize: CGFloat = 76
+    @ScaledMetric(relativeTo: .largeTitle) private var scoreSize: CGFloat = 78
 
-    private var descriptor: MiniGameDescriptor? {
-        GameRegistry.descriptor(for: result.gameID)
+    private var descriptor: MiniGameDescriptor? { GameRegistry.descriptor(for: result.gameID) }
+    private var stats: GameStatistics { statistics.statistics(for: result.gameID) }
+    private var theme: GameVisualTheme { GamePresentationCatalog.theme(for: result.gameID) }
+    private var progress: ResultProgressFeedback {
+        ResultProgressFeedback.evaluate(result: result, statistics: stats)
     }
-
-    private var stats: GameStatistics {
-        statistics.statistics(for: result.gameID)
-    }
-
-    private var isNewBest: Bool {
-        stats.gamesPlayed > 1
-            && result.score == stats.bestScore
-            && result.scorePresentation.comparison.isBetter(result.score, than: stats.previousBestScore)
+    private var metricColumns: [GridItem] {
+        [GridItem(.adaptive(minimum: 132), spacing: AppTheme.Spacing.md, alignment: .top)]
     }
 
     var body: some View {
         ZStack {
             ScreenBackground()
             ScrollView {
-                VStack(spacing: 24) {
-                    Text(descriptor?.name ?? result.gameID)
-                        .font(AppTheme.Fonts.heading)
-                        .foregroundStyle(AppTheme.Colors.textSecondary)
-                        .padding(.top, 12)
-
-                    scoreBlock
-
-                    CardContainer {
-                        VStack(spacing: 2) {
-                            StatRow(label: "Personal Best", value: result.scorePresentation.formatted(stats.bestScore), highlight: isNewBest)
-                            Divider().overlay(AppTheme.Colors.divider)
-                            StatRow(label: "Games Played", value: "\(stats.gamesPlayed)")
-                            StatRow(label: "Average Score", value: result.scorePresentation.formattedAverage(stats.averageScore))
-                            if let best = stats.bestReactionTime {
-                                StatRow(label: "Best Reaction", value: MetricFormatter.milliseconds(best))
-                            }
-                        }
-                    }
-
-                    if !result.metrics.isEmpty {
-                        CardContainer {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("This Session")
-                                    .font(AppTheme.Fonts.caption)
-                                    .foregroundStyle(AppTheme.Colors.textSecondary)
-                                    .padding(.bottom, 6)
-                                ForEach(result.metrics) { metric in
-                                    StatRow(label: metric.label, value: metric.value)
-                                }
-                            }
-                        }
-                    }
+                VStack(alignment: .leading, spacing: AppTheme.Spacing.xl) {
+                    resultHeader
+                    scoreHero
+                    progressCard
+                    sessionSummary
+                    if !result.metrics.isEmpty { sessionMetrics }
                 }
                 .padding(AppTheme.Metrics.screenPadding)
                 .frame(maxWidth: AppTheme.Metrics.contentWidth)
@@ -68,8 +73,12 @@ struct ResultsView: View {
             }
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            VStack(spacing: 12) {
-                PrimaryButton(title: "Try Again", systemImage: "arrow.counterclockwise") {
+            VStack(spacing: AppTheme.Spacing.sm) {
+                PrimaryButton(
+                    title: "Try Again",
+                    systemImage: "arrow.counterclockwise",
+                    tint: theme.primary
+                ) {
                     router.retry(gameID: result.gameID)
                 }
                 PrimaryButton(title: "Library", systemImage: "square.grid.2x2", style: .outlined) {
@@ -80,37 +89,157 @@ struct ResultsView: View {
             .padding(.vertical, AppTheme.Spacing.md)
             .frame(maxWidth: AppTheme.Metrics.contentWidth)
             .frame(maxWidth: .infinity)
-            .background(AppTheme.Colors.background)
+            .background(.ultraThinMaterial)
         }
-        .navigationTitle("Results")
+        .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.hidden, for: .navigationBar)
         .onAppear {
             if reduceMotion {
                 appeared = true
             } else {
-                withAnimation(.easeOut(duration: 0.25)) { appeared = true }
+                withAnimation(.spring(response: AppTheme.Motion.entrance, dampingFraction: 0.78)) {
+                    appeared = true
+                }
             }
         }
     }
 
-    private var scoreBlock: some View {
-        VStack(spacing: 6) {
-            Text(result.scorePresentation.label)
-                .font(AppTheme.Fonts.caption)
-                .foregroundStyle(AppTheme.Colors.textSecondary)
-            Text(result.scorePresentation.formatted(result.score))
-                .font(AppTheme.Fonts.display(scoreSize).monospacedDigit())
-                .lineLimit(1)
-                .minimumScaleFactor(0.35)
-                .frame(maxWidth: .infinity)
-                .foregroundStyle(AppTheme.Colors.textPrimary)
-                .scaleEffect(appeared ? 1 : 0.96)
-                .opacity(appeared ? 1 : 0)
-            if isNewBest {
-                StatusBadge(title: "New Personal Best", systemImage: "trophy.fill", color: AppTheme.Colors.success)
+    private var resultHeader: some View {
+        HStack(spacing: AppTheme.Spacing.md) {
+            if let descriptor {
+                GameIconView(descriptor: descriptor, theme: theme, size: 46)
+            }
+            VStack(alignment: .leading, spacing: 2) {
+                Text("RESULTS")
+                    .font(.caption2.weight(.heavy))
+                    .tracking(1.1)
+                    .foregroundStyle(theme.primary)
+                Text(descriptor?.name ?? result.gameID)
+                    .font(AppTheme.Fonts.heading)
+                    .foregroundStyle(AppTheme.Colors.textPrimary)
+                    .accessibilityAddTraits(.isHeader)
             }
         }
+    }
+
+    private var scoreHero: some View {
+        ZStack {
+            GameMotifBackground(theme: theme)
+            VStack(spacing: AppTheme.Spacing.xs) {
+                Text(result.scorePresentation.label.uppercased())
+                    .font(.caption.weight(.bold))
+                    .tracking(0.8)
+                    .foregroundStyle(AppTheme.Colors.textSecondary)
+                Text(result.scorePresentation.formatted(result.score))
+                    .font(AppTheme.Fonts.display(scoreSize).monospacedDigit())
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.32)
+                    .foregroundStyle(AppTheme.Colors.textPrimary)
+                    .shadow(color: theme.primary.opacity(0.25), radius: 18)
+                    .scaleEffect(appeared ? 1 : 0.92)
+                    .opacity(appeared ? 1 : 0)
+            }
+            .padding(.horizontal, AppTheme.Spacing.lg)
+        }
+        .frame(maxWidth: .infinity, minHeight: 176)
+        .background(AppTheme.Colors.surface, in: RoundedRectangle(cornerRadius: AppTheme.Radius.hero, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.hero, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: AppTheme.Radius.hero, style: .continuous)
+                .strokeBorder(theme.primary.opacity(0.28), lineWidth: 1)
+        }
         .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(result.scorePresentation.label), \(result.scorePresentation.formatted(result.score))")
+    }
+
+    private var progressCard: some View {
+        HStack(spacing: AppTheme.Spacing.md) {
+            Image(systemName: progress.isNewPersonalBest ? "trophy.fill" : "scope")
+                .font(.title3.weight(.bold))
+                .foregroundStyle(theme.primary)
+                .frame(width: 44, height: 44)
+                .background(theme.primary.opacity(0.12), in: Circle())
+            VStack(alignment: .leading, spacing: 2) {
+                Text(progress.title)
+                    .font(AppTheme.Fonts.body.weight(.bold))
+                    .foregroundStyle(AppTheme.Colors.textPrimary)
+                Text("Best \(result.scorePresentation.formatted(stats.bestScore))")
+                    .font(AppTheme.Fonts.caption.monospacedDigit())
+                    .foregroundStyle(AppTheme.Colors.textSecondary)
+            }
+            Spacer()
+            if progress.isNewPersonalBest {
+                Image(systemName: "sparkles")
+                    .foregroundStyle(theme.primary)
+                    .scaleEffect(appeared ? 1 : 0.4)
+                    .opacity(appeared ? 1 : 0)
+                    .accessibilityHidden(true)
+            }
+        }
+        .padding(AppTheme.Metrics.cardPadding)
+        .background(theme.primary.opacity(0.09), in: RoundedRectangle(cornerRadius: AppTheme.Radius.large, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: AppTheme.Radius.large, style: .continuous)
+                .strokeBorder(theme.primary.opacity(0.25), lineWidth: 1)
+        }
+        .accessibilityElement(children: .combine)
+    }
+
+    private var sessionSummary: some View {
+        HStack(spacing: 0) {
+            summaryItem(title: "Games", value: "\(stats.gamesPlayed)")
+            Divider().overlay(AppTheme.Colors.divider).frame(height: 44)
+            summaryItem(title: "Average", value: result.scorePresentation.formattedAverage(stats.averageScore))
+            if let bestReaction = stats.bestReactionTime {
+                Divider().overlay(AppTheme.Colors.divider).frame(height: 44)
+                summaryItem(title: "Best reaction", value: MetricFormatter.milliseconds(bestReaction))
+            }
+        }
+        .padding(.vertical, AppTheme.Spacing.md)
+        .background(AppTheme.Colors.surface, in: RoundedRectangle(cornerRadius: AppTheme.Radius.large, style: .continuous))
+    }
+
+    private func summaryItem(title: String, value: String) -> some View {
+        VStack(spacing: AppTheme.Spacing.xs) {
+            Text(value)
+                .font(AppTheme.Fonts.body.weight(.bold).monospacedDigit())
+                .foregroundStyle(AppTheme.Colors.textPrimary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.65)
+            Text(title)
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(AppTheme.Colors.textSecondary)
+                .lineLimit(1)
+        }
+        .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
+    }
+
+    private var sessionMetrics: some View {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
+            Text("This Session")
+                .font(AppTheme.Fonts.heading)
+                .foregroundStyle(AppTheme.Colors.textPrimary)
+                .accessibilityAddTraits(.isHeader)
+            LazyVGrid(columns: metricColumns, alignment: .leading, spacing: AppTheme.Spacing.md) {
+                ForEach(result.metrics) { metric in
+                    VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
+                        Text(metric.value)
+                            .font(AppTheme.Fonts.body.weight(.bold).monospacedDigit())
+                            .foregroundStyle(AppTheme.Colors.textPrimary)
+                            .fixedSize(horizontal: false, vertical: true)
+                        Text(metric.label)
+                            .font(AppTheme.Fonts.caption)
+                            .foregroundStyle(AppTheme.Colors.textSecondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 66, alignment: .leading)
+                    .padding(AppTheme.Spacing.md)
+                    .background(AppTheme.Colors.surface, in: RoundedRectangle(cornerRadius: AppTheme.Radius.medium, style: .continuous))
+                    .accessibilityElement(children: .combine)
+                }
+            }
+        }
     }
 }

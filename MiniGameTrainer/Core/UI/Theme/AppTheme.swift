@@ -19,10 +19,11 @@ enum AppTheme {
     }
 
     enum Colors {
-        static let background = Color(red: 0.035, green: 0.065, blue: 0.12)
-        static let surface = Color(red: 0.07, green: 0.115, blue: 0.18)
-        static let surfaceElevated = Color(red: 0.10, green: 0.16, blue: 0.23)
-        static let accent = Color(red: 0.20, green: 0.88, blue: 0.90)
+        static let background = Color(hex: 0x07101F)
+        static let backgroundRaised = Color(hex: 0x0A1527)
+        static let surface = Color(hex: 0x101E32)
+        static let surfaceElevated = Color(hex: 0x172940)
+        static let accent = Color(hex: 0x54DFF2)
         static let success = Color(red: 0.35, green: 0.85, blue: 0.55)
         static let warning = Color(red: 1.0, green: 0.75, blue: 0.3)
         static let textPrimary = Color.white
@@ -42,17 +43,18 @@ enum AppTheme {
 
     enum Radius {
         static let small: CGFloat = 12
-        static let medium: CGFloat = 16
-        static let large: CGFloat = 20
+        static let medium: CGFloat = 18
+        static let large: CGFloat = 24
+        static let hero: CGFloat = 28
     }
 
     enum Metrics {
         static let cornerRadius = Radius.large
-        static let cardPadding: CGFloat = 16
+        static let cardPadding: CGFloat = 18
         static let screenPadding: CGFloat = 20
         static let controlHeight: CGFloat = 52
         static let contentWidth: CGFloat = 600
-        static let previewHeight: CGFloat = 180
+        static let previewHeight: CGFloat = 184
     }
 
     enum Fonts {
@@ -60,7 +62,8 @@ enum AppTheme {
             .system(size: size, weight: .heavy, design: .rounded)
         }
 
-        static let title = Font.system(.largeTitle, design: .rounded).weight(.heavy)
+        static let brand = Font.system(.largeTitle, design: .rounded).weight(.black)
+        static let title = Font.system(.largeTitle, design: .rounded).weight(.bold)
         static let heading = Font.system(.title2, design: .rounded).weight(.bold)
         static let cardTitle = Font.system(.title3, design: .rounded).weight(.bold)
         static let secondary = Font.system(.subheadline, design: .rounded)
@@ -68,5 +71,10 @@ enum AppTheme {
         static let body = Font.system(.body, design: .rounded)
         static let caption = Font.system(.caption, design: .rounded).weight(.semibold)
         static let button = Font.system(.headline, design: .rounded).weight(.bold)
+    }
+
+    enum Motion {
+        static let quick: Double = 0.16
+        static let entrance: Double = 0.34
     }
 }
