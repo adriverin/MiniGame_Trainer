@@ -1010,13 +1010,6 @@
 			path = Debug;
 			sourceTree = "<group>";
 		};
-		3E28F74508CD7CBE1DB57CBA /* Debug */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Debug;
-			sourceTree = "<group>";
-		};
 		3F02A293AAC0C14DDD3DD081 /* React */ = {
 			isa = PBXGroup;
 			children = (
@@ -1494,7 +1487,6 @@
 				5E06BFA2E090F62E21EA8D90 /* LaneRushRoadRenderer.swift */,
 				D5FF15BD2949C929DDC4190A /* LaneRushTrafficGenerator.swift */,
 				64511B281F2357D7C7D6E94E /* LaneRushTuningStore.swift */,
-				3E28F74508CD7CBE1DB57CBA /* Debug */,
 			);
 			path = LaneRush;
 			sourceTree = "<group>";
